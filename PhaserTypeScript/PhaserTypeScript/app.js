@@ -7,10 +7,12 @@ var SimpleGame = (function () {
     SimpleGame.prototype.preload = function () {
         this.game.load.image('logo', 'phaser2.png');
         this.game.load.image('sky', 'assets/sky.png');
-        this.game.load.image('ground', 'assets/floor.png');
+        this.game.load.image('ground', 'assets/platform.png');
+        this.game.load.image('ground2', 'assets/platformShort.png');
+        this.game.load.image('ground3', 'assets/platformTiny.png');
         this.game.load.image('bullet', 'assets/bullet.png');
         this.game.load.image('star', 'assets/bullet.png');
-        this.game.load.image('elevator', 'assets/big Rectangle.png');
+        this.game.load.image('elevator', 'assets/elevatorPro.png');
         this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
         this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
         this.game.load.spritesheet('doors1', 'assets/Doors_Blue.jpg', 25, 60, 4);
@@ -39,11 +41,17 @@ var SimpleGame = (function () {
         //var ground = this.platforms.create(-0, this.game.world.height - 400, 'ground');
         //ground.scale.setTo(2, 1);
         //ground.body.immovable = true;
-        for (var i = 0; i < 3; i++) {
-            var ledge = this.platforms.create(0, /*(this.game.world.height - ((i + 1) * 150) > 300 ? this.game.world.height - ((i + 1) * 150) : 300)*/ (i + 1) * 180, 'ground');
-            ledge.scale.setTo(2, 1);
-            ledge.body.immovable = true;
-        }
+        //for (var i = 0; i < 3; i++) {
+        var ledge = this.platforms.create(0, /*(this.game.world.height - ((i + 1) * 150) > 300 ? this.game.world.height - ((i + 1) * 150) : 300)*/ (i + 1) * 180, 'ground');
+        ledge.scale.setTo(2, 1);
+        ledge.body.immovable = true;
+        //}
+        ledge = this.platforms.create(116, 2 * 180, 'ground2');
+        ledge.scale.setTo(2, 1);
+        ledge.body.immovable = true;
+        ledge = this.platforms.create(0, 3 * 190, 'ground');
+        ledge.scale.setTo(2, 1);
+        ledge.body.immovable = true;
         //var ledge = this.platforms.create(-0, 400, 'ground');
         //ledge.scale.setTo(2, 1);
         //ledge.body.immovable = true;
@@ -55,26 +63,39 @@ var SimpleGame = (function () {
         this.player.body.gravity.y = 300;
         this.player.body.collideWorldBounds = true;
         this.player.animations.add('left', [0, 1, 2, 3], 10, true);
+        this.game.physics.arcade.enable(this.elevator);
+        this.elevator.body.collideWorldBounds = true;
+        this.elevator.body.velocity.setTo(0, 100);
+        this.elevator.body.bounce.set(1);
+        //this.elevator.body.allowGravity = false;
+        this.elevator.body.immovable = true;
+        this.elevator.body.onCollide = new Phaser.Signal();
         this.doors = this.game.add.group();
         this.doors.enableBody = true;
         this.enemyDoors = this.game.add.group();
         this.enemyDoors.enableBody = true;
-        for (var k = 0; k < 3; k++) {
+        for (var i = 0; i < 6; i++) {
+            var door2 = this.doors.create(this.randomIntFromInterval(1, 3) * 140, this.game.world.height - 105, 'doors2');
+            door2.animations.add('open', [1, 2, 3], 1, true);
+            door2.animations.add('close', [3, 2, 1], 1, true);
+        }
+        /*for (var k = 0; k < 3; k++) {
             for (var i = 0; i < 12; i++) {
-                var door = this.enemyDoors.create((i + 1) * 140, (k + 1) * 120 /*this.platforms.*/, 'doors1');
+                var door = this.enemyDoors.create((i + 1) * 115, (k+1) * 150 /*this.platforms., 'doors1');
                 door.body.immovable = true;
                 door.animations.add('open', [1, 2, 3], 1, true);
                 door.animations.add('close', [3, 2, 1], 1, true);
             }
         }
         for (var k = 0; k < 3; k++) {
-            var door2 = this.doors.create(this.randomIntFromInterval(1, 3) * 140, this.game.world.height - 480, 'doors2');
+            var door2 = this.doors.create(this.randomIntFromInterval(1, 3) * 140, this.game.world.height - 315, 'doors2');
             door2.animations.add('open', [1, 2, 3], 1, true);
             door2.animations.add('close', [3, 2, 1], 1, true);
-        }
+        }*/
         //}
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
         this.game.physics.arcade.enable(this.elevator);
         //this.game.physics.arcade.enable(door);
         this.elevator.body.enableBody = true;
@@ -88,6 +109,9 @@ var SimpleGame = (function () {
         this.scoreText = this.game.add.text(16, 16, this.scoreConst, { font: '32px Arial', fill: '#fff' });
         //Enemy things
         this.enemySpawn();
+        //this.enemies.callAll('animations.add', 'animations', 'baddie', [0, 1, 2, 3], 10, true);
+        //this.enemies.callAll('play', null, 'baddie');
+        //this.enemies.callAll('play', 'null', 'baddie');
         this.enemyBullets = this.game.add.group();
         this.enemyBullets.enableBody = true;
         this.enemyBullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -106,11 +130,14 @@ var SimpleGame = (function () {
         this.enemies = this.game.add.group();
         this.enemies.enableBody = true;
         var enemy = this.enemies.create(this.randomIntFromInterval(100, 500), this.game.world.height - 450, 'baddie');
+        //enemy.callALL('animations.add','animations','move', [0, 1, 2, 3], 10, true);
+        //enemy.callALL('animations.play', 'animations', 'move'); 
     };
     SimpleGame.prototype.update = function () {
         //var isDoorOpen = false;
         this.game.input.update();
         var hitPlatform = this.game.physics.arcade.collide(this.player, this.platforms);
+        var hitElevator = this.game.physics.arcade.collide(this.player, this.elevator);
         var elevatorHit = this.game.physics.arcade.collide(this.elevator, this.platforms);
         var enemyHit = this.game.physics.arcade.collide(this.enemies, this.platforms);
         var bulletHIt = this.game.physics.arcade.collide(this.bullets, this.platforms);
@@ -147,6 +174,10 @@ var SimpleGame = (function () {
         }
         if (elevatorHit) {
             this.isOnElevator = true;
+            this.elevator.body.immovable = false;
+        }
+        else {
+            this.elevator.body.immovable = true;
         }
         this.game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler, null, this);
         this.game.physics.arcade.overlap(this.enemyBullets, this.player, this.enemyHitsPlayer, null, this);
