@@ -1,13 +1,15 @@
 ﻿class SimpleGame {
 
     constructor() {
-        this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'content', { preload: this.preload, create: this.create, enemyFires: this.enemyFires, restart: this.restart, enemySpawn: this.enemySpawn, update: this.update, playAnimation: this.playAnimation, firebullet: this.firebullet, resetBullet: this.resetBullet, collisionHandler: this.collisionHandler, randomIntFromInterval: this.randomIntFromInterval, enemyHitsPlayer: this.enemyHitsPlayer });
+        this.game = new Phaser.Game(1000, 1000, Phaser.AUTO, 'content', { preload: this.preload, create: this.create, enemyFires: this.enemyFires, restart: this.restart, enemySpawn: this.enemySpawn, update: this.update, playAnimation: this.playAnimation, firebullet: this.firebullet, resetBullet: this.resetBullet, collisionHandler: this.collisionHandler, randomIntFromInterval: this.randomIntFromInterval, enemyHitsPlayer: this.enemyHitsPlayer });
     }
 
     game: Phaser.Game;
     platforms: Phaser.Group;
     floor1Doors: Phaser.Group;
     player: Phaser.Sprite;
+    walls: Phaser.Sprite;
+    floor: Phaser.Sprite;
     doors: Phaser.Group;
     enemyDoors: Phaser.Group;
     elevator: Phaser.Sprite;
@@ -35,6 +37,8 @@
         this.game.load.image('logo', 'phaser2.png');
         this.game.load.image('sky', 'assets/sky.png');
         this.game.load.image('background', 'assets/Quick Level.png');
+        this.game.load.image('walls', 'assets/QL_Wall.png');
+        this.game.load.image('floor', 'assets/QL_Floor.png');
         this.game.load.image('ground', 'assets/platform.png');
         this.game.load.image('ground2', 'assets/platformShort.png');
         this.game.load.image('ground3', 'assets/platformTiny.png');
@@ -48,12 +52,15 @@
     }
 
     create() {
+        this.game.world.resize(1000, 1000);
         this.bulletTime = 0;
         this.score = 0;
         this.livesCount = 3;
         this.firingTimer = 0;
         this.scoreConst = "Score :";
         this.game.stage.backgroundColor = "#000000;"
+       // this.game.add.tileSprite(0, 0, 800, 600, 'background');
+        this.game.world.setBounds(0, 0, 800, 600);
         this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.bullets = this.game.add.group();
         this.bullets.enableBody = true;
@@ -71,12 +78,13 @@
         //ground.scale.setTo(2, 1);
         //ground.body.immovable = true;
 
+        
         //for (var i = 0; i < 3; i++) {
-            var ledge = this.platforms.create(0, /*(this.game.world.height - ((i + 1) * 150) > 300 ? this.game.world.height - ((i + 1) * 150) : 300)*/ (i+1) * 180, 'ground');
+            /*var ledge = this.platforms.create(0, /*(this.game.world.height - ((i + 1) * 150) > 300 ? this.game.world.height - ((i + 1) * 150) : 300)/ (i+1) * 180, 'ground');
             ledge.scale.setTo(2, 1);
             ledge.body.immovable = true;
             //}
-            ledge = this.platforms.create(0, 2 * 180, 'ground2');
+           /* ledge = this.platforms.create(0, 2 * 180, 'ground2');
             //ledge.scale.setTo(0, 0);
             ledge.body.immovable = true;
      
@@ -95,18 +103,30 @@
 
             ledge = this.platforms.create(0, 3* 190, 'ground');
             ledge.scale.setTo(2, 1);
-            ledge.body.immovable = true;
+            ledge.body.immovable = true;*/
 
         //var ledge = this.platforms.create(-0, 400, 'ground');
         //ledge.scale.setTo(2, 1);
         //ledge.body.immovable = true;
+
+        this.walls = this.game.add.sprite(100, this.game.height - 837, 'walls');
+        this.floor = this.game.add.sprite(100, this.game.height - 837, 'floor');
+        this.game.physics.arcade.enable(this.walls);
+        this.game.physics.arcade.enable(this.floor);
+        this.walls.body.immovable = true;
+        this.floor.body.immovable = true;
+        
+        //this.floor.body.collideWorldBounds = true;
+        //this.walls.body.collideWorldBounds = true;
+        this.floor.body.onCollide = new Phaser.Signal();
+        this.walls.body.onCollide = new Phaser.Signal();
         this.player = this.game.add.sprite(200, 500, 'dude');
         //this.door = this.game.add.sprite(this.game.world.width / 2, this.game.world.height - 475, 'doors1');
         this.elevator = this.game.add.sprite(800, this.game.world.height - 500, 'elevator');
         this.elevatorT = this.game.add.sprite(300, this.game.world.height - 400, 'elevator');
         this.game.physics.arcade.enable(this.player);
         this.player.body.bounce.y = 0.2;
-        this.player.body.gravity.y = 600;
+        this.player.body.gravity.y = 1000;
         this.player.body.collideWorldBounds = true;
         this.player.animations.add('left', [0, 1, 2, 3], 10, true);
         this.game.physics.arcade.enable(this.elevator);
@@ -125,7 +145,7 @@
         this.enemyDoors = this.game.add.group();
         this.enemyDoors.enableBody = true;
 
-        for (var i = 0; i < 6; i++) {
+        /*for (var i = 0; i < 6; i++) {
             var door2 = this.doors.create(this.randomIntFromInterval(1, 3) * 140, this.game.world.height - 105, 'doors2');
             door2.body.immovable = true;
             door2.animations.add('open', [1, 2, 3], 1, true);
@@ -137,7 +157,7 @@
             eDoor.body.immovable;
         }
 
-        var tDoor = this.enemyDoors.create(this.randomIntFromInterval(0, 1) * 555, this.game.world.height - 300, 'doors1');
+        var tDoor = this.enemyDoors.create(this.randomIntFromInterval(0, 1) * 555, this.game.world.height - 300, 'doors1');*/
 
         /*for (var i = 0; i < 6; i++) {
             var door1 = this.floor1Doors.create(this.randomIntFromInterval(1, 3) * 140, this.game.world.height - 400, 'doors1');
@@ -215,14 +235,15 @@
     update() {
         //var isDoorOpen = false;
         this.game.input.update();
-        var hitPlatform = this.game.physics.arcade.collide(this.player, this.platforms);
+        var hitPlatform = this.game.physics.arcade.collide(this.player, this.floor);
+        var hitWall = this.game.physics.arcade.collide(this.player, this.walls);
         var hitElevator = this.game.physics.arcade.collide(this.player, this.elevator);
         var hitElevator2 = this.game.physics.arcade.collide(this.player, this.elevatorT);
-        var elevatorHit = this.game.physics.arcade.collide(this.elevator, this.platforms);
-        var elevator2Hit = this.game.physics.arcade.collide(this.elevatorT, this.platforms);
-        var enemyHit = this.game.physics.arcade.collide(this.enemies, this.platforms);
-        var bulletHIt = this.game.physics.arcade.collide(this.bullets, this.platforms);
-        var enemyBulletHit = this.game.physics.arcade.collide(this.enemyBullets, this.platforms);
+        var elevatorHit = this.game.physics.arcade.collide(this.elevator, this.floor);
+        var elevator2Hit = this.game.physics.arcade.collide(this.elevatorT, this.floor);
+        var enemyHit = this.game.physics.arcade.collide(this.enemies, this.floor);
+        var bulletHIt = this.game.physics.arcade.collide(this.bullets, this.floor);
+        var enemyBulletHit = this.game.physics.arcade.collide(this.enemyBullets, this.floor);
         //var doorHit = this.game.physics.arcade.collide(this.doors, this.player);
         this.game.physics.arcade.overlap(this.player, this.doors, this.playAnimation, null, this);
         //this.game.physics.arcade.overlap(this.enemies, this.doors, this.playEnemyAnimation, null, this);
@@ -244,7 +265,16 @@
             this.player.frame = 4;
             this.bulletDirection = true;
         }
+        if (this.cursors.up.isDown) {
+            this.player.body.velocity.y -= 100;
+        }
         if (this.cursors.up.isDown && this.player.body.touching.down && hitPlatform) {
+            this.player.body.velocity.y -= 350;
+        }
+        if (this.cursors.up.isDown && this.player.body.touching.down && hitWall) {
+            this.player.body.velocity.y -= 350;
+        }
+        if (this.cursors.up.isDown && this.player.body.touching.down && (hitElevator || hitElevator2)) {
             this.player.body.velocity.y -= 350;
         }
         if (this.fireButton.isDown) {
