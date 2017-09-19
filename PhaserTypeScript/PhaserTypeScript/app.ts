@@ -111,7 +111,7 @@
         this.game.physics.arcade.enable(this.elevator);
         this.game.physics.arcade.enable(this.elevatorT);
         this.elevator.body.collideWorldBounds = true;
-        this.elevator.body.velocity.setTo(0, 100);
+        this.elevator.body.velocity.setTo(0, 200);
         this.elevator.body.bounce.set(1);
         //this.elevator.body.allowGravity = false;
         this.elevator.body.immovable = true;
@@ -333,7 +333,7 @@
         var enemy = this.enemies.getFirstExists(true);
         if (enemyBullet) {
             enemyBullet.reset(enemy.body.x, enemy.body.y);
-            this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
+            //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
             this.firingTimer = this.game.time.now + 2000;
         }
     }
