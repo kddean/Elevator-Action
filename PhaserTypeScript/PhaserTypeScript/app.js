@@ -274,10 +274,10 @@ var SimpleGame = (function () {
     SimpleGame.prototype.enemyFires = function () {
         var enemyBullet = this.enemyBullets.getFirstExists(false);
         var enemy = this.enemies.getFirstExists(true);
-        if (enemyBullet) {
+        if (enemyBullet && ((enemy.body.x >= this.player.x) && (enemy.body.y >= this.player.y))) {
             enemyBullet.reset(enemy.body.x, enemy.body.y);
-            //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
-            this.firingTimer = this.game.time.now + 2000;
+            this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
+            this.firingTimer = this.game.time.now + 1000;
         }
     };
     SimpleGame.prototype.randomIntFromInterval = function (min, max) {
