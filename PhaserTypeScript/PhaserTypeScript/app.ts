@@ -34,6 +34,7 @@
     preload() {
         this.game.load.image('logo', 'phaser2.png');
         this.game.load.image('sky', 'assets/sky.png');
+        this.game.load.image('background', 'assets/Quick Level.png');
         this.game.load.image('ground', 'assets/platform.png');
         this.game.load.image('ground2', 'assets/platformShort.png');
         this.game.load.image('ground3', 'assets/platformTiny.png');
@@ -331,12 +332,10 @@
     enemyFires() {
         var enemyBullet = this.enemyBullets.getFirstExists(false);
         var enemy = this.enemies.getFirstExists(true);
-        if (enemyBullet && ((enemy.body.x >= this.player.x) && (enemy.body.y >= this.player.y ))) {
+        if (enemyBullet) {
             enemyBullet.reset(enemy.body.x, enemy.body.y);
-            this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
-       
-                this.firingTimer = this.game.time.now + 1000;
-            
+            //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
+            this.firingTimer = this.game.time.now + 2000;
         }
     }
     randomIntFromInterval(min, max) {

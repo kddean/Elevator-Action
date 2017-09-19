@@ -35,6 +35,7 @@
     <Content Include="assets\dude.png" />
     <Content Include="assets\floor.png" />
     <Content Include="assets\platform.png" />
+    <Content Include="assets\Quick Level.png" />
     <Content Include="assets\sky.png" />
     <Content Include="assets\small Rectangle.png" />
     <Content Include="assets\triangle.png" />
