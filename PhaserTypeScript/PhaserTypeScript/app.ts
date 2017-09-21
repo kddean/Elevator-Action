@@ -1,7 +1,7 @@
 ﻿class SimpleGame {
 
     constructor() {
-        this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'content', { preload: this.preload, create: this.create, enemyFires: this.enemyFires, restart: this.restart, enemySpawn: this.enemySpawn, update: this.update, playAnimation: this.playAnimation, firebullet: this.firebullet, resetBullet: this.resetBullet, collisionHandler: this.collisionHandler, randomIntFromInterval: this.randomIntFromInterval, enemyHitsPlayer: this.enemyHitsPlayer });
+        this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'content', { preload: this.preload, create: this.create, enemyFires: this.enemyFires, restart: this.restart, enemySpawn: this.enemySpawn, update: this.update, playAnimation: this.playAnimation, firebullet: this.firebullet, resetBullet: this.resetBullet, collisionHandler: this.collisionHandler, randomIntFromInterval: this.randomIntFromInterval, enemyHitsPlayer: this.enemyHitsPlayer, invisible:this.invisible });
     }
 
     game: Phaser.Game;
@@ -278,9 +278,14 @@
 
     playAnimation(player, door) {
         door.animations.play('open');
+        this.player.visible = false;
+        this.game.time.events.add(Phaser.Timer.SECOND * 2, this.invisible, this);
 
         //door.animations.play('open');
         //door2.animations.play('open');
+    }
+    invisible() {
+        this.player.visible = true;
     }
     //playEnemyAnimation(enemy, door2) {
     //    door2.animations.play('open');
