@@ -9,6 +9,8 @@
     setFloor: Phaser.Group;
     c: Phaser.Sprite;
     c2: Phaser.Sprite;
+    timer: Phaser.Timer;
+    door: Phaser.Sprite;
     leftPlatforms: Phaser.Group;
     rightPlatforms: Phaser.Group;
     floor1Doors: Phaser.Group;
@@ -16,7 +18,7 @@
     leftSideWall: Phaser.Sprite;
     rightSideWall: Phaser.Sprite;
     topWall: Phaser.Sprite;
-    walls: Phaser.Sprite;
+    walls: Phaser.Group;
     floor: Phaser.Sprite;
     doors: Phaser.Group;
     enemyDoors: Phaser.Group;
@@ -63,6 +65,8 @@
         this.game.load.spritesheet('doors2', 'assets/Doors_Red.jpg', 25, 75, 4);
         this.game.load.image('button', 'assets/button.png');
         this.game.load.image('invisible', 'assets/Invisible Box.png');
+        this.game.load.image('door', 'assets/Set_Door.png');
+        this.game.load.image('wall', 'assets/Set_Wall');
     }
 
     create() {
@@ -141,6 +145,15 @@
         this.rightPlatforms = this.game.add.group();
         this.rightPlatforms.enableBody = true;
 
+        this.walls = this.game.add.group();
+        this.walls.enableBody = true;
+
+        this.door = this.game.add.sprite(200, 360, 'door'); 
+        this.door.animations.add('open', [1, 2, 3], 1, true);
+        this.door.animations.add('close', [3, 2, 1], 1, true);
+        //this.game.physics.arcade.enable(this.door);
+        
+
        /* for (var i = 0; i < 10; i++){
             var ledge = this.leftPlatforms.create(100, (i+1) * 180, 'platform');
             ledge.scale.setTo(1, 2);
@@ -177,6 +190,7 @@
         //this.walls.body.collideWorldBounds = true;
         //this.floor.body.onCollide = new Phaser.Signal();
         //this.walls.body.onCollide = new Phaser.Signal();
+
 
         //going down
         this.player = this.game.add.sprite(200, 500, 'dude');
@@ -383,6 +397,9 @@
         } else {
             this.elevatorT.body.immovable = true;
         }
+        if (this.cursors.up.isDown && this.game.physics.arcade.overlap(this.player, this.doors)) {
+            this.playAnimation(this.player, this.door);
+        }
         this.game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler, null, this);
         this.game.physics.arcade.overlap(this.enemyBullets, this.player, this.enemyHitsPlayer, null, this);
         //this.doors.game.
@@ -395,9 +412,14 @@
 
     playAnimation(player, door) {
         door.animations.play('open');
+        this.player.visible = false;
+        this.game.time.events.add(Phaser.Timer.SECOND * 4, this.invisble, this); 
 
         //door.animations.play('open');
         //door2.animations.play('open');
+    }
+    invisble() {
+        this.player.visible = true;
     }
     //playEnemyAnimation(enemy, door2) {
     //    door2.animations.play('open');

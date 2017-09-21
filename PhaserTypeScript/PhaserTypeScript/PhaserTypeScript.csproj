@@ -42,6 +42,8 @@
     <Content Include="assets\QL_TopWall.png" />
     <Content Include="assets\Quick Level.png" />
     <Content Include="assets\Set_1_Floor.png" />
+    <Content Include="assets\Set_Door.png" />
+    <Content Include="assets\Set_Wall.png" />
     <Content Include="assets\sky.png" />
     <Content Include="assets\small Rectangle.png" />
     <Content Include="assets\triangle.png" />
