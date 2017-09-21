@@ -6,6 +6,9 @@
 
     game: Phaser.Game;
     platforms: Phaser.Group;
+    setFloor: Phaser.Group;
+    c: Phaser.Sprite;
+    c2: Phaser.Sprite;
     leftPlatforms: Phaser.Group;
     rightPlatforms: Phaser.Group;
     floor1Doors: Phaser.Group;
@@ -47,6 +50,7 @@
         this.game.load.image('topwall', 'assets/QL_TopWall.png');
         this.game.load.image('floor', 'assets/QL_Floor.png');
         this.game.load.image('platform', 'assets/QL_platform.png');
+        this.game.load.image('set1Floor', 'assets/Set_1_Floor.png');
         this.game.load.image('ground', 'assets/platform.png');
         this.game.load.image('ground2', 'assets/platformShort.png');
         this.game.load.image('ground3', 'assets/platformTiny.png');
@@ -57,6 +61,8 @@
         this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
         this.game.load.spritesheet('doors1', 'assets/Doors_Blue.jpg', 25, 60, 4);
         this.game.load.spritesheet('doors2', 'assets/Doors_Red.jpg', 25, 75, 4);
+        this.game.load.image('button', 'assets/button.png');
+        this.game.load.image('invisible', 'assets/Invisible Box.png');
     }
 
     create() {
@@ -116,12 +122,26 @@
         //var ledge = this.platforms.create(-0, 400, 'ground');
         //ledge.scale.setTo(2, 1);
         //ledge.body.immovable = true;
+
+        this.setFloor = this.game.add.group();
+        this.setFloor.enableBody = false;
+        var f = this.setFloor.create(100, 100, 'set1Floor');
+        f.scale.setTo(1, 2);
+        //f.body.immovable = true;
+        this.c = this.game.add.sprite(100,515, 'invisible');
+        this.game.physics.arcade.enable(this.c);
+        this.c.body.immovable = true;
+        this.c2 = this.game.add.sprite(814, 515, 'invisible');
+        this.game.physics.arcade.enable(this.c2);
+        this.c2.body.immovable = true;
+
+
         this.leftPlatforms = this.game.add.group();
         this.leftPlatforms.enableBody = true;
         this.rightPlatforms = this.game.add.group();
         this.rightPlatforms.enableBody = true;
 
-        for (var i = 0; i < 10; i++){
+       /* for (var i = 0; i < 10; i++){
             var ledge = this.leftPlatforms.create(100, (i+1) * 180, 'platform');
             ledge.scale.setTo(1, 2);
             ledge.body.immovable = true;
@@ -131,9 +151,9 @@
             var ledge2 = this.rightPlatforms.create(600, (i+1) * 180, 'platform');
             ledge2.scale.setTo(1, 2);
             ledge2.body.immovable = true;
-        }
+        }*/
 
-        this.leftSideWall = this.game.add.sprite(0, 0, 'sidewall');
+       /* this.leftSideWall = this.game.add.sprite(0, 0, 'sidewall');
         this.rightSideWall = this.game.add.sprite(995, 0, 'sidewall');
         this.topWall = this.game.add.sprite(0, 0, 'topwall');
         this.game.physics.arcade.enable(this.leftSideWall);
@@ -144,7 +164,7 @@
         this.topWall.body.immovable = true;
         this.leftSideWall.body.onCollide = new Phaser.Signal();
         this.rightSideWall.body.onCollide = new Phaser.Signal();
-        this.topWall.body.onCollide = new Phaser.Signal();
+        this.topWall.body.onCollide = new Phaser.Signal();*/
 
         /*this.walls = this.game.add.sprite(100, this.game.height - 837, 'walls');
         //this.floor = this.game.add.sprite(100, this.game.height - 837, 'floor');
@@ -264,7 +284,20 @@
         this.stateText.anchor.setTo(0.5, 0.5);
         this.stateText.visible = false;
 
+        /*var button = this.game.add.button(1000, 0, 'button', this.fullscreen, this, 2, 1, 0);
+        this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+        this.game.input.onDown.add(this.fullscreen, this);*/
+
     }
+   /* fullscreen() {
+        
+        if (this.game.scale.isFullScreen) {
+            this.game.scale.stopFullScreen();
+        }
+        else {
+            this.game.scale.startFullScreen(false);
+        }*/
+    
     enemySpawn() {
         this.enemies = this.game.add.group();
         this.enemies.enableBody = true;
@@ -293,6 +326,10 @@
         var bulletHIt2 = this.game.physics.arcade.collide(this.bullets, this.rightPlatforms);
         var enemyBulletHit = this.game.physics.arcade.collide(this.enemyBullets, this.leftPlatforms);
         var enemyBulletHit = this.game.physics.arcade.collide(this.enemyBullets, this.rightPlatforms);
+
+        var hitFloor = this.game.physics.arcade.collide(this.player, this.c);
+        var hitFloor = this.game.physics.arcade.collide(this.player, this.c2);
+        
         //var doorHit = this.game.physics.arcade.collide(this.doors, this.player);
         this.game.physics.arcade.overlap(this.player, this.doors, this.playAnimation, null, this);
         //this.game.physics.arcade.overlap(this.enemies, this.doors, this.playEnemyAnimation, null, this);
@@ -317,7 +354,7 @@
         if (this.cursors.up.isDown) {
             this.player.body.velocity.y -= 100;
         }
-        if (this.cursors.up.isDown && this.player.body.touching.down && (hitPlatform || hitPlatform2)) {
+        if (this.cursors.up.isDown && this.player.body.touching.down && (hitPlatform || hitPlatform2 || hitFloor)) {
             this.player.body.velocity.y -= 350;
         }
         if (this.cursors.up.isDown && this.player.body.touching.down && (hitWall || hitWall2 || hitWall3)) {
@@ -413,7 +450,7 @@
         var enemy = this.enemies.getFirstExists(true);
         if (enemyBullet) {
             enemyBullet.reset(enemy.body.x, enemy.body.y);
-            //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
+            this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
             this.firingTimer = this.game.time.now + 2000;
         }
     }

@@ -27,6 +27,7 @@
     <Content Include="assets\baddie.png" />
     <Content Include="assets\big Rectangle.png" />
     <Content Include="assets\bullet.png" />
+    <Content Include="assets\button.png" />
     <Content Include="assets\door1.png" />
     <Content Include="assets\door2.png" />
     <Content Include="assets\Doors.png" />
@@ -34,11 +35,13 @@
     <Content Include="assets\Doors_Red.jpg" />
     <Content Include="assets\dude.png" />
     <Content Include="assets\floor.png" />
+    <Content Include="assets\Invisible Box.png" />
     <Content Include="assets\platform.png" />
     <Content Include="assets\QL_platform.png" />
     <Content Include="assets\QL_SideWall.png" />
     <Content Include="assets\QL_TopWall.png" />
     <Content Include="assets\Quick Level.png" />
+    <Content Include="assets\Set_1_Floor.png" />
     <Content Include="assets\sky.png" />
     <Content Include="assets\small Rectangle.png" />
     <Content Include="assets\triangle.png" />
