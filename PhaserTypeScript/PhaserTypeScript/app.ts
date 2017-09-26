@@ -439,7 +439,7 @@
 
 
         //going down
-        this.player = this.game.add.sprite(200, 500, 'dude');
+        this.player = this.game.add.sprite(285, 300, 'dude');
         //going up
         //this.player = this.game.add.sprite(100, 1700, 'dude');
         //this.door = this.game.add.sprite(this.game.world.width / 2, this.game.world.height - 475, 'doors1');
@@ -547,7 +547,7 @@
     enemySpawn() {
         this.enemies = this.game.add.group();
         this.enemies.enableBody = true;
-        var enemy = this.enemies.create(this.randomIntFromInterval(100, 500), this.game.world.height - 450, 'baddie');
+        var enemy = this.enemies.create(this.player.x + this.randomIntFromInterval(100, 500), this.player.y, 'baddie');
         //enemy.callALL('animations.add','animations','move', [0, 1, 2, 3], 10, true);
         //enemy.callALL('animations.play', 'animations', 'move'); 
     }
@@ -579,6 +579,7 @@
         var elevator2HitFloor = this.game.physics.arcade.collide(this.elevatorT, this.leve1);
         var elevator3HitFloor = this.game.physics.arcade.collide(this.elevatorX, this.leve1);
         var elevator4HitFloor = this.game.physics.arcade.collide(this.elevatorY, this.leve1);
+        var bulletHits = this.game.physics.arcade.collide(this.bullets, this.enemyBullets);
         //var hitFooor2 = this.game.physics.arcade.collide(this.player, this.floor2);
         //var hitFooor3 = this.game.physics.arcade.collide(this.player, this.floor3);
         //var hitFooor4 = this.game.physics.arcade.collide(this.player, this.floor4);
@@ -677,7 +678,15 @@
         else {
             this.elevatorY.body.immovable = true;
         }
-
+        if (bulletHits) {
+            var bullet = this.bullets.getFirstExists(true);
+            var enemyBullet = this.enemyBullets.getFirstExists(true);
+            bullet.kill();
+            enemyBullet.kill();
+        }
+        //if (hitFloor1) {
+        //    this.enemySpawn();
+        //}
 
         /*if (elevator2Hit) {
             this.elevatorT.body.immovable = false;
@@ -694,7 +703,7 @@
         var enemy = this.enemies.getFirstExists(true);
 
 
-        this.game.physics.arcade.moveToXY(enemy, this.player.x, this.player.y, 20);
+        //this.game.physics.arcade.moveToXY(enemy, this.player.x, this.player.y, 20);
 
         if (this.game.physics.arcade.overlap(this.player, (this.floor1 || this.floor2 || this.floor3 || this.floor4 || this.floor5 || this.floor6 || this.floor7) && this.cursors.up.isDown)) {
             this.playAnimation(this.player, this.floor1);
@@ -723,7 +732,7 @@
         if (this.game.time.now > this.bulletTime) {
             bullet = this.bullets.getFirstExists(false);
             if (bullet) {
-                bullet.reset(this.player.x, this.player.y + 8);
+                bullet.reset(this.player.x, this.player.y);
                 if (this.bulletDirection) {
                     bullet.body.velocity.x += 200;
                 }
@@ -762,9 +771,15 @@
     enemyFires() {
         var enemyBullet = this.enemyBullets.getFirstExists(false);
         var enemy = this.enemies.getFirstExists(true);
-        if (enemyBullet) {
+        if (enemyBullet && enemy) {
             enemyBullet.reset(enemy.body.x, enemy.body.y);
-            this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
+            //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
+            if (this.player.x > enemy.body.x) {
+                enemyBullet.body.velocity.x += 100;
+            }
+            else {
+                enemyBullet.body.velocity.x -= 100;
+            }
             this.firingTimer = this.game.time.now + 2000;
         }
     }
