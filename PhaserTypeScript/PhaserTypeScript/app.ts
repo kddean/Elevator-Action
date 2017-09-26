@@ -694,10 +694,15 @@
 
 
         this.game.physics.arcade.moveToXY(enemy, this.player.x, this.player.y, 20);
+
+        if (this.game.physics.arcade.overlap(this.player, (this.floor1 || this.floor2 || this.floor3 || this.floor4 || this.floor5 || this.floor6 || this.floor7) && this.cursors.up.isDown)) {
+            this.playAnimation(this.player, this.floor1);
+
+        }
     }
 
     playAnimation(player, door) {
-        door.animations.play('open');
+        //door.animations.play('open');
         this.player.visible = false;
         this.game.time.events.add(Phaser.Timer.SECOND * 2, this.invisble, this); 
 
