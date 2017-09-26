@@ -174,7 +174,7 @@
 
 
         for (var i = 0; i < 3; i++) {
-                var d = this.floor1.create((i + 1) * 300, 200, 'door');
+                var d = this.floor1.create((i + 1) * 300, 250, 'door');
                 d.scale.setTo(1, 1);
                 d.body.immovable = true;
                 var ledge = this.leve1.create((i+1)*285, 350, 'floor');
@@ -183,7 +183,7 @@
         }
 
         for (var i = 0; i < 3; i++) {
-            var d = this.floor1.create((1200 + (i + 1) * 200), 200, 'door');
+            var d = this.floor1.create((1200 + (i + 1) * 200), 250, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
 
@@ -191,7 +191,7 @@
         
 
         for (var i = 0; i < 3; i++) {
-            var d = this.floor2.create((i + 1) * 300, 600, 'door');
+            var d = this.floor2.create((i + 1) * 300, 650, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
@@ -199,14 +199,14 @@
         
 
         for (var i = 0; i < 2; i++) {
-            var d = this.floor2.create((1400 + (i + 1) * 200), 600, 'door');
+            var d = this.floor2.create((1400 + (i + 1) * 200), 650, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
 
         }
 
         for (var i = 0; i < 5; i++) {
-            var d = this.floor3.create(200 + (i + 1) * 200, 900, 'door');
+            var d = this.floor3.create(200 + (i + 1) * 200, 950, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
@@ -214,7 +214,7 @@
         
 
         for (var i = 0; i < 2; i++) {
-            var d = this.floor4.create(((i + 1) * 150), 1200, 'door');
+            var d = this.floor4.create(((i + 1) * 150), 1250, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
@@ -222,7 +222,7 @@
         
 
         for (var i = 0; i < 4; i++) {
-            var d = this.floor4.create(400 + (i + 1) * 200, 1200, 'door');
+            var d = this.floor4.create(400 + (i + 1) * 200, 1250, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
@@ -230,7 +230,7 @@
        
 
         for (var i = 0; i < 2; i++) {
-            var d = this.floor5.create(((i + 1) * 150), 1500, 'door');
+            var d = this.floor5.create(((i + 1) * 150), 1550, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
@@ -238,7 +238,7 @@
         
 
         for (var i = 0; i < 4; i++) {
-            var d = this.floor5.create(400 + (i + 1) * 200, 1500, 'door');
+            var d = this.floor5.create(400 + (i + 1) * 200, 1550, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
@@ -246,14 +246,14 @@
         
 
         for (var i = 0; i < 2; i++) {
-            var d = this.floor5.create(( 1400 + (i + 1) * 200), 1500, 'door');
+            var d = this.floor5.create(( 1400 + (i + 1) * 200), 1550, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
 
 
         for (var i = 0; i < 4; i++) {
-            var d = this.floor6.create((i + 1) * 150, 1800, 'door');
+            var d = this.floor6.create((i + 1) * 150, 1850, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
@@ -261,7 +261,7 @@
    
 
         for (var i = 0; i < 3; i++) {
-            var d = this.floor6.create(900 + (i + 1) * 150, 1800, 'door');
+            var d = this.floor6.create(900 + (i + 1) * 150, 1850, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
@@ -333,18 +333,19 @@
         this.game.physics.arcade.enable(this.elevatorT);
         this.game.physics.arcade.enable(this.elevatorX);
         this.game.physics.arcade.enable(this.elevatorY);
+        this.elevator.body.enableBody = true;
         this.elevator.body.collideWorldBounds = true;
-        this.elevator.body.velocity.setTo(0, 200);
+        this.elevator.body.velocity.setTo(0, 100);
         this.elevator.body.bounce.set(1);
         //this.elevator.body.allowGravity = false;
         this.elevator.body.immovable = true;
         this.elevator.body.onCollide = new Phaser.Signal();
-        this.elevator.body.enableBody = true;
+        
         this.elevatorT.body.enableBody = true;
         this.elevatorX.body.enableBody = true;
         this.elevatorY.body.enableBody = true;
         
-        this.elevator.body.collideWorldBounds = true;
+       // this.elevator.body.collideWorldBounds = true;
         this.elevatorT.body.collideWorldBounds = true;
         this.elevatorT.body.velocity.setTo(0, 100);
         this.elevatorT.body.bounce.set(1);
@@ -652,7 +653,7 @@
             this.elevator.body.immovable = false;
         }
         else {
-                this.elevator.body.immovable = true;       
+            this.elevator.body.immovable = true;       
         }
         if (elevator2HitFloor) {
             this.isOnElevator = true;
