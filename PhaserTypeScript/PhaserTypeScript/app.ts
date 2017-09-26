@@ -325,7 +325,7 @@
 
         //Elevators
 
-        this.elevator = this.game.add.sprite(1300, this.game.world.height - 500, 'elevator');
+        this.elevator = this.game.add.sprite(1300, this.game.world.height - 100, 'elevator');
         this.elevatorT = this.game.add.sprite(380, this.game.world.height - 400, 'elevator');
         this.elevatorX = this.game.add.sprite(100, this.game.world.height - 800, 'elevator');
         this.elevatorY = this.game.add.sprite(1350, this.game.world.height - 800, 'elevator');
@@ -334,6 +334,9 @@
         this.game.physics.arcade.enable(this.elevatorX);
         this.game.physics.arcade.enable(this.elevatorY);
         this.elevator.body.enableBody = true;
+        this.elevatorT.body.enableBody = true;
+        this.elevatorX.body.enableBody = true;
+        this.elevatorY.body.enableBody = true;
         this.elevator.body.collideWorldBounds = true;
         this.elevator.body.velocity.setTo(0, 100);
         this.elevator.body.bounce.set(1);
@@ -341,9 +344,7 @@
         this.elevator.body.immovable = true;
         this.elevator.body.onCollide = new Phaser.Signal();
         
-        this.elevatorT.body.enableBody = true;
-        this.elevatorX.body.enableBody = true;
-        this.elevatorY.body.enableBody = true;
+        
         
        // this.elevator.body.collideWorldBounds = true;
         this.elevatorT.body.collideWorldBounds = true;
@@ -497,7 +498,7 @@
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.player.animations.add('right', [5, 6, 7, 8], 10, true);
         this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
-        this.game.physics.arcade.enable(this.elevator);
+        //this.game.physics.arcade.enable(this.elevator);
         //this.game.physics.arcade.enable(door);
         this.player.body.collideWorldBounds = true;
         
@@ -554,25 +555,25 @@
     update() {
         //var isDoorOpen = false;
         this.game.input.update();
-        var hitPlatform = this.game.physics.arcade.collide(this.player, this.leftPlatforms);
-        var hitPlatform2 = this.game.physics.arcade.collide(this.player, this.rightPlatforms);
-        var hitWall = this.game.physics.arcade.collide(this.player, this.leftSideWall);
-        var hitWall2 = this.game.physics.arcade.collide(this.player, this.rightSideWall);
-        var hitWall3 = this.game.physics.arcade.collide(this.player, this.topWall);
+        //var hitPlatform = this.game.physics.arcade.collide(this.player, this.leftPlatforms);
+        //var hitPlatform2 = this.game.physics.arcade.collide(this.player, this.rightPlatforms);
+        //var hitWall = this.game.physics.arcade.collide(this.player, this.leftSideWall);
+        //var hitWall2 = this.game.physics.arcade.collide(this.player, this.rightSideWall);
+        //var hitWall3 = this.game.physics.arcade.collide(this.player, this.topWall);
         var hitElevator = this.game.physics.arcade.collide(this.player, this.elevator);
         var hitElevator2 = this.game.physics.arcade.collide(this.player, this.elevatorT);
         var hitElevator3 = this.game.physics.arcade.collide(this.player, this.elevatorX);
         var hitElevator4 = this.game.physics.arcade.collide(this.player, this.elevatorY);
-        var elevatorHit = this.game.physics.arcade.collide(this.elevator, this.rightPlatforms);
-        var elevator2Hit = this.game.physics.arcade.collide(this.elevatorT, this.leftPlatforms);
-        var elevator2Hit2 = this.game.physics.arcade.collide(this.elevatorT, this.topWall);
-        var elevatorHit2 = this.game.physics.arcade.collide(this.elevator, this.topWall);
-        var enemyHit = this.game.physics.arcade.collide(this.enemies, this.leftPlatforms);
-        var enemyHit2 = this.game.physics.arcade.collide(this.enemies, this.rightPlatforms);
-        var bulletHIt = this.game.physics.arcade.collide(this.bullets, this.leftPlatforms);
-        var bulletHIt2 = this.game.physics.arcade.collide(this.bullets, this.rightPlatforms);
-        var enemyBulletHit = this.game.physics.arcade.collide(this.enemyBullets, this.leftPlatforms);
-        var enemyBulletHit = this.game.physics.arcade.collide(this.enemyBullets, this.rightPlatforms);
+        //var elevatorHit = this.game.physics.arcade.collide(this.elevator, this.rightPlatforms);
+        //var elevator2Hit = this.game.physics.arcade.collide(this.elevatorT, this.leftPlatforms);
+        //var elevator2Hit2 = this.game.physics.arcade.collide(this.elevatorT, this.topWall);
+        //var elevatorHit2 = this.game.physics.arcade.collide(this.elevator, this.topWall);
+        //var enemyHit = this.game.physics.arcade.collide(this.enemies, this.leftPlatforms);
+        //var enemyHit2 = this.game.physics.arcade.collide(this.enemies, this.rightPlatforms);
+        //var bulletHIt = this.game.physics.arcade.collide(this.bullets, this.leftPlatforms);
+        //var bulletHIt2 = this.game.physics.arcade.collide(this.bullets, this.rightPlatforms);
+        //var enemyBulletHit = this.game.physics.arcade.collide(this.enemyBullets, this.leftPlatforms);
+        //var enemyBulletHit = this.game.physics.arcade.collide(this.enemyBullets, this.rightPlatforms);
         var hitFloor1 = this.game.physics.arcade.collide(this.player, this.leve1);
         var elevatorHitFloor = this.game.physics.arcade.collide(this.elevator, this.leve1);
         var elevator2HitFloor = this.game.physics.arcade.collide(this.elevatorT, this.leve1);
@@ -622,10 +623,10 @@
         if (this.cursors.up.isDown) {
             this.player.body.velocity.y -= 100;
         }
-        if (this.cursors.up.isDown && this.player.body.touching.down && (hitPlatform || hitPlatform2 /*||hitFloor*/)) {
+        if (this.cursors.up.isDown && this.player.body.touching.down && (hitFloor1)) {
             this.player.body.velocity.y -= 350;
         }
-        if (this.cursors.up.isDown && this.player.body.touching.down && (hitWall || hitWall2 || hitWall3)) {
+        if (this.cursors.up.isDown && this.player.body.touching.down && (hitFloor1)) {
             this.player.body.velocity.y -= 350;
         }
         if (this.cursors.up.isDown && this.player.body.touching.down && (hitElevator || hitElevator2)) {
@@ -637,7 +638,7 @@
         if (this.game.time.now > this.firingTimer) {
             this.enemyFires();
         }
-        if (elevatorHit) {
+        if (hitElevator || hitElevator2 || hitElevator3 || hitElevator4) {
             this.isOnElevator = true;
             this.elevator.body.immovable = false;
             
