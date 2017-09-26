@@ -37,6 +37,8 @@ var SimpleGame = (function () {
         this.score = 0;
         this.livesCount = 3;
         this.firingTimer = 0;
+        this.numberOfEnemies = 1;
+        this.gameTime = 50;
         this.scoreConst = "Score :";
         this.game.stage.backgroundColor = "#000000;";
         // this.game.add.tileSprite(0, 0, 800, 600, 'background');
@@ -406,9 +408,12 @@ var SimpleGame = (function () {
              this.game.scale.startFullScreen(false);
          }*/
     SimpleGame.prototype.enemySpawn = function () {
-        this.enemies = this.game.add.group();
-        this.enemies.enableBody = true;
-        var enemy = this.enemies.create(this.player.x + this.randomIntFromInterval(100, 500), this.player.y, 'baddie');
+        if (this.numberOfEnemies > 0) {
+            this.enemies = this.game.add.group();
+            this.enemies.enableBody = true;
+            var enemy = this.enemies.create(this.player.x + this.randomIntFromInterval(200, 800), this.player.y, 'baddie');
+            this.numberOfEnemies -= 1;
+        }
         //enemy.callALL('animations.add','animations','move', [0, 1, 2, 3], 10, true);
         //enemy.callALL('animations.play', 'animations', 'move'); 
     };
@@ -532,9 +537,9 @@ var SimpleGame = (function () {
             bullet.kill();
             enemyBullet.kill();
         }
-        //if (hitFloor1) {
-        //    this.enemySpawn();
-        //}
+        if (hitFloor1) {
+            this.enemySpawn();
+        }
         /*if (elevator2Hit) {
             this.elevatorT.body.immovable = false;
         } else {
@@ -589,6 +594,7 @@ var SimpleGame = (function () {
         bullet.kill();
         enemy.kill();
         this.enemySpawn();
+        this.numberOfEnemies += 1;
         this.score += 20;
         this.scoreText.text = this.scoreConst + this.score;
     };

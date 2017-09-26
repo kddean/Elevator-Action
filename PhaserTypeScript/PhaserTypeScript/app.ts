@@ -44,6 +44,8 @@
     livingEnemies: Phaser.ArraySet;
     stateText: Phaser.Text;
     livesCount: number;
+    numberOfEnemies: number;
+    gameTime: number;
 
     floor1: Phaser.Group;
     floor2: Phaser.Group;
@@ -91,6 +93,8 @@
         this.score = 0;
         this.livesCount = 3;
         this.firingTimer = 0;
+        this.numberOfEnemies = 1;
+        this.gameTime = 50;
         this.scoreConst = "Score :";
         this.game.stage.backgroundColor = "#000000;"
        // this.game.add.tileSprite(0, 0, 800, 600, 'background');
@@ -545,9 +549,12 @@
         }*/
     
     enemySpawn() {
-        this.enemies = this.game.add.group();
-        this.enemies.enableBody = true;
-        var enemy = this.enemies.create(this.player.x + this.randomIntFromInterval(100, 500), this.player.y, 'baddie');
+        if (this.numberOfEnemies > 0) {
+            this.enemies = this.game.add.group();
+            this.enemies.enableBody = true;
+            var enemy = this.enemies.create(this.player.x + this.randomIntFromInterval(200, 800), this.player.y, 'baddie');
+            this.numberOfEnemies -=1;
+        }
         //enemy.callALL('animations.add','animations','move', [0, 1, 2, 3], 10, true);
         //enemy.callALL('animations.play', 'animations', 'move'); 
     }
@@ -684,9 +691,9 @@
             bullet.kill();
             enemyBullet.kill();
         }
-        //if (hitFloor1) {
-        //    this.enemySpawn();
-        //}
+        if (hitFloor1) {
+            this.enemySpawn();
+        }
 
         /*if (elevator2Hit) {
             this.elevatorT.body.immovable = false;
@@ -751,6 +758,7 @@
         bullet.kill();
         enemy.kill();
         this.enemySpawn();
+        this.numberOfEnemies += 1;
         this.score += 20;
         this.scoreText.text = this.scoreConst + this.score;
     }
