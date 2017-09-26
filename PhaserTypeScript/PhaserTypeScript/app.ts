@@ -45,6 +45,8 @@
     stateText: Phaser.Text;
     livesCount: number;
 
+    key1: Phaser.Sprite;
+
     floor1: Phaser.Group;
     floor2: Phaser.Group;
     floor3: Phaser.Group;
@@ -54,7 +56,10 @@
     floor7: Phaser.Group;
     floor8: Phaser.Group;
     leve1: Phaser.Group;
+    keys: Phaser.Group;
 
+    test: Phaser.Group;
+    testDoors: Phaser.Group;
 
     preload() {
         this.game.load.image('logo', 'phaser2.png');
@@ -82,6 +87,7 @@
         this.game.load.image('wall', 'assets/hanger.png');
         this.game.load.image('floor', 'assets/fancyfloor.png');
         this.game.load.image('archway', 'assets/fancyArchwalls');
+        this.game.load.image('key', 'assets/key.png');
     }
 
     create() {
@@ -94,7 +100,7 @@
         this.scoreConst = "Score :";
         this.game.stage.backgroundColor = "#000000;"
        // this.game.add.tileSprite(0, 0, 800, 600, 'background');
-        this.game.world.setBounds(0, 0, 1890, 2000);
+        this.game.world.setBounds(0, 0, 1890, 10800);
         this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.bullets = this.game.add.group();
         this.bullets.enableBody = true;
@@ -173,7 +179,7 @@
         this.game.physics.arcade.enable(this.leve1);     
 
 
-        for (var i = 0; i < 3; i++) {
+        /*for (var i = 0; i < 3; i++) {
                 var d = this.floor1.create((i + 1) * 300, 250, 'door');
                 d.scale.setTo(1, 1);
                 d.body.immovable = true;
@@ -264,11 +270,29 @@
             var d = this.floor6.create(900 + (i + 1) * 150, 1850, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
-        }
+        }*/
 
         //Floor
+        this.test = this.game.add.group();
+        this.test.enableBody = true;
+        this.testDoors = this.game.add.group();
+        var y = 150;
+        for (var i = 0; i < 50; i++) {
+            
+            for (var j = 0; j < 10; j++){
+                    var t = this.test.create(j * 192, y, 'floor');
+                    var l = this.testDoors.create(((j * 192) + 40), y - 95, 'door');
+                //t.scale.setTo(3, 1);
+               //t.body.immovable = true;
+            }
 
-        var ledge = this.leve1.create(1350, 350, 'floor');
+            y = y + 216;
+           
+        }
+
+
+
+       /* var ledge = this.leve1.create(1350, 350, 'floor');
         ledge.scale.setTo(3, 1);
         ledge.body.immovable = true;
 
@@ -321,11 +345,11 @@
         ledge13.body.immovable = true;
         var ledge13 = this.leve1.create(855, 350, 'wall');
         ledge13.scale.setTo(1, 1.85);
-        ledge13.body.immovable = true;
+        ledge13.body.immovable = true;*/
 
         //Elevators
 
-        this.elevator = this.game.add.sprite(1300, this.game.world.height - 100, 'elevator');
+        /*this.elevator = this.game.add.sprite(1300, this.game.world.height - 100, 'elevator');
         this.elevatorT = this.game.add.sprite(380, this.game.world.height - 400, 'elevator');
         this.elevatorX = this.game.add.sprite(100, this.game.world.height - 800, 'elevator');
         this.elevatorY = this.game.add.sprite(1350, this.game.world.height - 800, 'elevator');
@@ -359,7 +383,7 @@
             var r = this.elevatorSet.create((i + 1) * 150, 1800, 'elevator');
             r.scale.setTo(1, 1);
             r.body.immovable = true;
-        }*/
+        }/
 
         this.elevatorX.body.collideWorldBounds = true;
         this.elevatorX.body.velocity.setTo(0, 100);
@@ -371,7 +395,17 @@
         this.elevatorY.body.velocity.setTo(0, 100);
         this.elevatorY.body.bounce.set(1);
         this.elevatorY.body.immovable = true;
-        this.elevatorY.body.onCollide = new Phaser.Signal();
+        this.elevatorY.body.onCollide = new Phaser.Signal();*/
+
+        //Keys
+       /* this.keys = this.game.add.group();
+        this.keys.enableBody = true;
+        var k = this.keys.create(300, 500, 'key');
+        this.game.physics.arcade.overlap(this.player, this.keys, this.collectKey, null, this);
+
+        this.key1 = this.game.add.sprite(600, 600, 'key');
+        this.game.physics.arcade.overlap(this.player, this.key1, this.collectKey, null, this);*/
+
 
         //this.setFloor = this.game.add.group();
         //this.setFloor.enableBody = false;
@@ -638,7 +672,7 @@
         if (this.game.time.now > this.firingTimer) {
             this.enemyFires();
         }
-        if (hitElevator || hitElevator2 || hitElevator3 || hitElevator4) {
+        /*if (hitElevator || hitElevator2 || hitElevator3 || hitElevator4) {
             this.isOnElevator = true;
             this.elevator.body.immovable = false;
             
@@ -700,6 +734,10 @@
             this.playAnimation(this.player, this.floor1);
 
         }
+
+        
+         
+        
     }
 
     playAnimation(player, door) {
@@ -712,6 +750,10 @@
     }
     invisble() {
         this.player.visible = true;
+    }
+
+    collectKey(key) {
+        key.kill();
     }
     //playEnemyAnimation(enemy, door2) {
     //    door2.animations.play('open');

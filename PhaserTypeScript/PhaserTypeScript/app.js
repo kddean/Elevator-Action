@@ -29,6 +29,7 @@ var SimpleGame = (function () {
         this.game.load.image('wall', 'assets/hanger.png');
         this.game.load.image('floor', 'assets/fancyfloor.png');
         this.game.load.image('archway', 'assets/fancyArchwalls');
+        this.game.load.image('key', 'assets/key.png');
     };
     SimpleGame.prototype.create = function () {
         this.game.camera.follow(this.player);
@@ -40,7 +41,7 @@ var SimpleGame = (function () {
         this.scoreConst = "Score :";
         this.game.stage.backgroundColor = "#000000;";
         // this.game.add.tileSprite(0, 0, 800, 600, 'background');
-        this.game.world.setBounds(0, 0, 1890, 2000);
+        this.game.world.setBounds(0, 0, 1890, 10800);
         this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.bullets = this.game.add.group();
         this.bullets.enableBody = true;
@@ -113,114 +114,168 @@ var SimpleGame = (function () {
         this.leve1 = this.game.add.group();
         this.leve1.enableBody = true;
         this.game.physics.arcade.enable(this.leve1);
-        for (var i = 0; i < 3; i++) {
-            var d = this.floor1.create((i + 1) * 300, 250, 'door');
-            d.scale.setTo(1, 1);
-            d.body.immovable = true;
-            var ledge = this.leve1.create((i + 1) * 285, 350, 'floor');
-            ledge.scale.setTo(0.75, 1);
-            ledge.body.immovable = true;
+        /*for (var i = 0; i < 3; i++) {
+                var d = this.floor1.create((i + 1) * 300, 250, 'door');
+                d.scale.setTo(1, 1);
+                d.body.immovable = true;
+                var ledge = this.leve1.create((i+1)*285, 350, 'floor');
+                ledge.scale.setTo(0.75, 1);
+                ledge.body.immovable = true;
         }
+
         for (var i = 0; i < 3; i++) {
             var d = this.floor1.create((1200 + (i + 1) * 200), 250, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
+
         }
+        
+
         for (var i = 0; i < 3; i++) {
             var d = this.floor2.create((i + 1) * 300, 650, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
+
+        
+
         for (var i = 0; i < 2; i++) {
             var d = this.floor2.create((1400 + (i + 1) * 200), 650, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
+
         }
+
         for (var i = 0; i < 5; i++) {
             var d = this.floor3.create(200 + (i + 1) * 200, 950, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
+
+        
+
         for (var i = 0; i < 2; i++) {
             var d = this.floor4.create(((i + 1) * 150), 1250, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
+
+        
+
         for (var i = 0; i < 4; i++) {
             var d = this.floor4.create(400 + (i + 1) * 200, 1250, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
+
+       
+
         for (var i = 0; i < 2; i++) {
             var d = this.floor5.create(((i + 1) * 150), 1550, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
+
+        
+
         for (var i = 0; i < 4; i++) {
             var d = this.floor5.create(400 + (i + 1) * 200, 1550, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
+
+        
+
         for (var i = 0; i < 2; i++) {
-            var d = this.floor5.create((1400 + (i + 1) * 200), 1550, 'door');
+            var d = this.floor5.create(( 1400 + (i + 1) * 200), 1550, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
+
+
         for (var i = 0; i < 4; i++) {
             var d = this.floor6.create((i + 1) * 150, 1850, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
+
+   
+
         for (var i = 0; i < 3; i++) {
             var d = this.floor6.create(900 + (i + 1) * 150, 1850, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
-        }
+        }*/
         //Floor
-        var ledge = this.leve1.create(1350, 350, 'floor');
-        ledge.scale.setTo(3, 1);
-        ledge.body.immovable = true;
-        var ledge2 = this.leve1.create(285, 750, 'floor');
-        ledge2.scale.setTo(5, 1);
-        ledge2.body.immovable = true;
-        var ledge3 = this.leve1.create(1550, 750, 'floor');
-        ledge3.scale.setTo(2, 1);
-        ledge3.body.immovable = true;
-        var ledge4 = this.leve1.create(285, 1050, 'floor');
-        ledge4.scale.setTo(6, 1);
-        ledge4.body.immovable = true;
-        var ledge5 = this.leve1.create(0, 1350, 'floor');
-        ledge5.scale.setTo(2, 1);
-        ledge5.body.immovable = true;
-        var ledge6 = this.leve1.create(550, 1350, 'floor');
-        ledge6.scale.setTo(4, 1);
-        ledge6.body.immovable = true;
-        var ledge7 = this.leve1.create(1550, 1350, 'floor');
-        ledge7.scale.setTo(2, 1);
-        ledge7.body.immovable = true;
-        var ledge8 = this.leve1.create(0, 1650, 'floor');
-        ledge8.scale.setTo(2, 1);
-        ledge8.body.immovable = true;
-        var ledge9 = this.leve1.create(550, 1650, 'floor');
-        ledge9.scale.setTo(8, 1);
-        ledge9.body.immovable = true;
-        var ledge10 = this.leve1.create(0, 1950, 'floor');
-        ledge10.scale.setTo(4, 1);
-        ledge10.body.immovable = true;
-        var ledge11 = this.leve1.create(1000, 1950, 'floor');
-        ledge11.scale.setTo(2.5, 1);
-        ledge11.body.immovable = true;
-        var ledge12 = this.leve1.create(750, 750, 'wall');
-        ledge12.scale.setTo(1, 4.2);
-        ledge12.body.immovable = true;
-        var ledge13 = this.leve1.create(429, 350, 'wall');
-        ledge13.scale.setTo(1, 1.85);
-        ledge13.body.immovable = true;
-        var ledge13 = this.leve1.create(855, 350, 'wall');
-        ledge13.scale.setTo(1, 1.85);
-        ledge13.body.immovable = true;
+        this.test = this.game.add.group();
+        this.test.enableBody = true;
+        this.testDoors = this.game.add.group();
+        var y = 150;
+        for (var i = 0; i < 50; i++) {
+            for (var j = 0; j < 10; j++) {
+                var t = this.test.create(j * 192, y, 'floor');
+                var l = this.testDoors.create(((j * 192) + 40), y - 95, 'door');
+                //t.scale.setTo(3, 1);
+                //t.body.immovable = true;
+            }
+            y = y + 216;
+        }
+        /* var ledge = this.leve1.create(1350, 350, 'floor');
+         ledge.scale.setTo(3, 1);
+         ledge.body.immovable = true;
+ 
+         var ledge2 = this.leve1.create(285, 750, 'floor');
+         ledge2.scale.setTo(5, 1);
+         ledge2.body.immovable = true;
+ 
+         var ledge3 = this.leve1.create(1550, 750, 'floor');
+         ledge3.scale.setTo(2, 1);
+         ledge3.body.immovable = true;
+ 
+         var ledge4 = this.leve1.create(285, 1050, 'floor');
+         ledge4.scale.setTo(6, 1);
+         ledge4.body.immovable = true;
+ 
+         var ledge5 = this.leve1.create(0, 1350, 'floor');
+         ledge5.scale.setTo(2, 1);
+         ledge5.body.immovable = true;
+ 
+         var ledge6 = this.leve1.create(550, 1350, 'floor');
+         ledge6.scale.setTo(4, 1);
+         ledge6.body.immovable = true;
+ 
+         var ledge7 = this.leve1.create(1550, 1350, 'floor');
+         ledge7.scale.setTo(2, 1);
+         ledge7.body.immovable = true;
+ 
+         var ledge8 = this.leve1.create(0, 1650, 'floor');
+         ledge8.scale.setTo(2, 1);
+         ledge8.body.immovable = true;
+ 
+         var ledge9 = this.leve1.create(550, 1650, 'floor');
+         ledge9.scale.setTo(8, 1);
+         ledge9.body.immovable = true;
+ 
+         var ledge10 = this.leve1.create(0, 1950, 'floor');
+         ledge10.scale.setTo(4, 1);
+         ledge10.body.immovable = true;
+ 
+         var ledge11 = this.leve1.create(1000, 1950, 'floor');
+         ledge11.scale.setTo(2.5, 1);
+         ledge11.body.immovable = true;
+ 
+         var ledge12 = this.leve1.create(750, 750, 'wall');
+         ledge12.scale.setTo(1, 4.2);
+         ledge12.body.immovable = true;
+ 
+         var ledge13 = this.leve1.create(429, 350, 'wall');
+         ledge13.scale.setTo(1, 1.85);
+         ledge13.body.immovable = true;
+         var ledge13 = this.leve1.create(855, 350, 'wall');
+         ledge13.scale.setTo(1, 1.85);
+         ledge13.body.immovable = true;*/
         //Elevators
-        this.elevator = this.game.add.sprite(1300, this.game.world.height - 100, 'elevator');
+        /*this.elevator = this.game.add.sprite(1300, this.game.world.height - 100, 'elevator');
         this.elevatorT = this.game.add.sprite(380, this.game.world.height - 400, 'elevator');
         this.elevatorX = this.game.add.sprite(100, this.game.world.height - 800, 'elevator');
         this.elevatorY = this.game.add.sprite(1350, this.game.world.height - 800, 'elevator');
@@ -238,29 +293,43 @@ var SimpleGame = (function () {
         //this.elevator.body.allowGravity = false;
         this.elevator.body.immovable = true;
         this.elevator.body.onCollide = new Phaser.Signal();
-        // this.elevator.body.collideWorldBounds = true;
+        
+        
+        
+       // this.elevator.body.collideWorldBounds = true;
         this.elevatorT.body.collideWorldBounds = true;
         this.elevatorT.body.velocity.setTo(0, 100);
         this.elevatorT.body.bounce.set(1);
         this.elevatorT.body.immovable = true;
         this.elevatorT.body.onCollide = new Phaser.Signal();
+
         /*this.elevatorSet = this.game.add.group();
         this.elevatorSet.enableBody = true;
         for (var i = 0; i < 3; i++) {
             var r = this.elevatorSet.create((i + 1) * 150, 1800, 'elevator');
             r.scale.setTo(1, 1);
             r.body.immovable = true;
-        }*/
+        }/
+
         this.elevatorX.body.collideWorldBounds = true;
         this.elevatorX.body.velocity.setTo(0, 100);
         this.elevatorX.body.bounce.set(1);
         this.elevatorX.body.immovable = true;
         this.elevatorX.body.onCollide = new Phaser.Signal();
+
         this.elevatorY.body.collideWorldBounds = true;
         this.elevatorY.body.velocity.setTo(0, 100);
         this.elevatorY.body.bounce.set(1);
         this.elevatorY.body.immovable = true;
-        this.elevatorY.body.onCollide = new Phaser.Signal();
+        this.elevatorY.body.onCollide = new Phaser.Signal();*/
+        //Keys
+        /* this.keys = this.game.add.group();
+         this.keys.enableBody = true;
+         var k = this.keys.create(300, 500, 'key');
+         this.game.physics.arcade.overlap(this.player, this.keys, this.collectKey, null, this);
+ 
+         this.key1 = this.game.add.sprite(600, 600, 'key');
+         this.game.physics.arcade.overlap(this.player, this.key1, this.collectKey, null, this);*/
         //this.setFloor = this.game.add.group();
         //this.setFloor.enableBody = false;
         //var f = this.setFloor.create(100, 100, 'set1Floor');
@@ -489,13 +558,16 @@ var SimpleGame = (function () {
         if (this.game.time.now > this.firingTimer) {
             this.enemyFires();
         }
-        if (hitElevator || hitElevator2 || hitElevator3 || hitElevator4) {
+        /*if (hitElevator || hitElevator2 || hitElevator3 || hitElevator4) {
             this.isOnElevator = true;
             this.elevator.body.immovable = false;
+            
         }
         else {
             this.elevator.body.immovable = true;
+            
         }
+
         //Current Elevators' Contorls
         if (elevatorHitFloor) {
             this.isOnElevator = true;
@@ -525,6 +597,8 @@ var SimpleGame = (function () {
         else {
             this.elevatorY.body.immovable = true;
         }
+
+
         /*if (elevator2Hit) {
             this.elevatorT.body.immovable = false;
         } else {
@@ -551,6 +625,9 @@ var SimpleGame = (function () {
     };
     SimpleGame.prototype.invisble = function () {
         this.player.visible = true;
+    };
+    SimpleGame.prototype.collectKey = function (key) {
+        key.kill();
     };
     //playEnemyAnimation(enemy, door2) {
     //    door2.animations.play('open');
