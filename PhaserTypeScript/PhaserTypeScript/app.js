@@ -18,16 +18,17 @@ var SimpleGame = (function () {
         this.game.load.image('ground3', 'assets/platformTiny.png');
         this.game.load.image('bullet', 'assets/bullet.png');
         this.game.load.image('star', 'assets/bullet.png');
-        this.game.load.image('elevator', 'assets/elevatorPro.png');
+        this.game.load.image('elevator', 'assets/feather.png');
         this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
         this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
         this.game.load.spritesheet('doors1', 'assets/Doors_Blue.jpg', 25, 60, 4);
         this.game.load.spritesheet('doors2', 'assets/Doors_Red.jpg', 25, 75, 4);
         this.game.load.image('button', 'assets/button.png');
         this.game.load.image('invisible', 'assets/Invisible Box.png');
-        this.game.load.image('door', 'assets/Set_Door.png');
-        this.game.load.image('wall', 'assets/Set_Wall.png');
-        this.game.load.image('floor', 'assets/Set_Floor.png');
+        this.game.load.image('door', 'assets/fancydoor.png');
+        this.game.load.image('wall', 'assets/hanger.png');
+        this.game.load.image('floor', 'assets/fancyfloor.png');
+        this.game.load.image('archway', 'assets/fancyArchwalls');
     };
     SimpleGame.prototype.create = function () {
         this.game.camera.follow(this.player);
@@ -125,20 +126,11 @@ var SimpleGame = (function () {
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
-        var ledge = this.leve1.create(1350, 350, 'floor');
-        ledge.scale.setTo(3, 1);
-        ledge.body.immovable = true;
         for (var i = 0; i < 3; i++) {
             var d = this.floor2.create((i + 1) * 300, 600, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
-        var ledge2 = this.leve1.create(285, 750, 'floor');
-        ledge2.scale.setTo(5, 1);
-        ledge2.body.immovable = true;
-        var ledge3 = this.leve1.create(1550, 750, 'floor');
-        ledge3.scale.setTo(2, 1);
-        ledge3.body.immovable = true;
         for (var i = 0; i < 2; i++) {
             var d = this.floor2.create((1400 + (i + 1) * 200), 600, 'door');
             d.scale.setTo(1, 1);
@@ -149,44 +141,26 @@ var SimpleGame = (function () {
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
-        var ledge4 = this.leve1.create(285, 1050, 'floor');
-        ledge4.scale.setTo(6, 1);
-        ledge4.body.immovable = true;
         for (var i = 0; i < 2; i++) {
             var d = this.floor4.create(((i + 1) * 150), 1200, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
-        var ledge5 = this.leve1.create(0, 1350, 'floor');
-        ledge5.scale.setTo(2, 1);
-        ledge5.body.immovable = true;
         for (var i = 0; i < 4; i++) {
             var d = this.floor4.create(400 + (i + 1) * 200, 1200, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
-        var ledge6 = this.leve1.create(550, 1350, 'floor');
-        ledge6.scale.setTo(4, 1);
-        ledge6.body.immovable = true;
-        var ledge7 = this.leve1.create(1550, 1350, 'floor');
-        ledge7.scale.setTo(2, 1);
-        ledge7.body.immovable = true;
         for (var i = 0; i < 2; i++) {
             var d = this.floor5.create(((i + 1) * 150), 1500, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
-        var ledge8 = this.leve1.create(0, 1650, 'floor');
-        ledge8.scale.setTo(2, 1);
-        ledge8.body.immovable = true;
         for (var i = 0; i < 4; i++) {
             var d = this.floor5.create(400 + (i + 1) * 200, 1500, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
-        var ledge9 = this.leve1.create(550, 1650, 'floor');
-        ledge9.scale.setTo(8, 1);
-        ledge9.body.immovable = true;
         for (var i = 0; i < 2; i++) {
             var d = this.floor5.create((1400 + (i + 1) * 200), 1500, 'door');
             d.scale.setTo(1, 1);
@@ -197,14 +171,42 @@ var SimpleGame = (function () {
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
-        var ledge10 = this.leve1.create(0, 1950, 'floor');
-        ledge10.scale.setTo(4, 1);
-        ledge10.body.immovable = true;
         for (var i = 0; i < 3; i++) {
             var d = this.floor6.create(900 + (i + 1) * 150, 1800, 'door');
             d.scale.setTo(1, 1);
             d.body.immovable = true;
         }
+        //Floor
+        var ledge = this.leve1.create(1350, 350, 'floor');
+        ledge.scale.setTo(3, 1);
+        ledge.body.immovable = true;
+        var ledge2 = this.leve1.create(285, 750, 'floor');
+        ledge2.scale.setTo(5, 1);
+        ledge2.body.immovable = true;
+        var ledge3 = this.leve1.create(1550, 750, 'floor');
+        ledge3.scale.setTo(2, 1);
+        ledge3.body.immovable = true;
+        var ledge4 = this.leve1.create(285, 1050, 'floor');
+        ledge4.scale.setTo(6, 1);
+        ledge4.body.immovable = true;
+        var ledge5 = this.leve1.create(0, 1350, 'floor');
+        ledge5.scale.setTo(2, 1);
+        ledge5.body.immovable = true;
+        var ledge6 = this.leve1.create(550, 1350, 'floor');
+        ledge6.scale.setTo(4, 1);
+        ledge6.body.immovable = true;
+        var ledge7 = this.leve1.create(1550, 1350, 'floor');
+        ledge7.scale.setTo(2, 1);
+        ledge7.body.immovable = true;
+        var ledge8 = this.leve1.create(0, 1650, 'floor');
+        ledge8.scale.setTo(2, 1);
+        ledge8.body.immovable = true;
+        var ledge9 = this.leve1.create(550, 1650, 'floor');
+        ledge9.scale.setTo(8, 1);
+        ledge9.body.immovable = true;
+        var ledge10 = this.leve1.create(0, 1950, 'floor');
+        ledge10.scale.setTo(4, 1);
+        ledge10.body.immovable = true;
         var ledge11 = this.leve1.create(1000, 1950, 'floor');
         ledge11.scale.setTo(2.5, 1);
         ledge11.body.immovable = true;
@@ -217,6 +219,48 @@ var SimpleGame = (function () {
         var ledge13 = this.leve1.create(855, 350, 'wall');
         ledge13.scale.setTo(1, 1.85);
         ledge13.body.immovable = true;
+        //Elevators
+        this.elevator = this.game.add.sprite(1300, this.game.world.height - 500, 'elevator');
+        this.elevatorT = this.game.add.sprite(380, this.game.world.height - 400, 'elevator');
+        this.elevatorX = this.game.add.sprite(100, this.game.world.height - 800, 'elevator');
+        this.elevatorY = this.game.add.sprite(1350, this.game.world.height - 800, 'elevator');
+        this.game.physics.arcade.enable(this.elevator);
+        this.game.physics.arcade.enable(this.elevatorT);
+        this.game.physics.arcade.enable(this.elevatorX);
+        this.game.physics.arcade.enable(this.elevatorY);
+        this.elevator.body.collideWorldBounds = true;
+        this.elevator.body.velocity.setTo(0, 200);
+        this.elevator.body.bounce.set(1);
+        //this.elevator.body.allowGravity = false;
+        this.elevator.body.immovable = true;
+        this.elevator.body.onCollide = new Phaser.Signal();
+        this.elevator.body.enableBody = true;
+        this.elevatorT.body.enableBody = true;
+        this.elevatorX.body.enableBody = true;
+        this.elevatorY.body.enableBody = true;
+        this.elevator.body.collideWorldBounds = true;
+        this.elevatorT.body.collideWorldBounds = true;
+        this.elevatorT.body.velocity.setTo(0, 100);
+        this.elevatorT.body.bounce.set(1);
+        this.elevatorT.body.immovable = true;
+        this.elevatorT.body.onCollide = new Phaser.Signal();
+        /*this.elevatorSet = this.game.add.group();
+        this.elevatorSet.enableBody = true;
+        for (var i = 0; i < 3; i++) {
+            var r = this.elevatorSet.create((i + 1) * 150, 1800, 'elevator');
+            r.scale.setTo(1, 1);
+            r.body.immovable = true;
+        }*/
+        this.elevatorX.body.collideWorldBounds = true;
+        this.elevatorX.body.velocity.setTo(0, 100);
+        this.elevatorX.body.bounce.set(1);
+        this.elevatorX.body.immovable = true;
+        this.elevatorX.body.onCollide = new Phaser.Signal();
+        this.elevatorY.body.collideWorldBounds = true;
+        this.elevatorY.body.velocity.setTo(0, 100);
+        this.elevatorY.body.bounce.set(1);
+        this.elevatorY.body.immovable = true;
+        this.elevatorY.body.onCollide = new Phaser.Signal();
         //this.setFloor = this.game.add.group();
         //this.setFloor.enableBody = false;
         //var f = this.setFloor.create(100, 100, 'set1Floor');
@@ -276,21 +320,11 @@ var SimpleGame = (function () {
         //going up
         //this.player = this.game.add.sprite(100, 1700, 'dude');
         //this.door = this.game.add.sprite(this.game.world.width / 2, this.game.world.height - 475, 'doors1');
-        this.elevator = this.game.add.sprite(900, this.game.world.height - 500, 'elevator');
-        this.elevatorT = this.game.add.sprite(400, this.game.world.height - 400, 'elevator');
         this.game.physics.arcade.enable(this.player);
         this.player.body.bounce.y = 0.2;
         this.player.body.gravity.y = 1000;
         this.player.body.collideWorldBounds = true;
         this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.game.physics.arcade.enable(this.elevator);
-        this.game.physics.arcade.enable(this.elevatorT);
-        this.elevator.body.collideWorldBounds = true;
-        this.elevator.body.velocity.setTo(0, 200);
-        this.elevator.body.bounce.set(1);
-        //this.elevator.body.allowGravity = false;
-        this.elevator.body.immovable = true;
-        this.elevator.body.onCollide = new Phaser.Signal();
         //this.elevator.body.allowGravity = false;
         this.doors = this.game.add.group();
         this.doors.enableBody = true;
@@ -334,15 +368,7 @@ var SimpleGame = (function () {
         this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
         this.game.physics.arcade.enable(this.elevator);
         //this.game.physics.arcade.enable(door);
-        this.elevator.body.enableBody = true;
-        this.elevatorT.body.enableBody = true;
         this.player.body.collideWorldBounds = true;
-        this.elevator.body.collideWorldBounds = true;
-        this.elevatorT.body.collideWorldBounds = true;
-        this.elevatorT.body.velocity.setTo(0, 100);
-        this.elevatorT.body.bounce.set(1);
-        this.elevatorT.body.immovable = true;
-        this.elevatorT.body.onCollide = new Phaser.Signal();
         //if (this.isOnElevator) {
         //}
         //else {
@@ -396,6 +422,8 @@ var SimpleGame = (function () {
         var hitWall3 = this.game.physics.arcade.collide(this.player, this.topWall);
         var hitElevator = this.game.physics.arcade.collide(this.player, this.elevator);
         var hitElevator2 = this.game.physics.arcade.collide(this.player, this.elevatorT);
+        var hitElevator3 = this.game.physics.arcade.collide(this.player, this.elevatorX);
+        var hitElevator4 = this.game.physics.arcade.collide(this.player, this.elevatorY);
         var elevatorHit = this.game.physics.arcade.collide(this.elevator, this.rightPlatforms);
         var elevator2Hit = this.game.physics.arcade.collide(this.elevatorT, this.leftPlatforms);
         var elevator2Hit2 = this.game.physics.arcade.collide(this.elevatorT, this.topWall);
@@ -407,6 +435,10 @@ var SimpleGame = (function () {
         var enemyBulletHit = this.game.physics.arcade.collide(this.enemyBullets, this.leftPlatforms);
         var enemyBulletHit = this.game.physics.arcade.collide(this.enemyBullets, this.rightPlatforms);
         var hitFloor1 = this.game.physics.arcade.collide(this.player, this.leve1);
+        var elevatorHitFloor = this.game.physics.arcade.collide(this.elevator, this.leve1);
+        var elevator2HitFloor = this.game.physics.arcade.collide(this.elevatorT, this.leve1);
+        var elevator3HitFloor = this.game.physics.arcade.collide(this.elevatorX, this.leve1);
+        var elevator4HitFloor = this.game.physics.arcade.collide(this.elevatorY, this.leve1);
         //var hitFooor2 = this.game.physics.arcade.collide(this.player, this.floor2);
         //var hitFooor3 = this.game.physics.arcade.collide(this.player, this.floor3);
         //var hitFooor4 = this.game.physics.arcade.collide(this.player, this.floor4);
@@ -464,12 +496,40 @@ var SimpleGame = (function () {
         else {
             this.elevator.body.immovable = true;
         }
-        if (elevator2Hit) {
+        //Current Elevators' Contorls
+        if (elevatorHitFloor) {
+            this.isOnElevator = true;
+            this.elevator.body.immovable = false;
+        }
+        else {
+            this.elevator.body.immovable = true;
+        }
+        if (elevator2HitFloor) {
+            this.isOnElevator = true;
             this.elevatorT.body.immovable = false;
         }
         else {
             this.elevatorT.body.immovable = true;
         }
+        if (elevator3HitFloor) {
+            this.isOnElevator = true;
+            this.elevatorX.body.immovable = false;
+        }
+        else {
+            this.elevator.body.immovable = true;
+        }
+        if (elevator4HitFloor) {
+            this.isOnElevator = true;
+            this.elevatorY.body.immovable = false;
+        }
+        else {
+            this.elevatorY.body.immovable = true;
+        }
+        /*if (elevator2Hit) {
+            this.elevatorT.body.immovable = false;
+        } else {
+            this.elevatorT.body.immovable = true;
+        }*/
         if (this.cursors.up.isDown && this.game.physics.arcade.overlap(this.player, this.doors)) {
             this.playAnimation(this.player, this.door);
         }
