@@ -42,6 +42,8 @@
         livesCount: number;
         numberOfEnemies: number;
         gameTime: number;
+        music: Phaser.Sound;
+        doorMusic: Phaser.Sound;
 
         floor1: Phaser.Group;
         floor2: Phaser.Group;
@@ -63,7 +65,6 @@
             this.game.load.image('walls', 'assets/QL_Wall.png');
             this.game.load.image('sidewall', 'assets/QL_SideWall.png');
             this.game.load.image('topwall', 'assets/QL_TopWall.png');
-
             this.game.load.image('platform', 'assets/QL_platform.png');
             this.game.load.image('set1Floor', 'assets/Set_1_Floor.png');
             this.game.load.image('ground', 'assets/platform.png');
@@ -83,6 +84,8 @@
             this.game.load.image('floor', 'assets/fancyfloor.png');
             this.game.load.image('archway', 'assets/fancyArchwalls');
             this.game.load.image('key', 'assets/key.png');
+            this.game.load.audio('shoot', 'assets/shoot.wav', true);
+            this.game.load.audio('doorOpen', 'assets/door_open_2.wav', true);
         }
 
         create() {
@@ -92,12 +95,11 @@
             this.score = 0;
             this.livesCount = 3;
             this.firingTimer = 0;
-            this.numberOfEnemies = 1;
+            this.numberOfEnemies = 2;
             this.gameTime = 50;
             this.scoreConst = "Score :";
             this.game.stage.backgroundColor = "#000000;"
             this.game.add.sprite(0, 0, 'levelDesign');
-            // this.game.add.tileSprite(0, 0, 800, 600, 'background');
             this.game.world.setBounds(0, 0, 1890, 10800);
             this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.bullets = this.game.add.group();
@@ -109,45 +111,10 @@
             this.bullets.setAll('outOfBoundsKill', true);
             this.bullets.setAll('checkWorldBounds', true);
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
-            //this.game.add.sprite(0, 0, 'sky');
+            this.music = this.add.audio('shoot', 1, false);
+            this.doorMusic = this.add.audio('doorOpen', 1, false);
             this.platforms = this.game.add.group();
             this.platforms.enableBody = true;
-            //var ground = this.platforms.create(-0, this.game.world.height - 400, 'ground');
-            //ground.scale.setTo(2, 1);
-            //ground.body.immovable = true;
-
-
-            //for (var i = 0; i < 3; i++) {
-            /*var ledge = this.platforms.create(0, /*(this.game.world.height - ((i + 1) * 150) > 300 ? this.game.world.height - ((i + 1) * 150) : 300)/ (i+1) * 180, 'ground');
-            ledge.scale.setTo(2, 1);
-            ledge.body.immovable = true;
-            //}
-           /* ledge = this.platforms.create(0, 2 * 180, 'ground2');
-            //ledge.scale.setTo(0, 0);
-            ledge.body.immovable = true;
-     
-            var ledge2 = this.platforms.create(400, 2 * 180, 'ground2');
-            //ledge2.scale.setTo(0, 0);
-            ledge2.body.immovable = true;
-    
-            var ledge3 = this.platforms.create(0, 180, 'ground2');
-            ledge3.body.immovable = true;
-    
-            var ledge4 = this.platforms.create(300, 180, 'ground2');
-            ledge4.body.immovable = true;
-    
-            var ledge5 = this.platforms.create(500, 180, 'ground2');
-            ledge5.body.immovable = true;
-    
-            ledge = this.platforms.create(0, 3* 190, 'ground');
-            ledge.scale.setTo(2, 1);
-            ledge.body.immovable = true;*/
-
-            //var ledge = this.platforms.create(-0, 400, 'ground');
-            //ledge.scale.setTo(2, 1);
-            //ledge.body.immovable = true;
-
-            //Door Placement
             this.floor1 = this.game.add.group();
             this.floor1.enableBody = true;
             this.game.physics.arcade.enable(this.floor1);
@@ -452,73 +419,8 @@
             this.elevatorY.body.immovable = true;
             this.elevatorY.body.onCollide = new Phaser.Signal();
 
-            //this.setFloor = this.game.add.group();
-            //this.setFloor.enableBody = false;
-            //var f = this.setFloor.create(100, 100, 'set1Floor');
-            //f.scale.setTo(1, 2);
-            //f.body.immovable = true;
-            //this.c = this.game.add.sprite(100,515, 'invisible');
-            //this.game.physics.arcade.enable(this.c);
-            //this.c.body.immovable = true;
-            //this.c2 = this.game.add.sprite(814, 515, 'invisible');
-            //this.game.physics.arcade.enable(this.c2);
-            //this.c2.body.immovable = true;
-
-
-            //this.leftPlatforms = this.game.add.group();
-            //this.leftPlatforms.enableBody = true;
-            //this.rightPlatforms = this.game.add.group();
-            //this.rightPlatforms.enableBody = true;
-
-            //this.walls = this.game.add.group();
-            //this.walls.enableBody = true;
-
-            /*this.door = this.game.add.sprite(200, 360, 'door'); 
-            this.door.animations.add('open', [1, 2, 3], 1, true);
-            this.door.animations.add('close', [3, 2, 1], 1, true);*/
-            //this.game.physics.arcade.enable(this.door);
-
-
-            /* for (var i = 0; i < 10; i++){
-                 var ledge = this.leftPlatforms.create(100, (i+1) * 180, 'platform');
-                 ledge.scale.setTo(1, 2);
-                 ledge.body.immovable = true;
-             }
-     
-             for (var i = 0; i < 10; i++) {
-                 var ledge2 = this.rightPlatforms.create(600, (i+1) * 180, 'platform');
-                 ledge2.scale.setTo(1, 2);
-                 ledge2.body.immovable = true;
-             }*/
-
-            /* this.leftSideWall = this.game.add.sprite(0, 0, 'sidewall');
-             this.rightSideWall = this.game.add.sprite(995, 0, 'sidewall');
-             this.topWall = this.game.add.sprite(0, 0, 'topwall');
-             this.game.physics.arcade.enable(this.leftSideWall);
-             this.game.physics.arcade.enable(this.rightSideWall);
-             this.game.physics.arcade.enable(this.topWall);
-             this.leftSideWall.body.immovable = true;
-             this.rightSideWall.body.immovable = true;
-             this.topWall.body.immovable = true;
-             this.leftSideWall.body.onCollide = new Phaser.Signal();
-             this.rightSideWall.body.onCollide = new Phaser.Signal();
-             this.topWall.body.onCollide = new Phaser.Signal();*/
-
-            /*this.walls = this.game.add.sprite(100, this.game.height - 837, 'walls');
-            //this.floor = this.game.add.sprite(100, this.game.height - 837, 'floor');
-            this.game.physics.arcade.enable(this.walls);
-            //this.game.physics.arcade.enable(this.floor);
-            this.walls.body.immovable = true;
-            //this.floor.body.immovable = true;*/
-
-            //this.floor.body.collideWorldBounds = true;
-            //this.walls.body.collideWorldBounds = true;
-            //this.floor.body.onCollide = new Phaser.Signal();
-            //this.walls.body.onCollide = new Phaser.Signal();
-
-
             //going down
-            this.player = this.game.add.sprite(285, 300, 'dude');
+            this.player = this.game.add.sprite(this.game.width/2, 0, 'dude');
             //going up
             //this.player = this.game.add.sprite(100, 1700, 'dude');
             //this.door = this.game.add.sprite(this.game.world.width / 2, this.game.world.height - 475, 'doors1');
@@ -667,26 +569,12 @@
             var elevator3HitFloor = this.game.physics.arcade.collide(this.elevatorX, this.leve1);
             var elevator4HitFloor = this.game.physics.arcade.collide(this.elevatorY, this.leve1);
             var bulletHits = this.game.physics.arcade.collide(this.bullets, this.enemyBullets);
-            //var hitFooor2 = this.game.physics.arcade.collide(this.player, this.floor2);
-            //var hitFooor3 = this.game.physics.arcade.collide(this.player, this.floor3);
-            //var hitFooor4 = this.game.physics.arcade.collide(this.player, this.floor4);
-            //var hitFooor5 = this.game.physics.arcade.collide(this.player, this.floor5);
-            //var hitFooor6 = this.game.physics.arcade.collide(this.player, this.floor6);
 
 
             //var hitFloor = this.game.physics.arcade.collide(this.player, this.c);
             //var hitFloor = this.game.physics.arcade.collide(this.player, this.c2);
 
             //var doorHit = this.game.physics.arcade.collide(this.doors, this.player);
-
-
-
-            //this.game.physics.arcade.overlap(this.player, this.floor1, this.playAnimation, null, this);
-            //this.game.physics.arcade.overlap(this.player, this.floor2, this.playAnimation, null, this);
-            //this.game.physics.arcade.overlap(this.player, this.floor3, this.playAnimation, null, this);
-            //this.game.physics.arcade.overlap(this.player, this.floor4, this.playAnimation, null, this);
-            //this.game.physics.arcade.overlap(this.player, this.floor5, this.playAnimation, null, this);
-            //this.game.physics.arcade.overlap(this.player, this.floor6, this.playAnimation, null, this);
 
 
 
@@ -812,6 +700,7 @@
 
         playAnimation(player, door) {
             //door.animations.play('open');
+            this.doorMusic.play();
             this.player.visible = false;
             this.game.time.events.add(Phaser.Timer.SECOND * 2, this.invisble, this);
 
@@ -829,6 +718,7 @@
         //}
         firebullet(bullet) {
             if (this.game.time.now > this.bulletTime) {
+                this.music.play();
                 bullet = this.bullets.getFirstExists(false);
                 if (bullet) {
                     bullet.reset(this.player.x, this.player.y);
@@ -849,8 +739,8 @@
         collisionHandler(enemy, bullet) {
             bullet.kill();
             enemy.kill();
-            this.enemySpawn();
             this.numberOfEnemies += 1;
+            this.enemySpawn();
             this.score += 20;
             this.scoreText.text = this.scoreConst + this.score;
         }
