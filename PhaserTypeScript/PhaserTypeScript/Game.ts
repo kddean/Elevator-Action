@@ -56,6 +56,7 @@
 
 
         preload() {
+            this.game.load.image('levelDesign', 'assets/Level Design.pdf');
             this.game.load.image('logo', 'phaser2.png');
             this.game.load.image('sky', 'assets/sky.png');
             this.game.load.image('background', 'assets/Quick Level.png');
@@ -95,6 +96,7 @@
             this.gameTime = 50;
             this.scoreConst = "Score :";
             this.game.stage.backgroundColor = "#000000;"
+            this.game.add.sprite(0, 0, 'levelDesign');
             // this.game.add.tileSprite(0, 0, 800, 600, 'background');
             this.game.world.setBounds(0, 0, 1890, 10800);
             this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -330,43 +332,29 @@
         var y = 150;
         var t;
         for (var w = 0; w <= 5; w++) {
-            for (var i = 1; i <= 2; i++) {
+            
                 for (var j = 0; j < 10; j++) {
-                    if (j != (7 || 8)) {
+                    if (((j >= 0) && (j < 2)) || (j > 2 && j < 7) || (j > 7 && j <= 9)) {
                         t = this.leve1.create(j * 192, y, 'floor');
                         t.body.immovable = true;
                     }
                 }
                 y = y + 216;
-            }
-            for (var j = 0; j < 10; j++) {
-                if (((j >= 0) && (j < 2)) || (j>2 && j<7) || (j>7 && j <=9)  ) {
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;
-
-            for (var j = 0; j < 10; j++) {
-                if (j != (2)) {
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;
-
+        
             for (var i = 1; i <= 2; i++) {
                 for (var j = 0; j < 10; j++) {
-                    if (j != (6)) {
+                    if (((j >= 0) && (j < 3)) || (j > 3 && j < 5) || (j >= 6 && j < 8) || (j == 9)) {
                         t = this.leve1.create(j * 192, y, 'floor');
                         t.body.immovable = true;
+                        
                     }
                 }
                 y = y + 216;
             }
+            
 
             for (var j = 0; j < 10; j++) {
-                if (((j >= 0) && (j < 2)) || (j > 2 && j < 7) || (j > 7 && j <= 9)) {
+                if ((j>0 && j<3) || (j>3 && j<6) || (j>=7)) {
                     t = this.leve1.create(j * 192, y, 'floor');
                     t.body.immovable = true;
                 }
@@ -375,13 +363,33 @@
 
             for (var i = 1; i <= 2; i++) {
                 for (var j = 0; j < 10; j++) {
-                    if (j != (8)) {
+                    if ((j>0 && j<3) || (j==4) || (j>6)) {
                         t = this.leve1.create(j * 192, y, 'floor');
                         t.body.immovable = true;
                     }
                 }
                 y = y + 216;
             }
+
+            for (var j = 0; j < 10; j++) {
+                if ((j > 0 && j < 3) || (j>3 && j<6) || (j > 6)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
+                }
+            }
+            y = y + 216;
+
+            for (var i = 1; i <= 2; i++) {
+                for (var j = 0; j < 10; j++) {
+                    if ((j >= 0 && j<3) || (j==5) || (j>=6 && j<9)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+            }
+
+            
         }
 
 
