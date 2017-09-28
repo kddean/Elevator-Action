@@ -94,7 +94,7 @@
             this.scoreConst = "Score :";
             this.game.stage.backgroundColor = "#000000;"
             // this.game.add.tileSprite(0, 0, 800, 600, 'background');
-            this.game.world.setBounds(0, 0, 1890, 2000);
+            this.game.world.setBounds(0, 0, 1890, 10800);
             this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.bullets = this.game.add.group();
             this.bullets.enableBody = true;
@@ -169,10 +169,10 @@
             this.floor8.enableBody = true;
             this.game.physics.arcade.enable(this.floor8);
             this.leve1 = this.game.add.group();
-            this.leve1.enableBody = true;
+            //this.leve1.enableBody = true;
             this.game.physics.arcade.enable(this.leve1);
 
-
+            /*
             for (var i = 0; i < 3; i++) {
                 var d = this.floor1.create((i + 1) * 300, 250, 'door');
                 d.scale.setTo(1, 1);
@@ -321,7 +321,66 @@
             ledge13.body.immovable = true;
             var ledge13 = this.leve1.create(855, 350, 'wall');
             ledge13.scale.setTo(1, 1.85);
-            ledge13.body.immovable = true;
+            ledge13.body.immovable = true;*/
+
+            //Floor Layout
+
+        var y = 150;
+        var t;
+        for (var w = 0; w <= 5; w++) {
+            for (var i = 1; i <= 2; i++) {
+                for (var j = 0; j < 10; j++) {
+                    if (j != (7 || 8)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+            }
+            for (var j = 0; j < 10; j++) {
+                if (((j >= 0) && (j < 2)) || (j>2 && j<7) || (j>7 && j <=9)  ) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
+                }
+            }
+            y = y + 216;
+
+            for (var j = 0; j < 10; j++) {
+                if (j != (2)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
+                }
+            }
+            y = y + 216;
+
+            for (var i = 1; i <= 2; i++) {
+                for (var j = 0; j < 10; j++) {
+                    if (j != (6)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+            }
+
+            for (var j = 0; j < 10; j++) {
+                if (((j >= 0) && (j < 2)) || (j > 2 && j < 7) || (j > 7 && j <= 9)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
+                }
+            }
+            y = y + 216;
+
+            for (var i = 1; i <= 2; i++) {
+                for (var j = 0; j < 10; j++) {
+                    if (j != (8)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+            }
+        }
 
             //Elevators
 
@@ -610,12 +669,12 @@
             //this.elevator.body.velocity.y = 50 * this.elevatorDir;
             this.player.body.velocity.x = 0;
             if (this.cursors.left.isDown) {
-                this.player.body.velocity.x -= 100;
+                this.player.body.velocity.x -= 200;
                 this.player.animations.play('left');
                 this.bulletDirection = false;
             }
             else if (this.cursors.right.isDown) {
-                this.player.body.velocity.x += 100;
+                this.player.body.velocity.x += 200;
                 this.player.animations.play('right');
                 this.bulletDirection = true;
             }
@@ -737,10 +796,10 @@
                 if (bullet) {
                     bullet.reset(this.player.x, this.player.y);
                     if (this.bulletDirection) {
-                        bullet.body.velocity.x += 200;
+                        bullet.body.velocity.x += 300;
                     }
                     else {
-                        bullet.body.velocity.x -= 200;
+                        bullet.body.velocity.x -= 300;
                     }
                     this.bulletTime = this.game.time.now + 200;
                 }
@@ -779,10 +838,10 @@
                 enemyBullet.reset(enemy.body.x, enemy.body.y);
                 //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
                 if (this.player.x > enemy.body.x) {
-                    enemyBullet.body.velocity.x += 100;
+                    enemyBullet.body.velocity.x += 200;
                 }
                 else {
-                    enemyBullet.body.velocity.x -= 100;
+                    enemyBullet.body.velocity.x -= 200;
                 }
                 this.firingTimer = this.game.time.now + 2000;
             }
