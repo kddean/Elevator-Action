@@ -627,7 +627,12 @@
             if (this.numberOfEnemies > 0) {
                 this.enemies = this.game.add.group();
                 this.enemies.enableBody = true;
-                var enemy = this.enemies.create(this.player.x + this.randomIntFromInterval(200, 800), this.player.y, 'baddie');
+                if (this.player.x > this.game.width / 2) {
+                    var enemy = this.enemies.create(this.player.x - this.randomIntFromInterval(200, 800), this.player.y, 'baddie');
+                }
+                else {
+                    var enemy = this.enemies.create(this.player.x + this.randomIntFromInterval(200, 800), this.player.y, 'baddie');
+                }
                 this.numberOfEnemies -= 1;
             }
             //enemy.callALL('animations.add','animations','move', [0, 1, 2, 3], 10, true);

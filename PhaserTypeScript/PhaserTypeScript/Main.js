@@ -528,7 +528,12 @@ var ElevatorAction;
             if (this.numberOfEnemies > 0) {
                 this.enemies = this.game.add.group();
                 this.enemies.enableBody = true;
-                var enemy = this.enemies.create(this.player.x + this.randomIntFromInterval(200, 800), this.player.y, 'baddie');
+                if (this.player.x > this.game.width / 2) {
+                    var enemy = this.enemies.create(this.player.x - this.randomIntFromInterval(200, 800), this.player.y, 'baddie');
+                }
+                else {
+                    var enemy = this.enemies.create(this.player.x + this.randomIntFromInterval(200, 800), this.player.y, 'baddie');
+                }
                 this.numberOfEnemies -= 1;
             }
             //enemy.callALL('animations.add','animations','move', [0, 1, 2, 3], 10, true);
@@ -795,16 +800,15 @@ var ElevatorAction;
         function MainMenu() {
             _super.apply(this, arguments);
         }
-        MainMenu.prototype.create = function () {
-            var text = "Click to Begin";
-            var style = { font: "30px Arial", fill: "#fff", align: "center" };
-            var t = this.add.text(this.game.width / 2, this.game.height / 2, text, style);
-            t.anchor.set(0.5);
+        MainMenu.prototype.preload = function () {
+            this.game.load.image('button', 'assets/start.png');
         };
-        MainMenu.prototype.update = function () {
-            if (this.input.onTap) {
-                this.game.state.start('Game', true, false);
-            }
+        MainMenu.prototype.create = function () {
+            var button = this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY, 'button', this.actionOnClick, this, 2, 1, 0);
+            button.scale.setTo(0.5, 0.5);
+        };
+        MainMenu.prototype.actionOnClick = function () {
+            this.game.state.start('Game', true, false);
         };
         return MainMenu;
     }(Phaser.State));

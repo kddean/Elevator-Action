@@ -1,16 +1,14 @@
 ﻿module ElevatorAction {
     export class MainMenu extends Phaser.State {
+        preload() {
+            this.game.load.image('button', 'assets/start.png');
+        }
         create() {
-            var text = "Click to Begin";
-            var style = { font: "30px Arial", fill: "#fff", align: "center" };
-            var t = this.add.text(this.game.width / 2, this.game.height / 2, text, style);
-            t.anchor.set(0.5);
+            var button = this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY, 'button', this.actionOnClick, this, 2, 1, 0);
+            button.scale.setTo(0.5, 0.5);
         }
-        update() {
-            if (this.input.onTap) {
-                this.game.state.start('Game', true, false);
-            }
+        actionOnClick() {
+            this.game.state.start('Game', true, false);
         }
-
     }
 }
