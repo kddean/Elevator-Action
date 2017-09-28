@@ -42,6 +42,7 @@
         livesCount: number;
         numberOfEnemies: number;
         gameTime: number;
+        //sound: Phaser.Sound;
 
         floor1: Phaser.Group;
         floor2: Phaser.Group;
@@ -80,9 +81,11 @@
             this.game.load.image('wall', 'assets/hanger.png');
             this.game.load.image('floor', 'assets/fancyfloor.png');
             this.game.load.image('archway', 'assets/fancyArchwalls');
+            this.game.load.audio('shoot', 'assets/throw.wav');
         }
 
         create() {
+            var sound = this.game.add.audio('shoot');
             this.game.camera.follow(this.player);
             this.game.world.resize(800, 1000);
             this.bulletTime = 0;
@@ -733,6 +736,7 @@
         //}
         firebullet(bullet) {
             if (this.game.time.now > this.bulletTime) {
+                //this.sound.play();
                 bullet = this.bullets.getFirstExists(false);
                 if (bullet) {
                     bullet.reset(this.player.x, this.player.y);

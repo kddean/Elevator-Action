@@ -47,6 +47,7 @@
     <Content Include="assets\Set_Wall.png" />
     <Content Include="assets\sky.png" />
     <Content Include="assets\small Rectangle.png" />
+    <Content Include="assets\start.png" />
     <Content Include="assets\triangle.png" />
     <Content Include="index.html" />
     <Content Include="phaser.js" />

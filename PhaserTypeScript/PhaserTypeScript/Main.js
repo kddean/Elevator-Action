@@ -46,8 +46,10 @@ var ElevatorAction;
             this.game.load.image('wall', 'assets/hanger.png');
             this.game.load.image('floor', 'assets/fancyfloor.png');
             this.game.load.image('archway', 'assets/fancyArchwalls');
+            this.game.load.audio('shoot', 'assets/throw.wav');
         };
         Game.prototype.create = function () {
+            var sound = this.game.add.audio('shoot');
             this.game.camera.follow(this.player);
             this.game.world.resize(800, 1000);
             this.bulletTime = 0;
@@ -591,6 +593,7 @@ var ElevatorAction;
         //}
         Game.prototype.firebullet = function (bullet) {
             if (this.game.time.now > this.bulletTime) {
+                //this.sound.play();
                 bullet = this.bullets.getFirstExists(false);
                 if (bullet) {
                     bullet.reset(this.player.x, this.player.y);
@@ -690,16 +693,15 @@ var ElevatorAction;
         function MainMenu() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        MainMenu.prototype.create = function () {
-            var text = "Click to Begin";
-            var style = { font: "30px Arial", fill: "#fff", align: "center" };
-            var t = this.add.text(this.game.width / 2, this.game.height / 2, text, style);
-            t.anchor.set(0.5);
+        MainMenu.prototype.preload = function () {
+            this.game.load.image('button', 'assets/start.png');
         };
-        MainMenu.prototype.update = function () {
-            if (this.input.onTap) {
-                this.game.state.start('Game', true, false);
-            }
+        MainMenu.prototype.create = function () {
+            var button = this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY, 'button', this.actionOnClick, this, 2, 1, 0);
+            button.scale.setTo(0.5, 0.5);
+        };
+        MainMenu.prototype.actionOnClick = function () {
+            this.game.state.start('Game', true, false);
         };
         return MainMenu;
     }(Phaser.State));
