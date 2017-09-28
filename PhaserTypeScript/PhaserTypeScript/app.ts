@@ -60,6 +60,7 @@
 
     test: Phaser.Group;
     testDoors: Phaser.Group;
+    f: FileReader;
 
     preload() {
         this.game.load.image('logo', 'phaser2.png');
@@ -277,18 +278,83 @@
         this.test.enableBody = true;
         this.testDoors = this.game.add.group();
         var y = 150;
-        for (var i = 0; i < 50; i++) {
+            /*for (var i = 0; i < 50; i++) {
+                
+                for (var j = 0; j < 10; j++){
+                        var t = this.test.create(j * 192, y, 'floor');
+                        var l = this.testDoors.create(((j * 192) + 40), y - 95, 'door');
+                    //t.scale.setTo(3, 1);
+                   //t.body.immovable = true;
+                }
             
-            for (var j = 0; j < 10; j++){
-                    var t = this.test.create(j * 192, y, 'floor');
-                    var l = this.testDoors.create(((j * 192) + 40), y - 95, 'door');
-                //t.scale.setTo(3, 1);
-               //t.body.immovable = true;
+                y = y + 216;
+            
+            }*/
+        var t;
+        for (var w = 0; w <= 5; w++) {
+            for (var i = 1; i <= 2; i++) {
+                for (var j = 0; j < 10; j++) {
+                    if (j != (7 || 8)) {
+                        t = this.test.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+            }
+            for (var j = 0; j < 10; j++) {
+                if (j != (2 || 7)) {
+                    t = this.test.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
+                }
+            }
+            y = y + 216;
+
+            for (var j = 0; j < 10; j++) {
+                if (j != (2)) {
+                    t = this.test.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
+                }
+            }
+            y = y + 216;
+
+            for (var i = 1; i <= 2; i++) {
+                for (var j = 0; j < 10; j++) {
+                    if (j != (6)) {
+                        t = this.test.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
             }
 
+            for (var j = 0; j < 10; j++) {
+                if (j != (3 || 7)) {
+                    t = this.test.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
+                }
+            }
             y = y + 216;
-           
+
+            for (var i = 1; i <= 2; i++) {
+                for (var j = 0; j < 10; j++) {
+                    if (j != (8)) {
+                        t = this.test.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+            }
         }
+
+
+
+
+
+
+
+
+
+
 
 
 
