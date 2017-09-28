@@ -52,6 +52,7 @@
         floor7: Phaser.Group;
         floor8: Phaser.Group;
         leve1: Phaser.Group;
+        keys: Phaser.Group;
 
 
         preload() {
@@ -80,6 +81,7 @@
             this.game.load.image('wall', 'assets/hanger.png');
             this.game.load.image('floor', 'assets/fancyfloor.png');
             this.game.load.image('archway', 'assets/fancyArchwalls');
+            this.game.load.image('key', 'assets/key.png');
         }
 
         create() {
@@ -169,7 +171,7 @@
             this.floor8.enableBody = true;
             this.game.physics.arcade.enable(this.floor8);
             this.leve1 = this.game.add.group();
-            //this.leve1.enableBody = true;
+            this.leve1.enableBody = true;
             this.game.physics.arcade.enable(this.leve1);
 
             /*
@@ -381,6 +383,16 @@
                 y = y + 216;
             }
         }
+
+
+        //Keys
+        this.keys = this.game.add.group();
+        this.keys.enableBody = true;
+        for (var v = 0; v < 5; v++) {
+            var k = this.keys.create(v * 500, 300, 'key');
+        }
+
+
 
             //Elevators
 
@@ -771,7 +783,19 @@
                 this.playAnimation(this.player, this.floor1);
 
             }
+
+            // Collection/ Keys
+            this.game.physics.arcade.overlap(this.player, this.keys, this.collectKeys, null, this);
+
+
         }
+
+        collectKeys(player, key) {
+            //key = this.keys.getFirstExists(true);
+            //key.body.visible = false;
+            key.kill(this);
+        }
+
 
         playAnimation(player, door) {
             //door.animations.play('open');

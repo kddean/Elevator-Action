@@ -1,25 +1,19 @@
 window.onload = function () {
     var game = new ElevatorAction.Main();
 };
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var ElevatorAction;
 (function (ElevatorAction) {
     var Game = (function (_super) {
         __extends(Game, _super);
         function Game() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.elevatorDir = 1;
-            _this.isOnElevator = false;
-            return _this;
+            _super.apply(this, arguments);
+            this.elevatorDir = 1;
+            this.isOnElevator = false;
         }
         Game.prototype.preload = function () {
             this.game.load.image('logo', 'phaser2.png');
@@ -46,6 +40,7 @@ var ElevatorAction;
             this.game.load.image('wall', 'assets/hanger.png');
             this.game.load.image('floor', 'assets/fancyfloor.png');
             this.game.load.image('archway', 'assets/fancyArchwalls');
+            this.game.load.image('key', 'assets/key.png');
         };
         Game.prototype.create = function () {
             this.game.camera.follow(this.player);
@@ -130,7 +125,7 @@ var ElevatorAction;
             this.floor8.enableBody = true;
             this.game.physics.arcade.enable(this.floor8);
             this.leve1 = this.game.add.group();
-            //this.leve1.enableBody = true;
+            this.leve1.enableBody = true;
             this.game.physics.arcade.enable(this.leve1);
             /*
             for (var i = 0; i < 3; i++) {
@@ -334,6 +329,12 @@ var ElevatorAction;
                     }
                     y = y + 216;
                 }
+            }
+            //Keys
+            this.keys = this.game.add.group();
+            this.keys.enableBody = true;
+            for (var v = 0; v < 5; v++) {
+                var k = this.keys.create(v * 500, 300, 'key');
             }
             //Elevators
             this.elevator = this.game.add.sprite(1300, this.game.world.height - 100, 'elevator');
@@ -670,6 +671,13 @@ var ElevatorAction;
             if (this.game.physics.arcade.overlap(this.player, (this.floor1 || this.floor2 || this.floor3 || this.floor4 || this.floor5 || this.floor6 || this.floor7) && this.cursors.up.isDown)) {
                 this.playAnimation(this.player, this.floor1);
             }
+            // Collection/ Keys
+            this.game.physics.arcade.overlap(this.player, this.keys, this.collectKeys, null, this);
+        };
+        Game.prototype.collectKeys = function (player, key) {
+            //key = this.keys.getFirstExists(true);
+            //key.body.visible = false;
+            key.kill(this);
         };
         Game.prototype.playAnimation = function (player, door) {
             //door.animations.play('open');
@@ -758,15 +766,13 @@ var ElevatorAction;
     var Main = (function (_super) {
         __extends(Main, _super);
         function Main() {
-            var _this = this;
             var renderMode = Phaser.AUTO;
-            _this = _super.call(this, 1890, 1000, renderMode, "content", null) || this;
+            _super.call(this, 1890, 1000, renderMode, "content", null);
             //this.state.add('Boot', Boot, false);
             //this.state.add('Preloader', Preloader, false);
-            _this.state.add('MainMenu', ElevatorAction.MainMenu, false);
-            _this.state.add('Game', ElevatorAction.Game, false);
-            _this.state.start('MainMenu');
-            return _this;
+            this.state.add('MainMenu', ElevatorAction.MainMenu, false);
+            this.state.add('Game', ElevatorAction.Game, false);
+            this.state.start('MainMenu');
         }
         return Main;
     }(Phaser.Game));
@@ -774,10 +780,10 @@ var ElevatorAction;
     var GameStates = (function () {
         function GameStates() {
         }
+        GameStates.MAINMENU = "mainMenu";
+        GameStates.GAME = "game";
         return GameStates;
     }());
-    GameStates.MAINMENU = "mainMenu";
-    GameStates.GAME = "game";
     ElevatorAction.GameStates = GameStates;
 })(ElevatorAction || (ElevatorAction = {}));
 var ElevatorAction;
@@ -785,7 +791,7 @@ var ElevatorAction;
     var MainMenu = (function (_super) {
         __extends(MainMenu, _super);
         function MainMenu() {
-            return _super !== null && _super.apply(this, arguments) || this;
+            _super.apply(this, arguments);
         }
         MainMenu.prototype.create = function () {
             var text = "Click to Begin";
