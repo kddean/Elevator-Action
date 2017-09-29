@@ -1,22 +1,27 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 window.onload = function () {
     var game = new ElevatorAction.Main();
-};
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var ElevatorAction;
 (function (ElevatorAction) {
     var Game = (function (_super) {
         __extends(Game, _super);
         function Game() {
-            _super.apply(this, arguments);
-            this.elevatorDir = 1;
-            this.isOnElevator = false;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.elevatorDir = 1;
+            _this.isOnElevator = false;
+            return _this;
         }
         Game.prototype.preload = function () {
-            this.game.load.image('levelDesign', 'assets/Level Design.pdf');
             this.game.load.image('logo', 'phaser2.png');
             this.game.load.image('sky', 'assets/sky.png');
             this.game.load.image('background', 'assets/Quick Level.png');
@@ -56,8 +61,7 @@ var ElevatorAction;
             this.gameTime = 50;
             this.scoreConst = "Score :";
             this.game.stage.backgroundColor = "#000000;";
-            this.game.add.sprite(0, 0, 'levelDesign');
-            this.game.world.setBounds(0, 0, 1890, 10800);
+            this.game.world.setBounds(0, 0, 1890, 19000);
             this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.bullets = this.game.add.group();
             this.bullets.enableBody = true;
@@ -69,6 +73,7 @@ var ElevatorAction;
             this.bullets.setAll('checkWorldBounds', true);
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.music = this.add.audio('shoot', 1, false);
+            this.doorMusic = this.add.audio('doorOpen', 1, false);
             this.platforms = this.game.add.group();
             this.platforms.enableBody = true;
             this.floor1 = this.game.add.group();
@@ -251,7 +256,7 @@ var ElevatorAction;
             //Floor Layout
             var y = 150;
             var t;
-            for (var w = 0; w <= 5; w++) {
+            for (var w = 0; w <= 3; w++) {
                 for (var j = 0; j < 10; j++) {
                     if (((j >= 0) && (j < 2)) || (j > 2 && j < 7) || (j > 7 && j <= 9)) {
                         t = this.leve1.create(j * 192, y, 'floor');
@@ -300,6 +305,94 @@ var ElevatorAction;
                     }
                     y = y + 216;
                 }
+                for (var j = 0; j < 10; j++) {
+                    if ((j < 2) || ((j > 2) && (j < 7)) || (j == 9)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+                for (var j = 0; j < 10; j++) {
+                    if ((j < 2) || (j > 2 && j < 5) || (j == 6) || (j == 9)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+                for (var j = 0; j < 10; j++) {
+                    if ((j > 0 && j < 4) || (j > 4 && j < 7) || (j == 9)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+                for (var j = 0; j < 10; j++) {
+                    if ((j > 1 && j < 4) || (j > 4 && j < 9)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+                for (var j = 0; j < 10; j++) {
+                    if ((j < 1) || (j == 2) || (j > 5 && j < 9)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+                for (var j = 0; j < 10; j++) {
+                    if ((j < 1) || (j == 2) || (j > 4 && j < 7) || (j > 7)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+                for (var j = 0; j < 10; j++) {
+                    if ((j < 3) || (j > 3 && j < 6) || (j > 7)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+                for (var j = 0; j < 10; j++) {
+                    if ((j < 3) || (j == 4) || (j > 6)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+                for (var j = 0; j < 10; j++) {
+                    if ((j > 0 && j < 3) || (j == 4) || (j > 6)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+                for (var j = 0; j < 10; j++) {
+                    if ((j > 0 && j < 5) || (j > 5)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+                for (var j = 0; j < 10; j++) {
+                    if ((j < 2) || (j > 2 && j < 5) || (j > 5 && j > 8) || (j == 9)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+                for (var j = 0; j < 10; j++) {
+                    if ((j < 1) || (j > 1 && j < 8) || (j > 8)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
+            }
+            for (var j = 0; j < 10; j++) {
+                t = this.leve1.create(j * 192, y, 'floor');
+                t.body.immovable = true;
             }
             //Keys
             this.keys = this.game.add.group();
@@ -592,6 +685,7 @@ var ElevatorAction;
         };
         Game.prototype.playAnimation = function (player, door) {
             //door.animations.play('open');
+            this.doorMusic.play();
             this.player.visible = false;
             this.game.time.events.add(Phaser.Timer.SECOND * 2, this.invisble, this);
             //door.animations.play('open');
@@ -678,13 +772,15 @@ var ElevatorAction;
     var Main = (function (_super) {
         __extends(Main, _super);
         function Main() {
+            var _this = this;
             var renderMode = Phaser.AUTO;
-            _super.call(this, 1890, 1000, renderMode, "content", null);
+            _this = _super.call(this, 1890, 1000, renderMode, "content", null) || this;
             //this.state.add('Boot', Boot, false);
             //this.state.add('Preloader', Preloader, false);
-            this.state.add('MainMenu', ElevatorAction.MainMenu, false);
-            this.state.add('Game', ElevatorAction.Game, false);
-            this.state.start('MainMenu');
+            _this.state.add('MainMenu', ElevatorAction.MainMenu, false);
+            _this.state.add('Game', ElevatorAction.Game, false);
+            _this.state.start('MainMenu');
+            return _this;
         }
         return Main;
     }(Phaser.Game));
@@ -692,10 +788,10 @@ var ElevatorAction;
     var GameStates = (function () {
         function GameStates() {
         }
-        GameStates.MAINMENU = "mainMenu";
-        GameStates.GAME = "game";
         return GameStates;
     }());
+    GameStates.MAINMENU = "mainMenu";
+    GameStates.GAME = "game";
     ElevatorAction.GameStates = GameStates;
 })(ElevatorAction || (ElevatorAction = {}));
 var ElevatorAction;
@@ -703,7 +799,7 @@ var ElevatorAction;
     var MainMenu = (function (_super) {
         __extends(MainMenu, _super);
         function MainMenu() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         MainMenu.prototype.preload = function () {
             this.game.load.image('button', 'assets/start.png');
