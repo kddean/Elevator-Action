@@ -44,6 +44,7 @@
         gameTime: number;
         music: Phaser.Sound;
         doorMusic: Phaser.Sound;
+        keysCOllected: number;
 
         floor1: Phaser.Group;
         floor2: Phaser.Group;
@@ -81,13 +82,14 @@
             this.game.load.image('door', 'assets/fancydoor.png');
             this.game.load.image('wall', 'assets/hanger.png');
             this.game.load.image('floor', 'assets/fancyfloor.png');
-            this.game.load.image('archway', 'assets/fancyArchwalls');
+            this.game.load.image('archway', 'assets/fancyArchwalls.png');
             this.game.load.image('key', 'assets/key.png');
             this.game.load.audio('shoot', 'assets/shoot.wav', true);
             this.game.load.audio('doorOpen', 'assets/door_open_2.wav', true);
         }
 
         create() {
+            this.keysCOllected = 0;
             this.game.camera.follow(this.player);
             this.game.world.resize(800, 1000);
             this.bulletTime = 0;
@@ -460,9 +462,16 @@
         //Keys
         this.keys = this.game.add.group();
         this.keys.enableBody = true;
-        for (var v = 0; v < 5; v++) {
-            var k = this.keys.create(v * 500, 300, 'key');
-        }
+        var k = this.keys.create(1280, 300, 'key');
+        var k = this.keys.create(210, 732, 'key');
+        var k = this.keys.create(50, 2028, 'key');
+        var k = this.keys.create(700, 2028, 'key');
+        var k = this.keys.create(1750, 2028, 'key');
+        var k = this.keys.create(1000, 2676, 'key');
+        var k = this.keys.create(1350, 3540, 'key');
+        var k = this.keys.create(600, 3756, 'key');
+        var k = this.keys.create(1750, 3756, 'key');
+        
 
 
 
@@ -792,6 +801,7 @@
             //key = this.keys.getFirstExists(true);
             //key.body.visible = false;
             key.kill(this);
+            this.keysCOllected++;
         }
 
 
