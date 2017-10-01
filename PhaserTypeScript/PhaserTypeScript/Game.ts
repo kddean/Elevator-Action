@@ -58,6 +58,7 @@
 
 
         preload() {
+            this.game.load.image('levelDesign', 'assets/Level Design.pdf');
             this.game.load.image('logo', 'phaser2.png');
             this.game.load.image('sky', 'assets/sky.png');
             this.game.load.image('background', 'assets/Quick Level.png');
@@ -98,7 +99,8 @@
             this.gameTime = 50;
             this.scoreConst = "Score :";
             this.game.stage.backgroundColor = "#000000;"
-            this.game.world.setBounds(0, 0, 1890, 19000);
+            this.game.add.sprite(0, 0, 'levelDesign');
+            this.game.world.setBounds(0, 0, 1890, 10800);
             this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.bullets = this.game.add.group();
             this.bullets.enableBody = true;
@@ -296,7 +298,7 @@
 
         var y = 150;
         var t;
-        for (var w = 0; w <= 3; w++) {
+        for (var w = 0; w <= 5; w++) {
             
                 for (var j = 0; j < 10; j++) {
                     if (((j >= 0) && (j < 2)) || (j > 2 && j < 7) || (j > 7 && j <= 9)) {
@@ -354,107 +356,8 @@
                 y = y + 216;
             }
 
-            for (var j = 0; j < 10; j++) {
-                if ((j < 2) || ((j > 2) && (j < 7)) || (j == 9)){
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;
-
-            for (var j = 0; j < 10; j++) {
-                if ((j < 2) || (j > 2 && j < 5) || (j == 6) || (j==9)){
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;
-
-            for (var j = 0; j < 10; j++) {
-                if ((j > 0 && j < 4) || (j > 4 && j < 7) || (j == 9)) {
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;
-
-            for (var j = 0; j < 10; j++) {
-                if ((j > 1 && j < 4) || (j > 4 && j < 9)) {
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;
-
-            for (var j = 0; j < 10; j++) {
-                if ((j < 1) || (j == 2) || (j > 5 && j < 9)) {
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;
-
-            for (var j = 0; j < 10; j++) {
-                if ((j < 1) || (j == 2) || (j > 4 && j < 7) || (j > 7)) {
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;
-
-            for (var j = 0; j < 10; j++) {
-                if ((j < 3) || (j > 3 && j < 6) || (j > 7)) {
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;
-
-
-            for (var j = 0; j < 10; j++) {
-                if ((j < 3) || (j == 4) || (j > 6)) {
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;
-
-            for (var j = 0; j < 10; j++) {
-                if ((j > 0 && j < 3) || (j == 4) || (j > 6)) {
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;
-
-            for (var j = 0; j < 10; j++) {
-                if ((j > 0 && j < 5) || (j > 5)) {
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;
-
-            for (var j = 0; j < 10; j++) {
-                if ((j < 2) || (j > 2 && j < 5) || (j > 5 && j > 8) || (j == 9)) {
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;
-
-            for (var j = 0; j < 10; j++) {
-                if ((j < 1) || (j > 1 && j < 8) || (j > 8)) {
-                    t = this.leve1.create(j * 192, y, 'floor');
-                    t.body.immovable = true;
-                }
-            }
-            y = y + 216;   
+            
         }
-        for (var j = 0; j < 10; j++) {
-                t = this.leve1.create(j * 192, y, 'floor');
-                t.body.immovable = true;
-            }
 
 
         //Keys
