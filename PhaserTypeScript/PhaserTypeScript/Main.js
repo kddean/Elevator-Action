@@ -69,6 +69,7 @@ var ElevatorAction;
             this.bullets.setAll('checkWorldBounds', true);
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.music = this.add.audio('shoot', 1, false);
+            this.doorMusic = this.add.audio('doorOpen', 1, false);
             this.platforms = this.game.add.group();
             this.platforms.enableBody = true;
             this.floor1 = this.game.add.group();
@@ -592,6 +593,7 @@ var ElevatorAction;
         };
         Game.prototype.playAnimation = function (player, door) {
             //door.animations.play('open');
+            this.doorMusic.play();
             this.player.visible = false;
             this.game.time.events.add(Phaser.Timer.SECOND * 2, this.invisble, this);
             //door.animations.play('open');
