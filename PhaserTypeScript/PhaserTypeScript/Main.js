@@ -394,6 +394,19 @@ var ElevatorAction;
                 t = this.leve1.create(j * 192, y, 'floor');
                 t.body.immovable = true;
             }
+            //Door Placement
+            this.doors = this.game.add.group();
+            this.doors.enableBody = true;
+            var z = 150;
+            for (var d = 0; d < 3; d++) {
+                for (var i = 0; i < 10; i++) {
+                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
+                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
+                        t.body.immovable = true;
+                    }
+                }
+                z = z + 216;
+            }
             //Keys
             this.keys = this.game.add.group();
             this.keys.enableBody = true;
