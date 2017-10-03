@@ -74,14 +74,16 @@
             this.game.load.image('ground', 'assets/platform.png');
             this.game.load.image('ground2', 'assets/platformShort.png');
             this.game.load.image('ground3', 'assets/platformTiny.png');
-            this.game.load.image('bullet', 'assets/shield.png');
+            this.game.load.image('bullet', 'assets/bullet.png');
+            this.game.load.image('star', 'assets/bullet.png');
             this.game.load.image('elevator', 'assets/feather.png');
             this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
             this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
             this.game.load.spritesheet('doors1', 'assets/Doors_Blue.jpg', 25, 60, 4);
             this.game.load.spritesheet('doors2', 'assets/Doors_Red.jpg', 25, 75, 4);
-            this.game.load.spritesheet('princess', 'assets/princess.png', 181, 110);
+            this.game.load.spritesheet('princess', 'assets/princess.png', 181, 150);
             this.game.load.spritesheet('ghost', 'assets/mrghost.png', 181, 150);
+            //this.game.load.spritesheet('princess_attact', 'assets/princess_attack.png', 181, 150, 10);
             this.game.load.image('button', 'assets/button.png');
             this.game.load.image('invisible', 'assets/Invisible Box.png');
             this.game.load.image('door', 'assets/fancydoor.png');
@@ -619,7 +621,7 @@
             this.player.animations.add('right', [18, 19, 20, 21, 22, 23, 24, 25, 26, 27], 0, true);
             this.player.animations.add('idle', [10, 11, 12, 13, 14, 15, 16, 17], 0, true);
             this.player.animations.currentAnim.speed = 10;
-            //this.player.animations.add('shootShield', [28, 29, 30, 31, 32, 33, 34, 35, 36, 37], 0, true);
+            this.player.animations.add('shootShield', [28, 29, 30, 31, 32, 33, 34, 35, 36, 37], 0, true);
             
 
             //this.Princess.animations.add('attack', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 0, true);
@@ -909,7 +911,7 @@
                 this.player.animations.currentAnim.speed = 10;
                 bullet = this.bullets.getFirstExists(false);
                 if (bullet) {
-                    bullet.reset(this.player.x + 50, this.player.y);
+                    bullet.reset(this.player.x + 50, this.player.y + 50);
                     if (this.bulletDirection) {
                         bullet.body.velocity.x += 300;
                     }
@@ -950,7 +952,7 @@
             var enemyBullet = this.enemyBullets.getFirstExists(false);
             var enemy = this.enemies.getFirstExists(true);
             if (enemyBullet && enemy) {
-                enemyBullet.reset(enemy.body.x, enemy.body.y);
+                enemyBullet.reset(enemy.body.x, enemy.body.y + 50);
                 //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
                 if (this.player.x > enemy.body.x) {
                     enemyBullet.body.velocity.x += 200;
