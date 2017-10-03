@@ -86,8 +86,8 @@
             this.game.load.spritesheet('doors2', 'assets/Doors_Red.jpg', 25, 75, 4);
             this.game.load.spritesheet('princess', 'assets/r_princess_all_sm.png', 110, 150);
             this.game.load.spritesheet('princess_death', 'assets/princess_death.png', 181, 150);
-            this.game.load.spritesheet('ghost_death', 'assets/princess_death.png', 181, 150);
-            this.game.load.spritesheet('skeleton_death', 'assets/princess_death.png', 181, 150);
+            this.game.load.spritesheet('ghost_death_anim', 'assets/mrghost_death.png', 181, 150);
+            this.game.load.spritesheet('skeleton_death_anim', 'assets/mrskeleton_death.png', 181, 150);
             this.game.load.spritesheet('ghost', 'assets/mrghost.png', 181, 150);
             //this.game.load.spritesheet('princess_attact', 'assets/princess_attack.png', 181, 150, 10);
             this.game.load.image('button', 'assets/button.png');
@@ -607,8 +607,6 @@
 
             //going down
             this.player = this.game.add.sprite(this.game.width / 2, 0, 'princess');
-            //this.ghostDeath = this.game.add.sprite(this.player.x, this.player.y, 'ghost_death');
-            //this.skeletonDeath = this.game.add.sprite(this.player.x, this.player.y, 'skeleton_death');
             //going up
             //this.player = this.game.add.sprite(100, 1700, 'dude');
             //this.door = this.game.add.sprite(this.game.world.width / 2, this.game.world.height - 475, 'doors1');
@@ -623,12 +621,24 @@
             this.player.animations.currentAnim.speed = 10;
             //this.player.animations.add('shootShield', [28, 29, 30, 31, 32, 33, 34, 35, 36, 37], 0, true);
 
-
+            //PlayerDeath
             this.playerDeath = this.game.add.sprite(this.player.x, this.player.y, 'princess_death');
             this.game.physics.arcade.enable(this.playerDeath);
             this.playerDeath.visible = false;
             this.playerDeath.animations.add('dead', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 0, true);
 
+            ////Ghost Death
+
+            this.ghostDeath = this.game.add.sprite(0, 0, 'ghost_death_anim');
+            this.game.physics.arcade.enable(this.ghostDeath);
+            this.ghostDeath.visible = false;
+            this.ghostDeath.animations.add('death_ghost', [0, 1, 2, 3, 4, 5, 6, 7], 0, true);
+
+            ////Skeleton Death.
+            this.skeletonDeath = this.game.add.sprite(0, 0, 'skeleton_death_anim');
+            this.game.physics.arcade.enable(this.skeletonDeath);
+            this.skeletonDeath.visible = false;
+            this.skeletonDeath.animations.add('death_skeleton', [0, 1, 2, 3, 4, 5, 6, 7], 0, true);
 
 
 
@@ -920,19 +930,19 @@
         playerHitByEnemy(enemy, player) {
             enemy.kill();
             player.kill();
-            this.playerDeath.body.visible = true;
-            this.playerDeath.animations.play('dead');
-            this.player.animations.currentAnim.speed = 10;
             this.livesCount -= 1;
             if (this.livesCount == 0) {
+                this.playerDeath.x = this.player.x;
+                this.playerDeath.y = this.player.y;
+                this.playerDeath.visible = true;
+                this.playerDeath.animations.play('dead');
+                this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
                 this.game.input.onTap.addOnce(this.restart, this);
             }
             else {
                 this.player.revive();
-                this.playerDeath.body.visible = false;
-                this.playerDeath.animations.stop();
             }
         }
 
@@ -979,7 +989,12 @@
         collisionHandler(enemy, bullet) {
             bullet.kill();
             enemy.kill();
-            this.numberOfEnemies += 1;
+            this.ghostDeath.x = enemy.body.x;
+            this.ghostDeath.y = enemy.body.y;
+            this.ghostDeath.visible = true;
+            this.ghostDeath.animations.play('death_ghost', 7, false, false);
+            //this.ghostDeath.animations.currentAnim.speed = 7;
+            //this.numberOfEnemies += 1;
             //this.enemySpawn();
             this.score += 20;
             this.scoreText.text = this.scoreConst + this.score;
@@ -993,6 +1008,7 @@
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
                 this.playerDeath.animations.play('dead');
+                this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
                 this.game.input.onTap.addOnce(this.restart, this);

@@ -286,3 +286,4 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+/PhaserTypeScript/PhaserTypeScript/mongoose-free-6.5.exe
