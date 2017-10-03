@@ -317,7 +317,7 @@
                     this.game.add.sprite(0, h, 'floors4');
                     h = h + 1080;
             }*/
-            //this.game.add.sprite(0, 0, 'boblife'); 
+            this.game.add.sprite(0, 0, 'boblife'); 
 
 
 
