@@ -40,7 +40,7 @@ var ElevatorAction;
             this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
             this.game.load.spritesheet('doors1', 'assets/Doors_Blue.jpg', 25, 60, 4);
             this.game.load.spritesheet('doors2', 'assets/Doors_Red.jpg', 25, 75, 4);
-            this.game.load.spritesheet('princess', 'assets/princess.png', 181, 100);
+            this.game.load.spritesheet('princess', 'assets/r_princess_all_sm.png', 110, 150);
             this.game.load.spritesheet('ghost', 'assets/mrghost.png', 181, 150);
             //this.game.load.spritesheet('princess_attact', 'assets/princess_attack.png', 181, 150, 10);
             this.game.load.image('button', 'assets/button.png');
@@ -72,14 +72,6 @@ var ElevatorAction;
             this.game.stage.backgroundColor = "#000000;";
             this.game.world.setBounds(0, 0, 1890, 19000);
             this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-            this.bullets = this.game.add.group();
-            this.bullets.enableBody = true;
-            this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-            this.bullets.createMultiple(30, 'bullet');
-            this.bullets.setAll('anchor.x', 0);
-            this.bullets.setAll('anchor.y', 0);
-            this.bullets.setAll('outOfBoundsKill', true);
-            this.bullets.setAll('checkWorldBounds', true);
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.music = this.add.audio('shoot', 1, false);
             this.doorMusic = this.add.audio('doorOpen', 1, false);
@@ -568,6 +560,15 @@ var ElevatorAction;
             this.enemyBullets.setAll('anchor.y', 0);
             this.enemyBullets.setAll('outOfBoundsKill', true);
             this.enemyBullets.setAll('checkWorldBounds', true);
+            // player bullets
+            this.bullets = this.game.add.group();
+            this.bullets.enableBody = true;
+            this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+            this.bullets.createMultiple(30, 'bullet');
+            this.bullets.setAll('anchor.x', 0);
+            this.bullets.setAll('anchor.y', 0);
+            this.bullets.setAll('outOfBoundsKill', true);
+            this.bullets.setAll('checkWorldBounds', true);
             this.lives = this.game.add.group();
             this.game.add.text(this.game.world.width - 100, 10, 'Lives : ', { font: '34px Arial', fill: '#fff' });
             this.stateText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, ' ', { font: '32px Arial', fill: '#fff' });
@@ -652,15 +653,15 @@ var ElevatorAction;
             if (this.cursors.up.isDown) {
                 this.player.body.velocity.y -= 100;
             }
-            if (this.cursors.up.isDown && this.player.body.touching.down && (hitFloor1)) {
-                this.player.body.velocity.y -= 350;
-            }
-            if (this.cursors.up.isDown && this.player.body.touching.down && (hitFloor1)) {
-                this.player.body.velocity.y -= 350;
-            }
-            if (this.cursors.up.isDown && this.player.body.touching.down && (hitElevator || hitElevator2)) {
-                this.player.body.velocity.y -= 350;
-            }
+            //if (this.cursors.up.isDown && this.player.body.touching.down && (hitFloor1)) {
+            //    this.player.body.velocity.y -= 350;
+            //}
+            //if (this.cursors.up.isDown && this.player.body.touching.down && (hitFloor1)) {
+            //    this.player.body.velocity.y -= 350;
+            //}
+            //if (this.cursors.up.isDown && this.player.body.touching.down && (hitElevator || hitElevator2)) {
+            //    this.player.body.velocity.y -= 350;
+            //}
             if (this.fireButton.isDown) {
                 this.firebullet(this.bullets);
             }
@@ -722,6 +723,7 @@ var ElevatorAction;
             }
             this.game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler, null, this);
             this.game.physics.arcade.overlap(this.enemyBullets, this.player, this.enemyHitsPlayer, null, this);
+            this.game.physics.arcade.overlap(this.player, this.enemies, this.playerHitByEnemy, null, this);
             //this.doors.game.
             var enemy = this.enemies.getFirstExists(true);
             //this.game.physics.arcade.moveToXY(enemy, this.player.x, this.player.y, 20);
@@ -736,6 +738,19 @@ var ElevatorAction;
             //key.body.visible = false;
             key.kill(this);
             this.keysCOllected++;
+        };
+        Game.prototype.playerHitByEnemy = function (enemy, player) {
+            enemy.kill();
+            player.kill();
+            this.livesCount -= 1;
+            if (this.livesCount == 0) {
+                this.stateText.text = "You Lose, click to restart";
+                this.stateText.visible = true;
+                this.game.input.onTap.addOnce(this.restart, this);
+            }
+            else {
+                this.player.revive();
+            }
         };
         Game.prototype.playAnimation = function (player, door) {
             //door.animations.play('open');
@@ -760,7 +775,7 @@ var ElevatorAction;
                 //this.player.animations.currentAnim.speed = 10;
                 bullet = this.bullets.getFirstExists(false);
                 if (bullet) {
-                    bullet.reset(this.player.x + 50, this.player.y + 50);
+                    bullet.reset(this.player.x + 50, this.player.y);
                     if (this.bulletDirection) {
                         bullet.body.velocity.x += 300;
                     }
@@ -799,7 +814,7 @@ var ElevatorAction;
             var enemyBullet = this.enemyBullets.getFirstExists(false);
             var enemy = this.enemies.getFirstExists(true);
             if (enemyBullet && enemy) {
-                enemyBullet.reset(enemy.body.x, enemy.body.y + 50);
+                enemyBullet.reset(enemy.body.x, enemy.body.y);
                 //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
                 if (this.player.x > enemy.body.x) {
                     enemyBullet.body.velocity.x += 200;
