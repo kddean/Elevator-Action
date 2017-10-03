@@ -74,14 +74,14 @@
             this.game.load.image('ground', 'assets/platform.png');
             this.game.load.image('ground2', 'assets/platformShort.png');
             this.game.load.image('ground3', 'assets/platformTiny.png');
-            this.game.load.image('bullet', 'assets/bullet.png');
+            this.game.load.image('bullet', 'assets/shield.png');
             this.game.load.image('star', 'assets/bullet.png');
             this.game.load.image('elevator', 'assets/feather.png');
             this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
             this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
             this.game.load.spritesheet('doors1', 'assets/Doors_Blue.jpg', 25, 60, 4);
             this.game.load.spritesheet('doors2', 'assets/Doors_Red.jpg', 25, 75, 4);
-            this.game.load.spritesheet('princess', 'assets/princess.png', 181, 150);
+            this.game.load.spritesheet('princess', 'assets/princess.png', 181, 100);
             this.game.load.spritesheet('ghost', 'assets/mrghost.png', 181, 150);
             //this.game.load.spritesheet('princess_attact', 'assets/princess_attack.png', 181, 150, 10);
             this.game.load.image('button', 'assets/button.png');
@@ -174,7 +174,7 @@
                     h = h + 1080;
             }*/
             //this.game.add.sprite(0, 0, 'boblife'); 
-
+            this.game.add.sprite(0, 0, 'boblife'); 
 
 
             //Floor Layout
@@ -540,7 +540,7 @@
         this.keys = this.game.add.group();
         this.keys.enableBody = true;
         var q = 0;
-        for (var f = 0; t < 3; t++) {
+        for (var f = 0; f < 3; f++) {
             var k = this.keys.create(1280, 300 + q, 'key');
             var k = this.keys.create(210, 732 + q, 'key');
             var k = this.keys.create(50, 2028 + q, 'key');
@@ -621,7 +621,7 @@
             this.player.animations.add('right', [18, 19, 20, 21, 22, 23, 24, 25, 26, 27], 0, true);
             this.player.animations.add('idle', [10, 11, 12, 13, 14, 15, 16, 17], 0, true);
             this.player.animations.currentAnim.speed = 10;
-            this.player.animations.add('shootShield', [28, 29, 30, 31, 32, 33, 34, 35, 36, 37], 0, true);
+            //this.player.animations.add('shootShield', [28, 29, 30, 31, 32, 33, 34, 35, 36, 37], 0, true);
             
 
             //this.Princess.animations.add('attack', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 0, true);
@@ -721,23 +721,33 @@
              }*/
 
         enemySpawn() {
-            if (this.numberOfEnemies > 0) {
-                this.enemies = this.game.add.group();
-                this.enemies.enableBody = true;
-                if (this.player.x > this.game.width / 2) {
-                    var enemy = this.enemies.create(this.player.x - this.randomIntFromInterval(200, 800), this.player.y, 'ghost');
-                    enemy.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
+            //if (this.numberOfEnemies > 0) {
+            //    this.enemies = this.game.add.group();
+            //    this.enemies.enableBody = true;
+            //    if (this.player.x > this.game.width / 2) {
+            //        var enemy = this.enemies.create(this.player.x - this.randomIntFromInterval(200, 800), this.player.y, 'ghost');
+            //        enemy.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
+            //        enemy.animations.play('idle');
+            //        enemy.animations.currentAnim.speed = 10;
+            //    }
+            //    else {
+            //        var enemy = this.enemies.create(this.player.x + this.randomIntFromInterval(200, 800), this.player.y, 'ghost');
+            //        enemy.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
+            //        enemy.animations.play('idle');
+            //        enemy.animations.currentAnim.speed = 10;
+            //    }
+            //    this.numberOfEnemies -= 1;
+            //}
+
+            this.enemies = this.game.add.group();
+            this.enemies.enableBody = true;
+            for (var i = 0; i < 60; i++) {
+                var enemy = this.enemies.create(this.randomIntFromInterval(0, 1800), i* 216, 'ghost');
+                enemy.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
                     enemy.animations.play('idle');
                     enemy.animations.currentAnim.speed = 10;
-                }
-                else {
-                    var enemy = this.enemies.create(this.player.x + this.randomIntFromInterval(200, 800), this.player.y, 'ghost');
-                    enemy.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
-                    enemy.animations.play('idle');
-                    enemy.animations.currentAnim.speed = 10;
-                }
-                this.numberOfEnemies -= 1;
             }
+
             //enemy.callALL('animations.add','animations','move', [0, 1, 2, 3], 10, true);
             //enemy.callALL('animations.play', 'animations', 'move'); 
         }
@@ -846,9 +856,9 @@
                 bullet.kill();
                 enemyBullet.kill();
             }
-            if (hitFloor1) {
-                this.enemySpawn();
-            }
+            //if (hitFloor1) {
+            //    this.enemySpawn();
+            //}
 
             /*if (elevator2Hit) {
                 this.elevatorT.body.immovable = false;
@@ -907,8 +917,8 @@
         firebullet(bullet) {
             if (this.game.time.now > this.bulletTime) {
                 this.music.play();
-                this.player.animations.play('shootShield');
-                this.player.animations.currentAnim.speed = 10;
+                //this.player.animations.play('shootShield');
+                //this.player.animations.currentAnim.speed = 10;
                 bullet = this.bullets.getFirstExists(false);
                 if (bullet) {
                     bullet.reset(this.player.x + 50, this.player.y + 50);
@@ -930,7 +940,7 @@
             bullet.kill();
             enemy.kill();
             this.numberOfEnemies += 1;
-            this.enemySpawn();
+            //this.enemySpawn();
             this.score += 20;
             this.scoreText.text = this.scoreConst + this.score;
         }
