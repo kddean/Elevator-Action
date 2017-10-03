@@ -51,6 +51,10 @@
         ghostDeath: Phaser.Sprite;
         playerDeath: Phaser.Sprite;
         skeletonDeath: Phaser.Sprite;
+        lightHeart: Phaser.Group;
+        darkHeart: Phaser.Group;
+        lightKey: Phaser.Group;
+        darkKey: Phaser.Group;
 
         floor1: Phaser.Group;
         floor2: Phaser.Group;
@@ -104,6 +108,10 @@
             this.game.load.image('floors3', 'assets/floor3.png');
             this.game.load.image('floors4', 'assets/floor4.png');
             this.game.load.image('boblife', 'assets/bob.png');
+            this.game.load.image('keyTaken', 'assets/golden_key.png');
+            this.game.load.image('noKeyTaken', 'assets/golden_key_dark.png');
+            this.game.load.image('life', 'assets/pink_heart.png');
+            this.game.load.image('noLife', 'assets/pink_heart_dark.png');
         }
 
         create() {
@@ -112,7 +120,7 @@
             this.game.world.resize(800, 1000);
             this.bulletTime = 0;
             this.score = 0;
-            this.livesCount = 3;
+            this.livesCount = 5;
             this.firingTimer = 0;
             this.numberOfEnemies = 1;
             this.gameTime = 50;
@@ -155,6 +163,9 @@
 
 
 
+
+
+
             //Background
             /*var h = 4320;
             this.game.add.sprite(0, 0, 'floors1');
@@ -173,6 +184,13 @@
             }*/
             //this.game.add.sprite(0, 0, 'boblife'); 
             this.game.add.sprite(0, 0, 'boblife'); 
+
+            //initializing lifes and keys.
+            this.lightHeart = this.game.add.group();
+            this.darkHeart = this.game.add.group();
+            this.lightKey = this.game.add.group();
+            this.darkKey = this.game.add.group();
+
 
 
             //Floor Layout
@@ -745,6 +763,8 @@
             this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
             this.game.input.onDown.add(this.fullscreen, this);*/
 
+            this.showHearts();
+
         }
         /* fullscreen() {
              
@@ -917,7 +937,7 @@
 
             // Collection/ Keys
             this.game.physics.arcade.overlap(this.player, this.keys, this.collectKeys, null, this);
-
+            this.showHearts();
 
         }
 
@@ -930,13 +950,18 @@
         playerHitByEnemy(enemy, player) {
             enemy.kill();
             player.kill();
+            this.ghostDeath.x = enemy.body.x;
+            this.ghostDeath.y = enemy.body.y;
+            this.ghostDeath.visible = true;
+            this.ghostDeath.animations.play('death_ghost', 7, false, false);
             this.livesCount -= 1;
+            this.showHearts();
             if (this.livesCount == 0) {
                 this.playerDeath.x = this.player.x;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead');
-                this.playerDeath.animations.currentAnim.speed = 8;
+                this.playerDeath.animations.play('dead', 8, false, false);
+                //this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
                 this.game.input.onTap.addOnce(this.restart, this);
@@ -1003,12 +1028,13 @@
             bullet.kill();
             player.kill();
             this.livesCount -= 1;
+            this.showHearts();
             if (this.livesCount == 0) {
                 this.playerDeath.x = this.player.x;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead');
-                this.playerDeath.animations.currentAnim.speed = 8;
+                this.playerDeath.animations.play('dead', 8, false, false);
+                //this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
                 this.game.input.onTap.addOnce(this.restart, this);
@@ -1036,6 +1062,17 @@
         randomIntFromInterval(min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
         }
+
+        showHearts() {
+            this.lightHeart.removeAll();
+            for (var i = 0; i < this.livesCount; i++) {
+                var lHeart = this.lightHeart.create((i+1) * 50, this.game.world.camera.y + 100, 'life');
+                lHeart.anchor.setTo(0.5, 0.5);
+            }
+        }
+
+        showKeys() {
+        }
         restart() {
             //this.lives.callAll('revive');
             this.player.revive();
@@ -1044,5 +1081,6 @@
             this.playerDeath.animations.stop();
             this.playerDeath.visible = false;
         }
+
     }
 }

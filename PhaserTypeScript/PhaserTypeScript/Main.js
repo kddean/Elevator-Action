@@ -1,25 +1,19 @@
 window.onload = function () {
     var game = new ElevatorAction.Main();
 };
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var ElevatorAction;
 (function (ElevatorAction) {
     var Game = (function (_super) {
         __extends(Game, _super);
         function Game() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.elevatorDir = 1;
-            _this.isOnElevator = false;
-            return _this;
+            _super.apply(this, arguments);
+            this.elevatorDir = 1;
+            this.isOnElevator = false;
         }
         Game.prototype.preload = function () {
             this.game.load.image('logo', 'phaser2.png');
@@ -60,6 +54,10 @@ var ElevatorAction;
             this.game.load.image('floors3', 'assets/floor3.png');
             this.game.load.image('floors4', 'assets/floor4.png');
             this.game.load.image('boblife', 'assets/bob.png');
+            this.game.load.image('keyTaken', 'assets/golden_key.png');
+            this.game.load.image('noKeyTaken', 'assets/golden_key_dark.png');
+            this.game.load.image('life', 'assets/pink_heart.png');
+            this.game.load.image('noLife', 'assets/pink_heart_dark.png');
         };
         Game.prototype.create = function () {
             this.keysCOllected = 0;
@@ -67,7 +65,7 @@ var ElevatorAction;
             this.game.world.resize(800, 1000);
             this.bulletTime = 0;
             this.score = 0;
-            this.livesCount = 3;
+            this.livesCount = 5;
             this.firingTimer = 0;
             this.numberOfEnemies = 1;
             this.gameTime = 50;
@@ -125,6 +123,11 @@ var ElevatorAction;
             }*/
             //this.game.add.sprite(0, 0, 'boblife'); 
             this.game.add.sprite(0, 0, 'boblife');
+            //initializing lifes and keys.
+            this.lightHeart = this.game.add.group();
+            this.darkHeart = this.game.add.group();
+            this.lightKey = this.game.add.group();
+            this.darkKey = this.game.add.group();
             //Floor Layout
             var y = 190;
             var t;
@@ -595,6 +598,7 @@ var ElevatorAction;
             /*var button = this.game.add.button(1000, 0, 'button', this.fullscreen, this, 2, 1, 0);
             this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
             this.game.input.onDown.add(this.fullscreen, this);*/
+            this.showHearts();
         };
         /* fullscreen() {
              
@@ -750,6 +754,7 @@ var ElevatorAction;
             }
             // Collection/ Keys
             this.game.physics.arcade.overlap(this.player, this.keys, this.collectKeys, null, this);
+            this.showHearts();
         };
         Game.prototype.collectKeys = function (player, key) {
             //key = this.keys.getFirstExists(true);
@@ -760,13 +765,18 @@ var ElevatorAction;
         Game.prototype.playerHitByEnemy = function (enemy, player) {
             enemy.kill();
             player.kill();
+            this.ghostDeath.x = enemy.body.x;
+            this.ghostDeath.y = enemy.body.y;
+            this.ghostDeath.visible = true;
+            this.ghostDeath.animations.play('death_ghost', 7, false, false);
             this.livesCount -= 1;
+            this.showHearts();
             if (this.livesCount == 0) {
                 this.playerDeath.x = this.player.x;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead');
-                this.playerDeath.animations.currentAnim.speed = 8;
+                this.playerDeath.animations.play('dead', 8, false, false);
+                //this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
                 this.game.input.onTap.addOnce(this.restart, this);
@@ -829,12 +839,13 @@ var ElevatorAction;
             bullet.kill();
             player.kill();
             this.livesCount -= 1;
+            this.showHearts();
             if (this.livesCount == 0) {
                 this.playerDeath.x = this.player.x;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead');
-                this.playerDeath.animations.currentAnim.speed = 8;
+                this.playerDeath.animations.play('dead', 8, false, false);
+                //this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
                 this.game.input.onTap.addOnce(this.restart, this);
@@ -861,6 +872,15 @@ var ElevatorAction;
         Game.prototype.randomIntFromInterval = function (min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
         };
+        Game.prototype.showHearts = function () {
+            this.lightHeart.removeAll();
+            for (var i = 0; i < this.livesCount; i++) {
+                var lHeart = this.lightHeart.create((i + 1) * 50, this.game.world.camera.y + 100, 'life');
+                lHeart.anchor.setTo(0.5, 0.5);
+            }
+        };
+        Game.prototype.showKeys = function () {
+        };
         Game.prototype.restart = function () {
             //this.lives.callAll('revive');
             this.player.revive();
@@ -878,15 +898,13 @@ var ElevatorAction;
     var Main = (function (_super) {
         __extends(Main, _super);
         function Main() {
-            var _this = this;
             var renderMode = Phaser.AUTO;
-            _this = _super.call(this, 1890, 1000, renderMode, "content", null) || this;
+            _super.call(this, 1890, 1000, renderMode, "content", null);
             //this.state.add('Boot', Boot, false);
             //this.state.add('Preloader', Preloader, false);
-            _this.state.add('MainMenu', ElevatorAction.MainMenu, false);
-            _this.state.add('Game', ElevatorAction.Game, false);
-            _this.state.start('MainMenu');
-            return _this;
+            this.state.add('MainMenu', ElevatorAction.MainMenu, false);
+            this.state.add('Game', ElevatorAction.Game, false);
+            this.state.start('MainMenu');
         }
         return Main;
     }(Phaser.Game));
@@ -894,10 +912,10 @@ var ElevatorAction;
     var GameStates = (function () {
         function GameStates() {
         }
+        GameStates.MAINMENU = "mainMenu";
+        GameStates.GAME = "game";
         return GameStates;
     }());
-    GameStates.MAINMENU = "mainMenu";
-    GameStates.GAME = "game";
     ElevatorAction.GameStates = GameStates;
 })(ElevatorAction || (ElevatorAction = {}));
 var ElevatorAction;
@@ -905,28 +923,86 @@ var ElevatorAction;
     var MainMenu = (function (_super) {
         __extends(MainMenu, _super);
         function MainMenu() {
-            return _super !== null && _super.apply(this, arguments) || this;
+            _super.apply(this, arguments);
         }
         MainMenu.prototype.preload = function () {
-            //this.game.load.image('button', 'assets/start.png');
-            this.game.load.audio('start', 'assets/shoot.wav');
+            this.game.load.audio('start', 'assets/spooky.mp3');
+            //Loading sprites for Startscreen
+            this.game.load.image('back', 'assets/reference 1-5.png');
+            this.game.load.spritesheet('startframe1', 'assets/introscreen_g1.png', 1920, 1080);
+            this.game.load.spritesheet('startframe2', 'assets/introscreen_g2.png', 1920, 1080);
+            this.game.load.spritesheet('startframe3', 'assets/introscreen_g3.png', 1920, 1080);
+            this.game.load.spritesheet('startframe4', 'assets/introscreen_g4.png', 1920, 1080);
             this.game.load.spritesheet('pressStart', 'assets/r_introscreen_space.png', 1920, 1080);
             this.fireButton = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         };
         MainMenu.prototype.create = function () {
             //var button = this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY, 'button', this.actionOnClick, this, 2, 1, 0);
             //button.scale.setTo(0.5, 0.5);
+            this.game.add.sprite(0, 0, 'back');
+            //this.frame1 = this.game.add.sprite(0, 0, 'startframe1');
+            //this.game.physics.arcade.enable(this.frame1);
+            //this.frame1.animations.add('idle1', [0, 1, 2, 3, 4], 0, true);
+            //this.frame1.visible = false;
+            //this.frame2 = this.game.add.sprite(0, 0, 'startframe2');
+            //this.game.physics.arcade.enable(this.frame2);
+            //this.frame2.animations.add('idle2', [0, 1, 2, 3, 4], 0, true);
+            //this.frame2.visible = false;
+            //this.frame3 = this.game.add.sprite(0, 0, 'startframe3');
+            //this.game.physics.arcade.enable(this.frame3);
+            //this.frame3.animations.add('idle3', [0, 1, 2, 3, 4], 0, true);
+            //this.frame3.visible = false;
+            //this.frame4 = this.game.add.sprite(0, 0, 'startframe4');
+            //this.game.physics.arcade.enable(this.frame4);
+            //this.frame4.animations.add('idle4', [0, 1, 2, 3], 0, true);
+            //this.frame4.visible = false;
             this.startScreen = this.game.add.sprite(0, 0, 'pressStart');
             this.game.physics.arcade.enable(this.startScreen);
             this.startScreen.animations.add('idle', [0, 1], 0, true);
-            this.music = this.add.audio('shoot');
+            this.startScreen.visible = false;
+            this.music = this.add.audio('start');
+            this.game.sound.setDecodedCallback([this.music], this.showPress, this);
         };
         MainMenu.prototype.update = function () {
+            //this.frame1.animations.play('idle1', 5, false, true);
+            //if (this.frame1.animations.currentAnim.complete) {
+            //    this.frame1.animations.stop();
+            //    this.frame1.visible = false;
+            //    this.frame2.visible = true;
+            //    this.frame2.animations.play('idle2', 2, true, false);
+            //}
+            //if (this.frame2.animations.currentAnim.complete) {
+            //    this.frame2.animations.stop();
+            //    this.frame2.visible = false;
+            //    this.frame3.visible = true;
+            //    this.frame3.animations.play('idle3', 2, false, true);
+            //}
+            //if (this.frame3.animations.currentAnim.complete) {
+            //    this.frame3.animations.stop();
+            //    this.frame3.visible = false;
+            //    this.frame4.visible = true;
+            //    this.frame4.animations.play('idle4', 2, false, true);
+            //}
+            ////this.frame3.visible = true;
+            ////this.frame3.animations.play('idle', 10, false, true);
+            ////this.frame3.visible = false;
+            ////this.frame4.visible = true;
+            ////this.frame4.animations.play('idle', 10, false, true);
+            ////this.frame4.visible = false;
+            //if (this.frame4.animations.currentAnim.complete) {
+            //    this.frame4.visible = false;
+            //this.showPress();
+            //}
             if (this.fireButton.isDown) {
+                this.music.stop();
                 this.state.start('Game', true, false);
             }
+        };
+        MainMenu.prototype.showPress = function () {
+            this.music.play();
+            this.startScreen.visible = true;
             this.startScreen.animations.play('idle');
-            this.startScreen.animations.currentAnim.speed = 10;
+            this.startScreen.animations.currentAnim.speed = 5;
         };
         return MainMenu;
     }(Phaser.State));
