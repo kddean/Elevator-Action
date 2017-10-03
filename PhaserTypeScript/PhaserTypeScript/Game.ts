@@ -93,6 +93,11 @@
             this.game.load.image('key', 'assets/key.png');
             this.game.load.audio('shoot', 'assets/shoot.wav', true);
             this.game.load.audio('doorOpen', 'assets/door_open_2.wav', true);
+            this.game.load.image('floors1', 'assets/floor1.png');
+            this.game.load.image('floors2', 'assets/floor2.png');
+            this.game.load.image('floors3', 'assets/floor3.png');
+            this.game.load.image('floors4', 'assets/floor4.png');
+            this.game.load.image('boblife', 'assets/bob.png');
         }
 
         create() {
@@ -151,21 +156,42 @@
             this.game.physics.arcade.enable(this.leve1);
 
 
+
+            //Background
+            /*var h = 4320;
+            this.game.add.sprite(0, 0, 'floors1');
+            this.game.add.sprite(0, 1080, 'floors2');
+            this.game.add.sprite(0, 2160, ' floors3');
+            this.game.add.sprite(0, 3240, 'floors4');
+            for (var f = 0; f < 2; f++) {
+                    this.game.add.sprite(0, h, 'floors1');
+                    h = h + 1080;
+                    this.game.add.sprite(0, h, 'floors2');
+                    h = h + 1080;
+                    this.game.add.sprite(0, h, ' floors3');
+                    h = h + 1080;
+                    this.game.add.sprite(0, h, 'floors4');
+                    h = h + 1080;
+            }*/
+            //this.game.add.sprite(0, 0, 'boblife'); 
+
+
+
             //Floor Layout
 
-        var y = 150;
+        var y = 190;
         var t;
         for (var w = 0; w <= 3; w++) {
             
                 for (var j = 0; j < 10; j++) {
-                    if (((j >= 0) && (j < 2)) || (j > 2 && j < 7) || (j > 7 && j <= 9)) {
+                    if (((j >= 0) && (j < 1)) || (j > 1 && j < 8) || (j > 8 && j <= 9)) {
                         t = this.leve1.create(j * 192, y, 'floor');
                         t.body.immovable = true;
                     }
                 }
                 y = y + 216;
         
-            for (var i = 1; i <= 2; i++) {
+            
                 for (var j = 0; j < 10; j++) {
                     if (((j >= 0) && (j < 3)) || (j > 3 && j < 5) || (j >= 6 && j < 8) || (j == 9)) {
                         t = this.leve1.create(j * 192, y, 'floor');
@@ -174,44 +200,65 @@
                     }
                 }
                 y = y + 216;
-            }
             
+                for (var j = 0; j < 10; j++) {
+                    if ((j<3) || (j>3 && j<8) || (j==9) ) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+
+                    }
+                }
+                y = y + 216;
 
             for (var j = 0; j < 10; j++) {
-                if ((j>0 && j<3) || (j>3 && j<6) || (j>=7)) {
+                if ((j>0 && j<3) || (j>3 && j<7) || (j>7)) {
                     t = this.leve1.create(j * 192, y, 'floor');
                     t.body.immovable = true;
                 }
             }
             y = y + 216;
 
-            for (var i = 1; i <= 2; i++) {
+            
                 for (var j = 0; j < 10; j++) {
-                    if ((j>0 && j<3) || (j==4) || (j>6)) {
+                    if ((j>0 && j<3) || (j==4) || (j>7)) {
                         t = this.leve1.create(j * 192, y, 'floor');
                         t.body.immovable = true;
                     }
                 }
                 y = y + 216;
-            }
+            
+                for (var j = 0; j < 10; j++) {
+                    if ((j > 0 && j < 3) || (j == 4) || (j == 8)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
 
             for (var j = 0; j < 10; j++) {
-                if ((j > 0 && j < 3) || (j>3 && j<6) || (j > 6)) {
+                if ((j >= 0 && j < 3) || (j>3 && j<6) || (j > 7)) {
                     t = this.leve1.create(j * 192, y, 'floor');
                     t.body.immovable = true;
                 }
             }
             y = y + 216;
 
-            for (var i = 1; i <= 2; i++) {
+            
                 for (var j = 0; j < 10; j++) {
-                    if ((j >= 0 && j<3) || (j==5) || (j>=6 && j<9)) {
+                    if ((j >= 0 && j<2) || (j==5) || (j>6 && j<9)) {
                         t = this.leve1.create(j * 192, y, 'floor');
                         t.body.immovable = true;
                     }
                 }
                 y = y + 216;
-            }
+
+                for (var j = 0; j < 10; j++) {
+                    if ((j >= 0 && j < 2) || (j>2 && j<6) || (j > 6)) {
+                        t = this.leve1.create(j * 192, y, 'floor');
+                        t.body.immovable = true;
+                    }
+                }
+                y = y + 216;
 
             for (var j = 0; j < 10; j++) {
                 if ((j < 2) || ((j > 2) && (j < 7)) || (j == 9)){
@@ -331,7 +378,7 @@
             z = z + 216;
 
             for (var i = 0; i < 10; i++) {
-                if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
+                if ((i < 1) || (i==2) || (i==7) || (i==9)) {
                     t = this.doors.create(((i * 192) + 20), z - 90, 'door');
                     t.body.immovable = true;
                 }
@@ -339,7 +386,7 @@
             z = z + 216;
 
             for (var i = 0; i < 10; i++) {
-                if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
+                if (( i < 3) || (i==4) || (i>5 && i<8) || (i==9)) {
                     t = this.doors.create(((i * 192) + 20), z - 90, 'door');
                     t.body.immovable = true;
                 }
@@ -347,7 +394,7 @@
             z = z + 216;
 
             for (var i = 0; i < 10; i++) {
-                if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
+                if ((i==2) || (i>3 && i<7) || (i==9)) {
                     t = this.doors.create(((i * 192) + 20), z - 90, 'door');
                     t.body.immovable = true;
                 }
@@ -355,7 +402,7 @@
             z = z + 216;
 
             for (var i = 0; i < 10; i++) {
-                if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
+                if ((i == 2)) {
                     t = this.doors.create(((i * 192) + 20), z - 90, 'door');
                     t.body.immovable = true;
                 }
@@ -492,17 +539,22 @@
         //Keys
         this.keys = this.game.add.group();
         this.keys.enableBody = true;
-        var k = this.keys.create(1280, 300, 'key');
-        var k = this.keys.create(210, 732, 'key');
-        var k = this.keys.create(50, 2028, 'key');
-        var k = this.keys.create(700, 2028, 'key');
-        var k = this.keys.create(1750, 2028, 'key');
-        var k = this.keys.create(1000, 2676, 'key');
-        var k = this.keys.create(1350, 3540, 'key');
-        var k = this.keys.create(600, 3756, 'key');
-        var k = this.keys.create(1750, 3756, 'key');
-        
+        var q = 0;
+        for (var f = 0; t < 3; t++) {
+            var k = this.keys.create(1280, 300 + q, 'key');
+            var k = this.keys.create(210, 732 + q, 'key');
+            var k = this.keys.create(50, 2028 + q, 'key');
+            var k = this.keys.create(700, 2028 + q, 'key');
+            var k = this.keys.create(1750, 2028 + q, 'key');
+            var k = this.keys.create(1000, 2676 + q, 'key');
+            var k = this.keys.create(1350, 3540 + q, 'key');
+            var k = this.keys.create(600, 3756 + q, 'key');
+            var k = this.keys.create(1750, 3756 + q, 'key');
 
+            q = q + 4770;
+        }
+        
+       //4470 + 300
 
 
             //Elevators
