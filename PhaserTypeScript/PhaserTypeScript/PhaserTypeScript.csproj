@@ -36,7 +36,13 @@
     <Content Include="assets\dude.png" />
     <Content Include="assets\floor.png" />
     <Content Include="assets\Invisible Box.png" />
+    <Content Include="assets\mrghost.png" />
     <Content Include="assets\platform.png" />
+    <Content Include="assets\princess.png" />
+    <Content Include="assets\princess_attack.png" />
+    <Content Include="assets\princess_defeatsketch.png" />
+    <Content Include="assets\princess_idle.png" />
+    <Content Include="assets\princess_running.png" />
     <Content Include="assets\QL_platform.png" />
     <Content Include="assets\QL_SideWall.png" />
     <Content Include="assets\QL_TopWall.png" />
