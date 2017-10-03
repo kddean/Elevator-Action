@@ -286,7 +286,7 @@ var ElevatorAction;
                     this.game.add.sprite(0, h, 'floors4');
                     h = h + 1080;
             }*/
-            this.game.add.sprite(0, 0, 'boblife');
+            //this.game.add.sprite(0, 0, 'boblife'); 
             //Floor Layout
             var y = 190;
             var t;
@@ -736,7 +736,7 @@ var ElevatorAction;
             var k = this.keys.create(600, 3756, 'key');
             var k = this.keys.create(1750, 3756, 'key');
             var q = 0;
-            for (var f = 0; f < 3; f++) {
+            for (var f = 0; t < 3; t++) {
                 var k = this.keys.create(1280, 300 + q, 'key');
                 var k = this.keys.create(210, 732 + q, 'key');
                 var k = this.keys.create(50, 2028 + q, 'key');
@@ -890,13 +890,13 @@ var ElevatorAction;
                 this.enemies = this.game.add.group();
                 this.enemies.enableBody = true;
                 if (this.player.x > this.game.width / 2) {
-                    var enemy = this.enemies.create(this.player.x - this.randomIntFromInterval(200, 800), this.player.y + 15, 'ghost');
+                    var enemy = this.enemies.create(this.player.x - this.randomIntFromInterval(200, 800), this.player.y, 'ghost');
                     enemy.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
                     enemy.animations.play('idle');
                     enemy.animations.currentAnim.speed = 10;
                 }
                 else {
-                    var enemy = this.enemies.create(this.player.x + this.randomIntFromInterval(200, 800), this.player.y + 15, 'ghost');
+                    var enemy = this.enemies.create(this.player.x + this.randomIntFromInterval(200, 800), this.player.y, 'ghost');
                     enemy.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
                     enemy.animations.play('idle');
                     enemy.animations.currentAnim.speed = 10;
