@@ -55,8 +55,7 @@
         ghostDeath: Phaser.Sprite;
         playerDeath: Phaser.Sprite;
         skeletonDeath: Phaser.Sprite;
-        crystalAnimation: Phaser.Sprite;
-        boneAnimation: Phaser.Sprite;
+        keyAnimation: Phaser.Sprite;
 
 
 
@@ -146,6 +145,7 @@
             this.game.load.spritesheet('skeleton', 'assets/mr_skeleton_walk.png', 181, 150);
             this.game.load.spritesheet('crystalAnim', 'assets/crystal_adj_anim.png', 60, 150);
             this.game.load.spritesheet('boneAnim', 'assets/bone.png', 37, 150);
+            this.game.load.spritesheet('keyShining', 'assets/key_animation_whole.png', 109, 216);
             //this.game.load.spritesheet('princess_attact', 'assets/princess_attack.png', 181, 150, 10);
         }
 
@@ -699,19 +699,12 @@
             this.skeletonDeath.visible = false;
             this.skeletonDeath.animations.add('death_skeleton', [0, 1, 2, 3, 4, 5, 6, 7], 0, true);
 
-            ////crystal animations
-            //this.crystalAnimation = this.game.add.sprite(0, 0, 'crystalAnim');
-            //this.game.physics.arcade.enable(this.crystalAnimation);
-            //this.crystalAnimation.visible = false;
-            //this.crystalAnimation.animations.add('crystalShining', [0, 1, 2, 3, 4, 5], 0, true);
+            //key shining animations.
 
-            ////boneAnimations
-            //this.boneAnimation = this.game.add.sprite(0, 0, 'boneAnim');
-            //this.game.physics.arcade.enable(this.boneAnimation);
-            //this.boneAnimation.visible = false;
-            //this.boneAnimation.animations.add('boneMoving', [0, 1, 2, 3, 4], 0, true);
-
-
+            this.keyAnimation = this.game.add.sprite(0, 0, 'keyShining');
+            this.game.physics.arcade.enable(this.keyAnimation);
+            this.keyAnimation.visible = false;
+            this.keyAnimation.animations.add('keyGlowing', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 0, true);
 
 
             //Animations end.
@@ -726,10 +719,6 @@
 
             //this.elevator.body.allowGravity = false;
 
-            this.doors = this.game.add.group();
-            this.doors.enableBody = true;
-            this.enemyDoors = this.game.add.group();
-            this.enemyDoors.enableBody = true;
 
             /*for (var i = 0; i < 6; i++) {
                 var door2 = this.doors.create(this.randomIntFromInterval(1, 3) * 140, this.game.world.height - 105, 'doors2');
@@ -767,6 +756,12 @@
                 door2.animations.add('close', [3, 2, 1], 1, true);
             }*/
             //}
+
+            this.doors = this.game.add.group();
+            this.doors.enableBody = true;
+            this.enemyDoors = this.game.add.group();
+            this.enemyDoors.enableBody = true;
+
             this.cursors = this.game.input.keyboard.createCursorKeys();
             
             this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
@@ -1048,6 +1043,10 @@
             //key = this.keys.getFirstExists(true);
             //key.body.visible = false;
             key.kill(this);
+            this.keyAnimation.x = key.body.x;
+            this.keyAnimation.y = key.body.y - 100;
+            this.keyAnimation.visible = true;
+            this.keyAnimation.animations.play('keyGlowing', 8, false, false);
             this.keysCollected++;
             this.showKeys();
         }
