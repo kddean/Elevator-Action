@@ -45,6 +45,7 @@ var ElevatorAction;
             this.game.load.spritesheet('ghost_death_anim', 'assets/mrghost_death.png', 181, 150);
             this.game.load.spritesheet('skeleton_death_anim', 'assets/mrskeleton_death.png', 181, 150);
             this.game.load.spritesheet('ghost', 'assets/mrghost.png', 181, 150);
+            this.game.load.spritesheet('skeleton', 'assets/mr_skeleton_walk.png', 181, 150);
             //this.game.load.spritesheet('princess_attact', 'assets/princess_attack.png', 181, 150, 10);
             this.game.load.image('button', 'assets/button.png');
             this.game.load.image('invisible', 'assets/Invisible Box.png');
@@ -64,6 +65,7 @@ var ElevatorAction;
             this.game.load.image('noKeyTaken', 'assets/golden_key_dark.png');
             this.game.load.image('life', 'assets/pink_heart.png');
             this.game.load.image('noLife', 'assets/pink_heart_dark.png');
+            this.game.load.image('crystal', 'assets/crystal.png');
         };
         Game.prototype.create = function () {
             this.keysCOllected = 0;
@@ -636,7 +638,12 @@ var ElevatorAction;
             this.enemies = this.game.add.group();
             this.enemies.enableBody = true;
             for (var i = 0; i < 60; i++) {
-                var enemy = this.enemies.create(this.randomIntFromInterval(0, 1800), i * 216, 'ghost');
+                if (i % 2 == 0) {
+                    var enemy = this.enemies.create(this.randomIntFromInterval(0, 1800), i * 216, 'ghost');
+                }
+                else {
+                    var enemy = this.enemies.create(this.randomIntFromInterval(0, 1800), i * 216, 'skeleton');
+                }
                 enemy.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
                 enemy.animations.play('idle');
                 enemy.animations.currentAnim.speed = 10;
