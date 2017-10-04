@@ -454,7 +454,6 @@ var ElevatorAction;
                 var k = this.keys.create(1750, 3756 + q, 'key');
                 q = q + 4770;
             }
-            //4470 + 300
             //Elevators
             this.elevator = this.game.add.sprite(1300, this.game.world.height - 100, 'elevator');
             this.elevatorT = this.game.add.sprite(380, this.game.world.height - 400, 'elevator');
@@ -480,13 +479,6 @@ var ElevatorAction;
             this.elevatorT.body.bounce.set(1);
             this.elevatorT.body.immovable = true;
             this.elevatorT.body.onCollide = new Phaser.Signal();
-            /*this.elevatorSet = this.game.add.group();
-            this.elevatorSet.enableBody = true;
-            for (var i = 0; i < 3; i++) {
-                var r = this.elevatorSet.create((i + 1) * 150, 1800, 'elevator');
-                r.scale.setTo(1, 1);
-                r.body.immovable = true;
-            }*/
             this.elevatorX.body.collideWorldBounds = true;
             this.elevatorX.body.velocity.setTo(0, 100);
             this.elevatorX.body.bounce.set(1);
@@ -582,6 +574,7 @@ var ElevatorAction;
             //this.enemies.callAll('animations.add', 'animations', 'baddie', [0, 1, 2, 3], 10, true);
             //this.enemies.callAll('play', null, 'baddie');
             //this.enemies.callAll('play', 'null', 'baddie');
+            //ghostBullets
             this.enemyBullets = this.game.add.group();
             this.enemyBullets.enableBody = true;
             this.enemyBullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -599,6 +592,15 @@ var ElevatorAction;
             this.bullets.setAll('anchor.y', 0);
             this.bullets.setAll('outOfBoundsKill', true);
             this.bullets.setAll('checkWorldBounds', true);
+            //Skeleton Bullets
+            this.skeletonBones = this.game.add.group();
+            this.skeletonBones.enableBody = true;
+            this.skeletonBones.physicsBodyType = Phaser.Physics.ARCADE;
+            this.skeletonBones.createMultiple(30, 'bullet');
+            this.skeletonBones.setAll('anchor.x', 0);
+            this.skeletonBones.setAll('anchor.y', 0);
+            this.skeletonBones.setAll('outOfBoundsKill', true);
+            this.skeletonBones.setAll('checkWorldBounds', true);
             this.lives = this.game.add.group();
             this.game.add.text(this.game.world.width - 100, 10, 'Lives : ', { font: '34px Arial', fill: '#fff' });
             this.stateText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, ' ', { font: '32px Arial', fill: '#fff' });
@@ -637,16 +639,21 @@ var ElevatorAction;
             //}
             this.enemies = this.game.add.group();
             this.enemies.enableBody = true;
+            this.skeletons = this.game.add.group();
+            this.skeletons.enableBody = true;
             for (var i = 0; i < 60; i++) {
                 if (i % 2 == 0) {
                     var enemy = this.enemies.create(this.randomIntFromInterval(0, 1800), i * 216, 'ghost');
+                    enemy.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
+                    enemy.animations.play('idle');
+                    enemy.animations.currentAnim.speed = 10;
                 }
                 else {
-                    var enemy = this.enemies.create(this.randomIntFromInterval(0, 1800), i * 216, 'skeleton');
+                    var skeleton = this.skeletons.create(this.randomIntFromInterval(0, 1800), i * 216, 'skeleton');
+                    skeleton.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
+                    skeleton.animations.play('idle');
+                    skeleton.animations.currentAnim.speed = 10;
                 }
-                enemy.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
-                enemy.animations.play('idle');
-                enemy.animations.currentAnim.speed = 10;
             }
             //enemy.callALL('animations.add','animations','move', [0, 1, 2, 3], 10, true);
             //enemy.callALL('animations.play', 'animations', 'move'); 
@@ -663,9 +670,7 @@ var ElevatorAction;
             var elevator3HitFloor = this.game.physics.arcade.collide(this.elevatorX, this.leve1);
             var elevator4HitFloor = this.game.physics.arcade.collide(this.elevatorY, this.leve1);
             var bulletHits = this.game.physics.arcade.collide(this.bullets, this.enemyBullets);
-            //var hitFloor = this.game.physics.arcade.collide(this.player, this.c);
-            //var hitFloor = this.game.physics.arcade.collide(this.player, this.c2);
-            //var doorHit = this.game.physics.arcade.collide(this.doors, this.player);
+            var bonesHits = this.game.physics.arcade.collide(this.bullets, this.skeletonBones);
             this.cursors = this.game.input.keyboard.createCursorKeys();
             //this.elevator.body.velocity.y = 50 * this.elevatorDir;
             this.player.body.velocity.x = 0;
@@ -712,6 +717,7 @@ var ElevatorAction;
             }
             if (this.game.time.now > this.firingTimer) {
                 this.enemyFires();
+                this.skeletonFires();
             }
             if (hitElevator || hitElevator2 || hitElevator3 || hitElevator4) {
                 this.isOnElevator = true;
@@ -755,6 +761,12 @@ var ElevatorAction;
                 bullet.kill();
                 enemyBullet.kill();
             }
+            if (bonesHits) {
+                var bullet = this.bullets.getFirstExists(true);
+                var skeletonBone = this.skeletonBones.getFirstExists(true);
+                bullet.kill();
+                skeletonBone.kill();
+            }
             //if (hitFloor1) {
             //    this.enemySpawn();
             //}
@@ -767,17 +779,39 @@ var ElevatorAction;
                 this.playAnimation(this.player, this.door);
             }
             this.game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler, null, this);
+            this.game.physics.arcade.overlap(this.bullets, this.skeletons, this.skeletonCollisionHandler, null, this);
             this.game.physics.arcade.overlap(this.enemyBullets, this.player, this.enemyHitsPlayer, null, this);
+            this.game.physics.arcade.overlap(this.skeletonBones, this.player, this.skeletonHitsPlayer, null, this);
             this.game.physics.arcade.overlap(this.player, this.enemies, this.playerHitByEnemy, null, this);
+            this.game.physics.arcade.overlap(this.player, this.skeletons, this.playerHitBySkeleton, null, this);
             //this.doors.game.
             var enemy = this.enemies.getFirstExists(true);
-            //this.game.physics.arcade.moveToXY(enemy, this.player.x, this.player.y, 20);
             if (this.game.physics.arcade.overlap(this.player, (this.floor1 || this.floor2 || this.floor3 || this.floor4 || this.floor5 || this.floor6 || this.floor7) && this.cursors.up.isDown)) {
                 this.playAnimation(this.player, this.floor1);
             }
             // Collection/ Keys
             this.game.physics.arcade.overlap(this.player, this.keys, this.collectKeys, null, this);
             this.showHearts();
+        };
+        Game.prototype.collisionHandler = function (enemy, bullet) {
+            bullet.kill();
+            enemy.kill();
+            this.ghostDeath.x = enemy.body.x;
+            this.ghostDeath.y = enemy.body.y;
+            this.ghostDeath.visible = true;
+            this.ghostDeath.animations.play('death_ghost', 7, false, false);
+            this.score += 20;
+            this.scoreText.text = this.scoreConst + this.score;
+        };
+        Game.prototype.skeletonCollisionHandler = function (skeleton, bullet) {
+            bullet.kill();
+            skeleton.kill();
+            this.skeletonDeath.x = skeleton.body.x;
+            this.skeletonDeath.y = skeleton.body.y;
+            this.skeletonDeath.visible = true;
+            this.skeletonDeath.animations.play('death_skeleton', 7, false, false);
+            this.score += 20;
+            this.scoreText.text = this.scoreConst + this.score;
         };
         Game.prototype.collectKeys = function (player, key) {
             //key = this.keys.getFirstExists(true);
@@ -792,6 +826,29 @@ var ElevatorAction;
             this.ghostDeath.y = enemy.body.y;
             this.ghostDeath.visible = true;
             this.ghostDeath.animations.play('death_ghost', 7, false, false);
+            this.livesCount -= 1;
+            this.showHearts();
+            if (this.livesCount == 0) {
+                this.playerDeath.x = this.player.x;
+                this.playerDeath.y = this.player.y;
+                this.playerDeath.visible = true;
+                this.playerDeath.animations.play('dead', 8, false, false);
+                //this.playerDeath.animations.currentAnim.speed = 8;
+                this.stateText.text = "You Lose, click to restart";
+                this.stateText.visible = true;
+                this.game.input.onTap.addOnce(this.restart, this);
+            }
+            else {
+                this.player.revive();
+            }
+        };
+        Game.prototype.playerHitBySkeleton = function (skeleton, player) {
+            skeleton.kill();
+            player.kill();
+            this.skeletonDeath.x = skeleton.body.x;
+            this.skeletonDeath.y = skeleton.body.y;
+            this.skeletonDeath.visible = true;
+            this.skeletonDeath.animations.play('death_ghost', 7, false, false);
             this.livesCount -= 1;
             this.showHearts();
             if (this.livesCount == 0) {
@@ -845,21 +902,27 @@ var ElevatorAction;
         Game.prototype.resetBullet = function (bullet) {
             bullet.kill();
         };
-        Game.prototype.collisionHandler = function (enemy, bullet) {
-            bullet.kill();
-            enemy.kill();
-            this.ghostDeath.x = enemy.body.x;
-            this.ghostDeath.y = enemy.body.y;
-            this.ghostDeath.visible = true;
-            this.ghostDeath.animations.play('death_ghost', 7, false, false);
-            //this.ghostDeath.animations.currentAnim.speed = 7;
-            //this.numberOfEnemies += 1;
-            //this.enemySpawn();
-            this.score += 20;
-            this.scoreText.text = this.scoreConst + this.score;
-        };
         Game.prototype.enemyHitsPlayer = function (player, bullet) {
             bullet.kill();
+            player.kill();
+            this.livesCount -= 1;
+            this.showHearts();
+            if (this.livesCount == 0) {
+                this.playerDeath.x = this.player.x;
+                this.playerDeath.y = this.player.y;
+                this.playerDeath.visible = true;
+                this.playerDeath.animations.play('dead', 8, false, false);
+                //this.playerDeath.animations.currentAnim.speed = 8;
+                this.stateText.text = "You Lose, click to restart";
+                this.stateText.visible = true;
+                this.game.input.onTap.addOnce(this.restart, this);
+            }
+            else {
+                this.player.revive();
+            }
+        };
+        Game.prototype.skeletonHitsPlayer = function (player, bone) {
+            bone.kill();
             player.kill();
             this.livesCount -= 1;
             this.showHearts();
@@ -888,6 +951,21 @@ var ElevatorAction;
                 }
                 else {
                     enemyBullet.body.velocity.x -= 200;
+                }
+                this.firingTimer = this.game.time.now + 2000;
+            }
+        };
+        Game.prototype.skeletonFires = function () {
+            var skeletonBone = this.skeletonBones.getFirstExists(false);
+            var skeleton = this.skeletons.getFirstExists(true);
+            if (skeletonBone && skeleton) {
+                skeletonBone.reset(skeleton.body.x, skeleton.body.y);
+                //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
+                if (this.player.x > skeleton.body.x) {
+                    skeletonBone.body.velocity.x += 200;
+                }
+                else {
+                    skeletonBone.body.velocity.x -= 200;
                 }
                 this.firingTimer = this.game.time.now + 2000;
             }
