@@ -55,6 +55,7 @@
         darkHeart: Phaser.Group;
         lightKey: Phaser.Group;
         darkKey: Phaser.Group;
+        playerDirection: boolean;
 
         floor1: Phaser.Group;
         floor2: Phaser.Group;
@@ -88,7 +89,7 @@
             this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
             this.game.load.spritesheet('doors1', 'assets/Doors_Blue.jpg', 25, 60, 4);
             this.game.load.spritesheet('doors2', 'assets/Doors_Red.jpg', 25, 75, 4);
-            this.game.load.spritesheet('princess', 'assets/r_princess_all_sm.png', 110, 150);
+            this.game.load.spritesheet('princess', 'assets/f_princess_all_smaller2.png', 110, 150);
             this.game.load.spritesheet('princess_death', 'assets/princess_death.png', 181, 150);
             this.game.load.spritesheet('ghost_death_anim', 'assets/mrghost_death.png', 181, 150);
             this.game.load.spritesheet('skeleton_death_anim', 'assets/mrskeleton_death.png', 181, 150);
@@ -634,8 +635,9 @@
             this.player.body.gravity.y = 1000;
             this.player.body.collideWorldBounds = true;
             this.player.animations.add('left', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
-            this.player.animations.add('right', [18, 19, 20, 21, 22, 23, 24, 25, 26, 27], 0, true);
-            this.player.animations.add('idle', [10, 11, 12, 13, 14, 15, 16, 17], 0, true);
+            this.player.animations.add('right', [26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 0, true);
+            this.player.animations.add('leftidle', [10, 11, 12, 13, 14, 15, 16, 17], 0, true);
+            this.player.animations.add('rightidle', [18, 19, 20, 21, 22, 23, 24, 25], 0, true);
             this.player.animations.currentAnim.speed = 10;
             //this.player.animations.add('shootShield', [28, 29, 30, 31, 32, 33, 34, 35, 36, 37], 0, true);
 
@@ -832,18 +834,27 @@
                 this.player.body.velocity.x -= 200;
                 this.player.animations.play('left');
                 this.player.animations.currentAnim.speed = 10;
+                this.playerDirection = false;
                 this.bulletDirection = false;
             }
             else if (this.cursors.right.isDown) {
                 this.player.body.velocity.x += 200;
                 this.player.animations.play('right');
                 this.player.animations.currentAnim.speed = 10;
+                this.playerDirection = true;
                 this.bulletDirection = true;
             }
             else {
-                //this.player.animations.stop();
-                this.player.animations.play('idle');
-                this.bulletDirection = true;
+                if (this.playerDirection) {
+                    this.player.animations.play('rightidle');
+                    this.player.animations.currentAnim.speed = 10;
+                    this.bulletDirection = true;
+                }
+                else {
+                    this.player.animations.play('leftidle');
+                    this.player.animations.currentAnim.speed = 10;
+                    this.bulletDirection = false;
+                }
             }
             if (this.cursors.up.isDown) {
                 this.player.body.velocity.y -= 100;

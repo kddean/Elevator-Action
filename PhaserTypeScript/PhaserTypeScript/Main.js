@@ -1,19 +1,25 @@
 window.onload = function () {
     var game = new ElevatorAction.Main();
 };
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var ElevatorAction;
 (function (ElevatorAction) {
     var Game = (function (_super) {
         __extends(Game, _super);
         function Game() {
-            _super.apply(this, arguments);
-            this.elevatorDir = 1;
-            this.isOnElevator = false;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.elevatorDir = 1;
+            _this.isOnElevator = false;
+            return _this;
         }
         Game.prototype.preload = function () {
             this.game.load.image('logo', 'phaser2.png');
@@ -34,7 +40,7 @@ var ElevatorAction;
             this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
             this.game.load.spritesheet('doors1', 'assets/Doors_Blue.jpg', 25, 60, 4);
             this.game.load.spritesheet('doors2', 'assets/Doors_Red.jpg', 25, 75, 4);
-            this.game.load.spritesheet('princess', 'assets/r_princess_all_sm.png', 110, 150);
+            this.game.load.spritesheet('princess', 'assets/f_princess_all_smaller2.png', 110, 150);
             this.game.load.spritesheet('princess_death', 'assets/princess_death.png', 181, 150);
             this.game.load.spritesheet('ghost_death_anim', 'assets/mrghost_death.png', 181, 150);
             this.game.load.spritesheet('skeleton_death_anim', 'assets/mrskeleton_death.png', 181, 150);
@@ -499,8 +505,9 @@ var ElevatorAction;
             this.player.body.gravity.y = 1000;
             this.player.body.collideWorldBounds = true;
             this.player.animations.add('left', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
-            this.player.animations.add('right', [18, 19, 20, 21, 22, 23, 24, 25, 26, 27], 0, true);
-            this.player.animations.add('idle', [10, 11, 12, 13, 14, 15, 16, 17], 0, true);
+            this.player.animations.add('right', [26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 0, true);
+            this.player.animations.add('leftidle', [10, 11, 12, 13, 14, 15, 16, 17], 0, true);
+            this.player.animations.add('rightidle', [18, 19, 20, 21, 22, 23, 24, 25], 0, true);
             this.player.animations.currentAnim.speed = 10;
             //this.player.animations.add('shootShield', [28, 29, 30, 31, 32, 33, 34, 35, 36, 37], 0, true);
             //PlayerDeath
@@ -659,18 +666,27 @@ var ElevatorAction;
                 this.player.body.velocity.x -= 200;
                 this.player.animations.play('left');
                 this.player.animations.currentAnim.speed = 10;
+                this.playerDirection = false;
                 this.bulletDirection = false;
             }
             else if (this.cursors.right.isDown) {
                 this.player.body.velocity.x += 200;
                 this.player.animations.play('right');
                 this.player.animations.currentAnim.speed = 10;
+                this.playerDirection = true;
                 this.bulletDirection = true;
             }
             else {
-                //this.player.animations.stop();
-                this.player.animations.play('idle');
-                this.bulletDirection = true;
+                if (this.playerDirection) {
+                    this.player.animations.play('rightidle');
+                    this.player.animations.currentAnim.speed = 10;
+                    this.bulletDirection = true;
+                }
+                else {
+                    this.player.animations.play('leftidle');
+                    this.player.animations.currentAnim.speed = 10;
+                    this.bulletDirection = false;
+                }
             }
             if (this.cursors.up.isDown) {
                 this.player.body.velocity.y -= 100;
@@ -898,13 +914,15 @@ var ElevatorAction;
     var Main = (function (_super) {
         __extends(Main, _super);
         function Main() {
+            var _this = this;
             var renderMode = Phaser.AUTO;
-            _super.call(this, 1890, 1000, renderMode, "content", null);
+            _this = _super.call(this, 1890, 1000, renderMode, "content", null) || this;
             //this.state.add('Boot', Boot, false);
             //this.state.add('Preloader', Preloader, false);
-            this.state.add('MainMenu', ElevatorAction.MainMenu, false);
-            this.state.add('Game', ElevatorAction.Game, false);
-            this.state.start('MainMenu');
+            _this.state.add('MainMenu', ElevatorAction.MainMenu, false);
+            _this.state.add('Game', ElevatorAction.Game, false);
+            _this.state.start('MainMenu');
+            return _this;
         }
         return Main;
     }(Phaser.Game));
@@ -912,10 +930,10 @@ var ElevatorAction;
     var GameStates = (function () {
         function GameStates() {
         }
-        GameStates.MAINMENU = "mainMenu";
-        GameStates.GAME = "game";
         return GameStates;
     }());
+    GameStates.MAINMENU = "mainMenu";
+    GameStates.GAME = "game";
     ElevatorAction.GameStates = GameStates;
 })(ElevatorAction || (ElevatorAction = {}));
 var ElevatorAction;
@@ -923,7 +941,7 @@ var ElevatorAction;
     var MainMenu = (function (_super) {
         __extends(MainMenu, _super);
         function MainMenu() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         MainMenu.prototype.preload = function () {
             this.game.load.audio('start', 'assets/spooky.mp3');
