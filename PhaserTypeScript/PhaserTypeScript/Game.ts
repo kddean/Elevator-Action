@@ -1,66 +1,20 @@
 ﻿module ElevatorAction {
     export class Game extends Phaser.State {
         game: Phaser.Game;
+
+        //groups here
         platforms: Phaser.Group;
         setFloor: Phaser.Group;
         leftPlatforms: Phaser.Group;
         rightPlatforms: Phaser.Group;
         floor1Doors: Phaser.Group;
-        c: Phaser.Sprite;
-        c2: Phaser.Sprite;
-        timer: Phaser.Timer;
-        door: Phaser.Sprite;
-        player: Phaser.Sprite;
-        Princess: Phaser.Sprite;
-        leftSideWall: Phaser.Sprite;
-        rightSideWall: Phaser.Sprite;
-        topWall: Phaser.Sprite;
         walls: Phaser.Group;
-        floor: Phaser.Sprite;
-        //doors: Phaser.Group;
         enemyDoors: Phaser.Group;
-        elevator: Phaser.Sprite;
-        elevatorT: Phaser.Sprite;
-        elevatorY: Phaser.Sprite;
-        elevatorX: Phaser.Sprite;
         elevatorSet: Phaser.Group;
-        score: number;
-        scoreText: Phaser.Text;
-        cursors: Phaser.CursorKeys;
-        elevatorDir: number = 1;
-        isOnElevator: boolean = false;
-        bullets: Phaser.Group;
-        bulletTime: number;
-        enemies: Phaser.Group;
-        fireButton: Phaser.Key;
-        bulletDirection: boolean;
-        scoreConst: string;
-        enemyBullets: Phaser.Group;
-        lives: Phaser.Group;
-        firingTimer: number;
-        livingEnemies: Phaser.ArraySet;
-        stateText: Phaser.Text;
-        livesCount: number;
-        numberOfEnemies: number;
-        gameTime: number;
-        music: Phaser.Sound;
-        doorMusic: Phaser.Sound;
-        keysCollected: number;
-        attack: Phaser.Sprite;
-        ghost: Phaser.Sprite;
-        ghostDeath: Phaser.Sprite;
-        playerDeath: Phaser.Sprite;
-        skeletonDeath: Phaser.Sprite;
         lightHeart: Phaser.Group;
         darkHeart: Phaser.Group;
         lightKey: Phaser.Group;
         darkKey: Phaser.Group;
-        playerDirection: boolean;
-        skeletons: Phaser.Group;
-        skeletonBones: Phaser.Group;
-        crystalAnimation: Phaser.Sprite;
-        boneAnimation: Phaser.Sprite;
-
         floor1: Phaser.Group;
         floor2: Phaser.Group;
         floor3: Phaser.Group;
@@ -72,11 +26,80 @@
         doors: Phaser.Group;
         leve1: Phaser.Group;
         keys: Phaser.Group;
+        skeletons: Phaser.Group;
+        skeletonBones: Phaser.Group;
+        enemyBullets: Phaser.Group;
+        lives: Phaser.Group;
+        bullets: Phaser.Group;
+        enemies: Phaser.Group;
+        //doors: Phaser.Group;
 
+
+
+        //sprites here
+        c: Phaser.Sprite;
+        c2: Phaser.Sprite;
+        door: Phaser.Sprite;
+        player: Phaser.Sprite;
+        Princess: Phaser.Sprite;
+        leftSideWall: Phaser.Sprite;
+        rightSideWall: Phaser.Sprite;
+        topWall: Phaser.Sprite;
+        floor: Phaser.Sprite;
+        elevator: Phaser.Sprite;
+        elevatorT: Phaser.Sprite;
+        elevatorY: Phaser.Sprite;
+        elevatorX: Phaser.Sprite;
+        attack: Phaser.Sprite;
+        ghost: Phaser.Sprite;
+        ghostDeath: Phaser.Sprite;
+        playerDeath: Phaser.Sprite;
+        skeletonDeath: Phaser.Sprite;
+        crystalAnimation: Phaser.Sprite;
+        boneAnimation: Phaser.Sprite;
+
+
+
+        //audio here
+        music: Phaser.Sound;
+        doorMusic: Phaser.Sound;
+        princessRunMusic: Phaser.Sound;
+        ghostAttackMusic: Phaser.Sound;
+        skeletonAttackMusic: Phaser.Sound;
+
+
+
+        //misc here
+        timer: Phaser.Timer;
+        score: number;
+        elevatorDir: number = 1;
+        isOnElevator: boolean = false;
+        bulletTime: number;
+        bulletDirection: boolean;
+        scoreConst: string;
+        ghostFiringTimer: number;
+        skeletonFirinigTimer: number;
+        livesCount: number;
+        numberOfEnemies: number;
+        gameTime: number;
+        keysCollected: number;
+        playerDirection: boolean;
+        livingEnemies: Phaser.ArraySet;
+        stateText: Phaser.Text;
+        scoreText: Phaser.Text;
+        cursors: Phaser.CursorKeys;
+        fireButton: Phaser.Key;
 
         preload() {
+
+            //Audio
             this.game.load.audio('shoot', 'assets/shoot.wav', true);
             this.game.load.audio('doorOpen', 'assets/door_open_2.wav', true);
+            this.game.load.audio('princessRun', 'assets/princess_run.wav', true);
+            this.game.load.audio('ghostAttack', 'assets/ghost_attack_1.wav', true);
+            this.game.load.audio('skeletonAttack', 'assets/skeleton_attack_1.wav', true);
+
+            //All Images here
             this.game.load.image('logo', 'phaser2.png');
             this.game.load.image('sky', 'assets/sky.png');
             this.game.load.image('background', 'assets/Quick Level.png');
@@ -108,6 +131,9 @@
             this.game.load.image('life', 'assets/pink_heart.png');
             this.game.load.image('noLife', 'assets/pink_heart_dark.png');
             this.game.load.image('crystal', 'assets/crystal_adj.png');
+            this.game.load.image('bone', 'assets/bone3.png');
+
+            //All spritesheets here.
             this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
             this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
             this.game.load.spritesheet('doors1', 'assets/Doors_Blue.jpg', 25, 60, 4);
@@ -130,7 +156,8 @@
             this.bulletTime = 0;
             this.score = 0;
             this.livesCount = 5;
-            this.firingTimer = 0;
+            this.ghostFiringTimer = 0;
+            this.skeletonFirinigTimer = 0;
             this.numberOfEnemies = 1;
             this.gameTime = 50;
             this.scoreConst = "Score :";
@@ -138,8 +165,18 @@
             this.game.world.setBounds(0, 0, 1890, 19000);
             this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+
+            //all the music here
             this.music = this.add.audio('shoot', 1, false);
             this.doorMusic = this.add.audio('doorOpen', 1, false);
+            this.skeletonAttackMusic = this.add.audio('skeletonAttack', 1, false);
+            this.ghostAttackMusic = this.add.audio('ghostAttack', 1, false);
+            this.princessRunMusic = this.add.audio('princessRun', 1, false);
+
+
+
+
             this.platforms = this.game.add.group();
             this.platforms.enableBody = true;
             this.floor1 = this.game.add.group();
@@ -662,17 +699,17 @@
             this.skeletonDeath.visible = false;
             this.skeletonDeath.animations.add('death_skeleton', [0, 1, 2, 3, 4, 5, 6, 7], 0, true);
 
-            //crystal animations
-            this.crystalAnimation = this.game.add.sprite(0, 0, 'crystalAnim');
-            this.game.physics.arcade.enable(this.crystalAnimation);
-            this.crystalAnimation.visible = false;
-            this.crystalAnimation.animations.add('crystalShining', [0, 1, 2, 3, 4], 0, true);
+            ////crystal animations
+            //this.crystalAnimation = this.game.add.sprite(0, 0, 'crystalAnim');
+            //this.game.physics.arcade.enable(this.crystalAnimation);
+            //this.crystalAnimation.visible = false;
+            //this.crystalAnimation.animations.add('crystalShining', [0, 1, 2, 3, 4, 5], 0, true);
 
-            //boneAnimations
-            this.boneAnimation = this.game.add.sprite(0, 0, 'boneAnim');
-            this.game.physics.arcade.enable(this.boneAnimation);
-            this.boneAnimation.visible = false;
-            this.boneAnimation.animations.add('boneMoving', [0, 1, 2, 3, 4], 0, true);
+            ////boneAnimations
+            //this.boneAnimation = this.game.add.sprite(0, 0, 'boneAnim');
+            //this.game.physics.arcade.enable(this.boneAnimation);
+            //this.boneAnimation.visible = false;
+            //this.boneAnimation.animations.add('boneMoving', [0, 1, 2, 3, 4], 0, true);
 
 
 
@@ -757,7 +794,7 @@
             this.enemyBullets = this.game.add.group();
             this.enemyBullets.enableBody = true;
             this.enemyBullets.physicsBodyType = Phaser.Physics.ARCADE;
-            this.enemyBullets.createMultiple(30, 'crystal');
+            this.enemyBullets.createMultiple(30, 'crystalAnim');
             this.enemyBullets.setAll('anchor.x', 0);
             this.enemyBullets.setAll('anchor.y', 0);
             this.enemyBullets.setAll('outOfBoundsKill', true);
@@ -778,7 +815,7 @@
             this.skeletonBones = this.game.add.group();
             this.skeletonBones.enableBody = true;
             this.skeletonBones.physicsBodyType = Phaser.Physics.ARCADE;
-            this.skeletonBones.createMultiple(30, 'bullet');
+            this.skeletonBones.createMultiple(30, 'boneAnim');
             this.skeletonBones.setAll('anchor.x', 0);
             this.skeletonBones.setAll('anchor.y', 0);
             this.skeletonBones.setAll('outOfBoundsKill', true);
@@ -833,7 +870,7 @@
             this.enemies.enableBody = true;
             this.skeletons = this.game.add.group();
             this.skeletons.enableBody = true;
-            for (var i = 0; i < 60; i++) {
+            for (var i = 0; i < 20; i++) {
                 if (i % 2 == 0) {
                     var enemy = this.enemies.create(this.randomIntFromInterval(0, 1800), i * 216, 'ghost');
                     enemy.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
@@ -876,6 +913,7 @@
                 this.player.animations.currentAnim.speed = 10;
                 this.playerDirection = false;
                 this.bulletDirection = false;
+                this.princessRunMusic.play();
             }
             else if (this.cursors.right.isDown) {
                 this.player.body.velocity.x += 200;
@@ -883,17 +921,20 @@
                 this.player.animations.currentAnim.speed = 10;
                 this.playerDirection = true;
                 this.bulletDirection = true;
+                this.princessRunMusic.play();
             }
             else {
                 if (this.playerDirection) {
                     this.player.animations.play('rightidle');
                     this.player.animations.currentAnim.speed = 10;
                     this.bulletDirection = true;
+                    this.princessRunMusic.stop();
                 }
                 else {
                     this.player.animations.play('leftidle');
                     this.player.animations.currentAnim.speed = 10;
                     this.bulletDirection = false;
+                    this.princessRunMusic.stop();
                 }
             }
             if (this.cursors.up.isDown) {
@@ -911,8 +952,10 @@
             if (this.fireButton.isDown) {
                 this.firebullet(this.bullets);
             }
-            if (this.game.time.now > this.firingTimer) {
+            if (this.game.time.now > this.ghostFiringTimer) {
                 this.enemyFires();
+            }
+            if (this.game.time.now > this.skeletonFirinigTimer) {
                 this.skeletonFires();
             }
             if (hitElevator || hitElevator2 || hitElevator3 || hitElevator4) {
@@ -1028,6 +1071,7 @@
         //    //door.animations.play('open');
         //    //door2.animations.play('open');
         //}
+
 
         //Collisons and kills
 
@@ -1172,15 +1216,23 @@
             var enemyBullet = this.enemyBullets.getFirstExists(false);
             var enemy = this.enemies.getFirstExists(true);
             if (enemyBullet && enemy) {
-                enemyBullet.reset(enemy.body.x, enemy.body.y);
-                //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
+                this.ghostAttackMusic.play();
+                enemyBullet.reset(enemy.body.x + 15, enemy.body.y + 50);
+                enemyBullet.animations.add('shining', [0, 1, 2, 3, 4, 5], 0, true);
+                enemyBullet.animations.play('shining');
+                enemyBullet.animations.currentAnim.speed = 10;
                 if (this.player.x > enemy.body.x) {
                     enemyBullet.body.velocity.x += 200;
+                    //this.crystalAnimation.x = enemyBullet.body.x;
+                    //this.crystalAnimation.y = enemyBullet.body.y;
+                    //enemyBullet.visible = false;
+                    //this.crystalAnimation.visible = true;
+                    //this.crystalAnimation.animations.play('crystalShining');
                 }
                 else {
                     enemyBullet.body.velocity.x -= 200;
                 }
-                this.firingTimer = this.game.time.now + 2000;
+                this.ghostFiringTimer = this.game.time.now + 2000;
             }
         }
 
@@ -1188,7 +1240,11 @@
             var skeletonBone = this.skeletonBones.getFirstExists(false);
             var skeleton = this.skeletons.getFirstExists(true);
             if (skeletonBone && skeleton) {
-                skeletonBone.reset(skeleton.body.x, skeleton.body.y);
+                this.skeletonAttackMusic.play();
+                skeletonBone.reset(skeleton.body.x, skeleton.body.y + 50);
+                skeletonBone.animations.add('rotate', [0, 1, 2, 3], 0, true);
+                skeletonBone.animations.play('rotate');
+                skeletonBone.animations.currentAnim.speed = 10;
                 //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
                 if (this.player.x > skeleton.body.x) {
                     skeletonBone.body.velocity.x += 200;
@@ -1196,7 +1252,7 @@
                 else {
                     skeletonBone.body.velocity.x -= 200;
                 }
-                this.firingTimer = this.game.time.now + 2000;
+                this.skeletonFirinigTimer = this.game.time.now + 1500;
             }
         }
 
@@ -1234,6 +1290,10 @@
         randomIntFromInterval(min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
         }
+
+
+
+        crystalAnimations() { }
 
     }
 }

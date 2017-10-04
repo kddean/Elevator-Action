@@ -22,8 +22,13 @@ var ElevatorAction;
             return _this;
         }
         Game.prototype.preload = function () {
+            //Audio
             this.game.load.audio('shoot', 'assets/shoot.wav', true);
             this.game.load.audio('doorOpen', 'assets/door_open_2.wav', true);
+            this.game.load.audio('princessRun', 'assets/princess_run.wav', true);
+            this.game.load.audio('ghostAttack', 'assets/ghost_attack_1.wav', true);
+            this.game.load.audio('skeletonAttack', 'assets/skeleton_attack_1.wav', true);
+            //All Images here
             this.game.load.image('logo', 'phaser2.png');
             this.game.load.image('sky', 'assets/sky.png');
             this.game.load.image('background', 'assets/Quick Level.png');
@@ -55,6 +60,8 @@ var ElevatorAction;
             this.game.load.image('life', 'assets/pink_heart.png');
             this.game.load.image('noLife', 'assets/pink_heart_dark.png');
             this.game.load.image('crystal', 'assets/crystal_adj.png');
+            this.game.load.image('bone', 'assets/bone3.png');
+            //All spritesheets here.
             this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
             this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
             this.game.load.spritesheet('doors1', 'assets/Doors_Blue.jpg', 25, 60, 4);
@@ -76,7 +83,8 @@ var ElevatorAction;
             this.bulletTime = 0;
             this.score = 0;
             this.livesCount = 5;
-            this.firingTimer = 0;
+            this.ghostFiringTimer = 0;
+            this.skeletonFirinigTimer = 0;
             this.numberOfEnemies = 1;
             this.gameTime = 50;
             this.scoreConst = "Score :";
@@ -84,8 +92,12 @@ var ElevatorAction;
             this.game.world.setBounds(0, 0, 1890, 19000);
             this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
+            //all the music here
             this.music = this.add.audio('shoot', 1, false);
             this.doorMusic = this.add.audio('doorOpen', 1, false);
+            this.skeletonAttackMusic = this.add.audio('skeletonAttack', 1, false);
+            this.ghostAttackMusic = this.add.audio('ghostAttack', 1, false);
+            this.princessRunMusic = this.add.audio('princessRun', 1, false);
             this.platforms = this.game.add.group();
             this.platforms.enableBody = true;
             this.floor1 = this.game.add.group();
@@ -522,16 +534,16 @@ var ElevatorAction;
             this.game.physics.arcade.enable(this.skeletonDeath);
             this.skeletonDeath.visible = false;
             this.skeletonDeath.animations.add('death_skeleton', [0, 1, 2, 3, 4, 5, 6, 7], 0, true);
-            //crystal animations
-            this.crystalAnimation = this.game.add.sprite(0, 0, 'crystalAnim');
-            this.game.physics.arcade.enable(this.crystalAnimation);
-            this.crystalAnimation.visible = false;
-            this.crystalAnimation.animations.add('crystalShining', [0, 1, 2, 3, 4], 0, true);
-            //boneAnimations
-            this.boneAnimation = this.game.add.sprite(0, 0, 'boneAnim');
-            this.game.physics.arcade.enable(this.boneAnimation);
-            this.boneAnimation.visible = false;
-            this.boneAnimation.animations.add('boneMoving', [0, 1, 2, 3, 4], 0, true);
+            ////crystal animations
+            //this.crystalAnimation = this.game.add.sprite(0, 0, 'crystalAnim');
+            //this.game.physics.arcade.enable(this.crystalAnimation);
+            //this.crystalAnimation.visible = false;
+            //this.crystalAnimation.animations.add('crystalShining', [0, 1, 2, 3, 4, 5], 0, true);
+            ////boneAnimations
+            //this.boneAnimation = this.game.add.sprite(0, 0, 'boneAnim');
+            //this.game.physics.arcade.enable(this.boneAnimation);
+            //this.boneAnimation.visible = false;
+            //this.boneAnimation.animations.add('boneMoving', [0, 1, 2, 3, 4], 0, true);
             //Animations end.
             //this.Princess.animations.add('attack', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 0, true);
             //this.elevator.body.allowGravity = false;
@@ -593,7 +605,7 @@ var ElevatorAction;
             this.enemyBullets = this.game.add.group();
             this.enemyBullets.enableBody = true;
             this.enemyBullets.physicsBodyType = Phaser.Physics.ARCADE;
-            this.enemyBullets.createMultiple(30, 'crystal');
+            this.enemyBullets.createMultiple(30, 'crystalAnim');
             this.enemyBullets.setAll('anchor.x', 0);
             this.enemyBullets.setAll('anchor.y', 0);
             this.enemyBullets.setAll('outOfBoundsKill', true);
@@ -611,7 +623,7 @@ var ElevatorAction;
             this.skeletonBones = this.game.add.group();
             this.skeletonBones.enableBody = true;
             this.skeletonBones.physicsBodyType = Phaser.Physics.ARCADE;
-            this.skeletonBones.createMultiple(30, 'bullet');
+            this.skeletonBones.createMultiple(30, 'boneAnim');
             this.skeletonBones.setAll('anchor.x', 0);
             this.skeletonBones.setAll('anchor.y', 0);
             this.skeletonBones.setAll('outOfBoundsKill', true);
@@ -657,7 +669,7 @@ var ElevatorAction;
             this.enemies.enableBody = true;
             this.skeletons = this.game.add.group();
             this.skeletons.enableBody = true;
-            for (var i = 0; i < 60; i++) {
+            for (var i = 0; i < 20; i++) {
                 if (i % 2 == 0) {
                     var enemy = this.enemies.create(this.randomIntFromInterval(0, 1800), i * 216, 'ghost');
                     enemy.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
@@ -696,6 +708,7 @@ var ElevatorAction;
                 this.player.animations.currentAnim.speed = 10;
                 this.playerDirection = false;
                 this.bulletDirection = false;
+                this.princessRunMusic.play();
             }
             else if (this.cursors.right.isDown) {
                 this.player.body.velocity.x += 200;
@@ -703,17 +716,20 @@ var ElevatorAction;
                 this.player.animations.currentAnim.speed = 10;
                 this.playerDirection = true;
                 this.bulletDirection = true;
+                this.princessRunMusic.play();
             }
             else {
                 if (this.playerDirection) {
                     this.player.animations.play('rightidle');
                     this.player.animations.currentAnim.speed = 10;
                     this.bulletDirection = true;
+                    this.princessRunMusic.stop();
                 }
                 else {
                     this.player.animations.play('leftidle');
                     this.player.animations.currentAnim.speed = 10;
                     this.bulletDirection = false;
+                    this.princessRunMusic.stop();
                 }
             }
             if (this.cursors.up.isDown) {
@@ -731,8 +747,10 @@ var ElevatorAction;
             if (this.fireButton.isDown) {
                 this.firebullet(this.bullets);
             }
-            if (this.game.time.now > this.firingTimer) {
+            if (this.game.time.now > this.ghostFiringTimer) {
                 this.enemyFires();
+            }
+            if (this.game.time.now > this.skeletonFirinigTimer) {
                 this.skeletonFires();
             }
             if (hitElevator || hitElevator2 || hitElevator3 || hitElevator4) {
@@ -964,22 +982,34 @@ var ElevatorAction;
             var enemyBullet = this.enemyBullets.getFirstExists(false);
             var enemy = this.enemies.getFirstExists(true);
             if (enemyBullet && enemy) {
-                enemyBullet.reset(enemy.body.x, enemy.body.y);
-                //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
+                this.ghostAttackMusic.play();
+                enemyBullet.reset(enemy.body.x + 15, enemy.body.y + 50);
+                enemyBullet.animations.add('shining', [0, 1, 2, 3, 4, 5], 0, true);
+                enemyBullet.animations.play('shining');
+                enemyBullet.animations.currentAnim.speed = 10;
                 if (this.player.x > enemy.body.x) {
                     enemyBullet.body.velocity.x += 200;
+                    //this.crystalAnimation.x = enemyBullet.body.x;
+                    //this.crystalAnimation.y = enemyBullet.body.y;
+                    //enemyBullet.visible = false;
+                    //this.crystalAnimation.visible = true;
+                    //this.crystalAnimation.animations.play('crystalShining');
                 }
                 else {
                     enemyBullet.body.velocity.x -= 200;
                 }
-                this.firingTimer = this.game.time.now + 2000;
+                this.ghostFiringTimer = this.game.time.now + 2000;
             }
         };
         Game.prototype.skeletonFires = function () {
             var skeletonBone = this.skeletonBones.getFirstExists(false);
             var skeleton = this.skeletons.getFirstExists(true);
             if (skeletonBone && skeleton) {
-                skeletonBone.reset(skeleton.body.x, skeleton.body.y);
+                this.skeletonAttackMusic.play();
+                skeletonBone.reset(skeleton.body.x, skeleton.body.y + 50);
+                skeletonBone.animations.add('rotate', [0, 1, 2, 3], 0, true);
+                skeletonBone.animations.play('rotate');
+                skeletonBone.animations.currentAnim.speed = 10;
                 //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
                 if (this.player.x > skeleton.body.x) {
                     skeletonBone.body.velocity.x += 200;
@@ -987,7 +1017,7 @@ var ElevatorAction;
                 else {
                     skeletonBone.body.velocity.x -= 200;
                 }
-                this.firingTimer = this.game.time.now + 2000;
+                this.skeletonFirinigTimer = this.game.time.now + 1500;
             }
         };
         //UI for hearts and Keys
@@ -1020,6 +1050,7 @@ var ElevatorAction;
         Game.prototype.randomIntFromInterval = function (min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
         };
+        Game.prototype.crystalAnimations = function () { };
         return Game;
     }(Phaser.State));
     ElevatorAction.Game = Game;
