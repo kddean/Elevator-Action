@@ -3,13 +3,13 @@
         game: Phaser.Game;
         platforms: Phaser.Group;
         setFloor: Phaser.Group;
+        leftPlatforms: Phaser.Group;
+        rightPlatforms: Phaser.Group;
+        floor1Doors: Phaser.Group;
         c: Phaser.Sprite;
         c2: Phaser.Sprite;
         timer: Phaser.Timer;
         door: Phaser.Sprite;
-        leftPlatforms: Phaser.Group;
-        rightPlatforms: Phaser.Group;
-        floor1Doors: Phaser.Group;
         player: Phaser.Sprite;
         Princess: Phaser.Sprite;
         leftSideWall: Phaser.Sprite;
@@ -45,7 +45,7 @@
         gameTime: number;
         music: Phaser.Sound;
         doorMusic: Phaser.Sound;
-        keysCOllected: number;
+        keysCollected: number;
         attack: Phaser.Sprite;
         ghost: Phaser.Sprite;
         ghostDeath: Phaser.Sprite;
@@ -58,6 +58,8 @@
         playerDirection: boolean;
         skeletons: Phaser.Group;
         skeletonBones: Phaser.Group;
+        crystalAnimation: Phaser.Sprite;
+        boneAnimation: Phaser.Sprite;
 
         floor1: Phaser.Group;
         floor2: Phaser.Group;
@@ -73,6 +75,8 @@
 
 
         preload() {
+            this.game.load.audio('shoot', 'assets/shoot.wav', true);
+            this.game.load.audio('doorOpen', 'assets/door_open_2.wav', true);
             this.game.load.image('logo', 'phaser2.png');
             this.game.load.image('sky', 'assets/sky.png');
             this.game.load.image('background', 'assets/Quick Level.png');
@@ -87,6 +91,23 @@
             this.game.load.image('bullet', 'assets/shield.png');
             this.game.load.image('star', 'assets/bullet.png');
             this.game.load.image('elevator', 'assets/feather.png');
+            this.game.load.image('button', 'assets/button.png');
+            this.game.load.image('invisible', 'assets/Invisible Box.png');
+            this.game.load.image('door', 'assets/fancydoor.png');
+            this.game.load.image('wall', 'assets/hanger.png');
+            this.game.load.image('floor', 'assets/fancyfloor.png');
+            this.game.load.image('archway', 'assets/fancyArchwalls.png');
+            this.game.load.image('key', 'assets/key.png');
+            this.game.load.image('floors1', 'assets/floor1.png');
+            this.game.load.image('floors2', 'assets/floor2.png');
+            this.game.load.image('floors3', 'assets/floor3.png');
+            this.game.load.image('floors4', 'assets/floor4.png');
+            this.game.load.image('boblife', 'assets/bob.png');
+            this.game.load.image('keyTaken', 'assets/golden_key.png');
+            this.game.load.image('noKeyTaken', 'assets/golden_key_dark.png');
+            this.game.load.image('life', 'assets/pink_heart.png');
+            this.game.load.image('noLife', 'assets/pink_heart_dark.png');
+            this.game.load.image('crystal', 'assets/crystal_adj.png');
             this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
             this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
             this.game.load.spritesheet('doors1', 'assets/Doors_Blue.jpg', 25, 60, 4);
@@ -97,30 +118,13 @@
             this.game.load.spritesheet('skeleton_death_anim', 'assets/mrskeleton_death.png', 181, 150);
             this.game.load.spritesheet('ghost', 'assets/mrghost.png', 181, 150);
             this.game.load.spritesheet('skeleton', 'assets/mr_skeleton_walk.png', 181, 150);
+            this.game.load.spritesheet('crystalAnim', 'assets/crystal_adj_anim.png', 60, 150);
+            this.game.load.spritesheet('boneAnim', 'assets/bone.png', 37, 150);
             //this.game.load.spritesheet('princess_attact', 'assets/princess_attack.png', 181, 150, 10);
-            this.game.load.image('button', 'assets/button.png');
-            this.game.load.image('invisible', 'assets/Invisible Box.png');
-            this.game.load.image('door', 'assets/fancydoor.png');
-            this.game.load.image('wall', 'assets/hanger.png');
-            this.game.load.image('floor', 'assets/fancyfloor.png');
-            this.game.load.image('archway', 'assets/fancyArchwalls.png');
-            this.game.load.image('key', 'assets/key.png');
-            this.game.load.audio('shoot', 'assets/shoot.wav', true);
-            this.game.load.audio('doorOpen', 'assets/door_open_2.wav', true);
-            this.game.load.image('floors1', 'assets/floor1.png');
-            this.game.load.image('floors2', 'assets/floor2.png');
-            this.game.load.image('floors3', 'assets/floor3.png');
-            this.game.load.image('floors4', 'assets/floor4.png');
-            this.game.load.image('boblife', 'assets/bob.png');
-            this.game.load.image('keyTaken', 'assets/golden_key.png');
-            this.game.load.image('noKeyTaken', 'assets/golden_key_dark.png');
-            this.game.load.image('life', 'assets/pink_heart.png');
-            this.game.load.image('noLife', 'assets/pink_heart_dark.png');
-            this.game.load.image('crystal', 'assets/crystal.png');
         }
 
         create() {
-            this.keysCOllected = 0;
+            this.keysCollected = 0;
             this.game.camera.follow(this.player);
             this.game.world.resize(800, 1000);
             this.bulletTime = 0;
@@ -636,6 +640,10 @@
             this.player.animations.currentAnim.speed = 10;
             //this.player.animations.add('shootShield', [28, 29, 30, 31, 32, 33, 34, 35, 36, 37], 0, true);
 
+
+
+            //All Animations here
+
             //PlayerDeath
             this.playerDeath = this.game.add.sprite(this.player.x, this.player.y, 'princess_death');
             this.game.physics.arcade.enable(this.playerDeath);
@@ -643,7 +651,6 @@
             this.playerDeath.animations.add('dead', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 0, true);
 
             ////Ghost Death
-
             this.ghostDeath = this.game.add.sprite(0, 0, 'ghost_death_anim');
             this.game.physics.arcade.enable(this.ghostDeath);
             this.ghostDeath.visible = false;
@@ -654,6 +661,23 @@
             this.game.physics.arcade.enable(this.skeletonDeath);
             this.skeletonDeath.visible = false;
             this.skeletonDeath.animations.add('death_skeleton', [0, 1, 2, 3, 4, 5, 6, 7], 0, true);
+
+            //crystal animations
+            this.crystalAnimation = this.game.add.sprite(0, 0, 'crystalAnim');
+            this.game.physics.arcade.enable(this.crystalAnimation);
+            this.crystalAnimation.visible = false;
+            this.crystalAnimation.animations.add('crystalShining', [0, 1, 2, 3, 4], 0, true);
+
+            //boneAnimations
+            this.boneAnimation = this.game.add.sprite(0, 0, 'boneAnim');
+            this.game.physics.arcade.enable(this.boneAnimation);
+            this.boneAnimation.visible = false;
+            this.boneAnimation.animations.add('boneMoving', [0, 1, 2, 3, 4], 0, true);
+
+
+
+
+            //Animations end.
 
 
 
@@ -727,11 +751,13 @@
             //this.enemies.callAll('play', null, 'baddie');
             //this.enemies.callAll('play', 'null', 'baddie');
 
+            //All bullets here
+
             //ghostBullets
             this.enemyBullets = this.game.add.group();
             this.enemyBullets.enableBody = true;
             this.enemyBullets.physicsBodyType = Phaser.Physics.ARCADE;
-            this.enemyBullets.createMultiple(30, 'bullet');
+            this.enemyBullets.createMultiple(30, 'crystal');
             this.enemyBullets.setAll('anchor.x', 0);
             this.enemyBullets.setAll('anchor.y', 0);
             this.enemyBullets.setAll('outOfBoundsKill', true);
@@ -757,6 +783,8 @@
             this.skeletonBones.setAll('anchor.y', 0);
             this.skeletonBones.setAll('outOfBoundsKill', true);
             this.skeletonBones.setAll('checkWorldBounds', true);
+
+            //BUllets end
 
 
 
@@ -968,8 +996,40 @@
             // Collection/ Keys
             this.game.physics.arcade.overlap(this.player, this.keys, this.collectKeys, null, this);
             this.showHearts();
+            this.showKeys();
 
         }
+
+
+        collectKeys(player, key) {
+            //key = this.keys.getFirstExists(true);
+            //key.body.visible = false;
+            key.kill(this);
+            this.keysCollected++;
+            this.showKeys();
+        }
+
+
+        playAnimation(player, door) {
+            //door.animations.play('open');
+            this.doorMusic.play();
+            this.player.visible = false;
+            this.game.time.events.add(Phaser.Timer.SECOND * 2, this.invisble, this);
+
+            //door.animations.play('open');
+            //door2.animations.play('open');
+        }
+        invisble() {
+            this.player.visible = true;
+        }
+        //playEnemyAnimation(enemy, door2) {
+        //    door2.animations.play('open');
+
+        //    //door.animations.play('open');
+        //    //door2.animations.play('open');
+        //}
+
+        //Collisons and kills
 
         collisionHandler(enemy, bullet) {
             bullet.kill();
@@ -981,6 +1041,7 @@
             this.score += 20;
             this.scoreText.text = this.scoreConst + this.score;
         }
+
         skeletonCollisionHandler(skeleton, bullet) {
             bullet.kill();
             skeleton.kill();
@@ -992,12 +1053,6 @@
             this.scoreText.text = this.scoreConst + this.score;
         }
 
-        collectKeys(player, key) {
-            //key = this.keys.getFirstExists(true);
-            //key.body.visible = false;
-            key.kill(this);
-            this.keysCOllected++;
-        }
         playerHitByEnemy(enemy, player) {
             enemy.kill();
             player.kill();
@@ -1021,6 +1076,7 @@
                 this.player.revive();
             }
         }
+
         playerHitBySkeleton(skeleton, player) {
             skeleton.kill();
             player.kill();
@@ -1045,24 +1101,51 @@
             }
         }
 
-        playAnimation(player, door) {
-            //door.animations.play('open');
-            this.doorMusic.play();
-            this.player.visible = false;
-            this.game.time.events.add(Phaser.Timer.SECOND * 2, this.invisble, this);
+        enemyHitsPlayer(player, bullet) {
+            bullet.kill();
+            player.kill();
+            this.livesCount -= 1;
+            this.showHearts();
+            if (this.livesCount == 0) {
+                this.playerDeath.x = this.player.x;
+                this.playerDeath.y = this.player.y;
+                this.playerDeath.visible = true;
+                this.playerDeath.animations.play('dead', 8, false, false);
+                //this.playerDeath.animations.currentAnim.speed = 8;
+                this.stateText.text = "You Lose, click to restart";
+                this.stateText.visible = true;
+                this.game.input.onTap.addOnce(this.restart, this);
+            }
+            else {
+                this.player.revive();
+            }
 
-            //door.animations.play('open');
-            //door2.animations.play('open');
         }
-        invisble() {
-            this.player.visible = true;
-        }
-        //playEnemyAnimation(enemy, door2) {
-        //    door2.animations.play('open');
 
-        //    //door.animations.play('open');
-        //    //door2.animations.play('open');
-        //}
+        skeletonHitsPlayer(player, bone) {
+            bone.kill();
+            player.kill();
+            this.livesCount -= 1;
+            this.showHearts();
+            if (this.livesCount == 0) {
+                this.playerDeath.x = this.player.x;
+                this.playerDeath.y = this.player.y;
+                this.playerDeath.visible = true;
+                this.playerDeath.animations.play('dead', 8, false, false);
+                //this.playerDeath.animations.currentAnim.speed = 8;
+                this.stateText.text = "You Lose, click to restart";
+                this.stateText.visible = true;
+                this.game.input.onTap.addOnce(this.restart, this);
+            }
+            else {
+                this.player.revive();
+            }
+        }
+
+
+
+        //All Fire mechanics
+
         firebullet(bullet) {
             if (this.game.time.now > this.bulletTime) {
                 this.music.play();
@@ -1085,46 +1168,6 @@
             bullet.kill();
         }
 
-        
-        enemyHitsPlayer(player, bullet) {
-            bullet.kill();
-            player.kill();
-            this.livesCount -= 1;
-            this.showHearts();
-            if (this.livesCount == 0) {
-                this.playerDeath.x = this.player.x;
-                this.playerDeath.y = this.player.y;
-                this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead', 8, false, false);
-                //this.playerDeath.animations.currentAnim.speed = 8;
-                this.stateText.text = "You Lose, click to restart";
-                this.stateText.visible = true;
-                this.game.input.onTap.addOnce(this.restart, this);
-            }
-            else {
-                this.player.revive();
-            }
-
-        }
-        skeletonHitsPlayer(player, bone) {
-            bone.kill();
-            player.kill();
-            this.livesCount -= 1;
-            this.showHearts();
-            if (this.livesCount == 0) {
-                this.playerDeath.x = this.player.x;
-                this.playerDeath.y = this.player.y;
-                this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead', 8, false, false);
-                //this.playerDeath.animations.currentAnim.speed = 8;
-                this.stateText.text = "You Lose, click to restart";
-                this.stateText.visible = true;
-                this.game.input.onTap.addOnce(this.restart, this);
-            }
-            else {
-                this.player.revive();
-            }
-        }
         enemyFires() {
             var enemyBullet = this.enemyBullets.getFirstExists(false);
             var enemy = this.enemies.getFirstExists(true);
@@ -1140,6 +1183,7 @@
                 this.firingTimer = this.game.time.now + 2000;
             }
         }
+
         skeletonFires() {
             var skeletonBone = this.skeletonBones.getFirstExists(false);
             var skeleton = this.skeletons.getFirstExists(true);
@@ -1155,9 +1199,8 @@
                 this.firingTimer = this.game.time.now + 2000;
             }
         }
-        randomIntFromInterval(min, max) {
-            return Math.floor(Math.random() * (max - min + 1) + min);
-        }
+
+        //UI for hearts and Keys
 
         showHearts() {
             this.lightHeart.removeAll();
@@ -1166,9 +1209,19 @@
                 lHeart.anchor.setTo(0.5, 0.5);
             }
         }
-
         showKeys() {
+            this.lightKey.removeAll();
+            if (this.keysCollected > 0) {
+                for (var i = 0; i < this.keysCollected; i++) {
+                    var lKey = this.lightKey.create((this.game.world.camera.x + 1600) + (i * 20), this.game.world.camera.y + 100, 'keyTaken');
+                    lKey.anchor.setTo(0.5, 0.5);
+                    lKey.scale.setTo(0.5);
+                }
+            }
         }
+
+        //Places the player back in the game.
+
         restart() {
             //this.lives.callAll('revive');
             this.player.revive();
@@ -1176,6 +1229,10 @@
             this.stateText.visible = false;
             this.playerDeath.animations.stop();
             this.playerDeath.visible = false;
+        }
+
+        randomIntFromInterval(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
         }
 
     }
