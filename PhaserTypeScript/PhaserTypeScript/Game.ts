@@ -174,6 +174,7 @@
             this.game.load.image('floors2', 'assets/floor2.png');
             this.game.load.image('floors3', 'assets/floor3.png');
             this.game.load.image('floors4', 'assets/floor4.png');
+            this.game.load.image('hiddenWall', 'assets/hiddenwall.png');
             this.game.load.image('boblife', 'assets/bob_2.png');
             this.game.load.image('keyTaken', 'assets/golden_key.png');
             this.game.load.image('noKeyTaken', 'assets/golden_key_dark.png');
@@ -492,6 +493,7 @@
                 }
             }
             y = y + 216;
+            var s = y;
             for (var j = 0; j < 10; j++) {
                 if ((j == 2) || (j == 7)) {
                     t = this.leve1.create(j * 192, y, 'floor');
@@ -516,6 +518,37 @@
                 }
             }
             y = y + 216;
+
+            //Hidden Wall
+
+            /*for (var j = 0; j < 10; j++) {
+                if ((j == 1) || (j == 7)) {
+                    t = this.leve1.create(j * (192), s, 'hiddenWall')
+                    t.body.immovable = true;
+                }
+
+            }
+            s = s + 216;
+
+            for (var j = 0; j < 10; j++) {
+                if ((j==2) || (j==6)) {
+                    t = this.leve1.create(j * (192), s, 'hiddenWall')
+                    t.body.immovable = true;
+                }
+
+            }
+            s = s + 216;
+            */
+
+
+
+
+
+
+
+
+
+
 
             /*for (var j = 0; j < 10; j++) {
                     t = this.leve1.create(j * 192, y, 'floor');
