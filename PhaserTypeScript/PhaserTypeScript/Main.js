@@ -1637,6 +1637,22 @@ var ElevatorAction;
             //var button = this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY, 'button', this.actionOnClick, this, 2, 1, 0);
             //button.scale.setTo(0.5, 0.5);
             this.game.add.sprite(0, 0, 'back');
+            this.frame1 = this.game.add.sprite(0, 0, 'startframe1');
+            this.game.physics.arcade.enable(this.frame1);
+            this.frame1.visible = false;
+            this.frame1.animations.add('start1', [0, 1, 2, 3, 4], 0, true);
+            this.frame2 = this.game.add.sprite(0, 0, 'startframe2');
+            this.game.physics.arcade.enable(this.frame2);
+            this.frame2.visible = false;
+            this.frame2.animations.add('start2', [0, 1, 2, 3, 4], 0, true);
+            this.frame3 = this.game.add.sprite(0, 0, 'startframe3');
+            this.game.physics.arcade.enable(this.frame3);
+            this.frame3.visible = false;
+            this.frame3.animations.add('start3', [0, 1, 2, 3, 4], 0, true);
+            this.frame4 = this.game.add.sprite(0, 0, 'startframe4');
+            this.game.physics.arcade.enable(this.frame4);
+            this.frame4.visible = false;
+            this.frame4.animations.add('start4', [0, 1, 2, 3, 4], 0, true);
             //this.frame1 = this.game.add.sprite(0, 0, 'startframe1');
             //this.game.physics.arcade.enable(this.frame1);
             //this.frame1.animations.add('idle1', [0, 1, 2, 3, 4], 0, true);
@@ -1661,6 +1677,29 @@ var ElevatorAction;
             this.game.sound.setDecodedCallback([this.music], this.showPress, this);
         };
         MainMenu.prototype.update = function () {
+            this.frame1.visible = true;
+            this.frame1.animations.play('start1', 10, false, true);
+            if (!this.frame1.alive) {
+                this.frame1.visible = false;
+                this.frame2.visible = true;
+                this.frame2.animations.play('start2', 10, false, true);
+            }
+            if (!this.frame2.alive) {
+                this.frame2.visible = false;
+                this.frame3.visible = true;
+                this.frame3.animations.play('start3', 10, false, true);
+            }
+            if (!this.frame3.alive) {
+                this.frame3.visible = false;
+                this.frame4.visible = true;
+                this.frame4.animations.play('start4', 10, false, true);
+            }
+            if (!this.frame4.alive) {
+                this.frame4.visible = false;
+                this.startScreen.visible = true;
+                this.startScreen.animations.play('idle');
+                this.startScreen.animations.currentAnim.speed = 5;
+            }
             //this.frame1.animations.play('idle1', 5, false, true);
             //if (this.frame1.animations.currentAnim.complete) {
             //    this.frame1.animations.stop();
@@ -1697,9 +1736,6 @@ var ElevatorAction;
         };
         MainMenu.prototype.showPress = function () {
             this.music.play();
-            this.startScreen.visible = true;
-            this.startScreen.animations.play('idle');
-            this.startScreen.animations.currentAnim.speed = 5;
         };
         return MainMenu;
     }(Phaser.State));
