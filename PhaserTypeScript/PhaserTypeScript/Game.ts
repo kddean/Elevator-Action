@@ -63,6 +63,7 @@
         finalKey2: Phaser.Sprite;
         ghostAttack: Phaser.Sprite;
         skeletonAttack: Phaser.Sprite;
+        gryphonAttack: Phaser.Sprite;
         gryphonDeath: Phaser.Sprite;
         princeFall: Phaser.Sprite;
         princeCelebrate: Phaser.Sprite;
@@ -208,6 +209,7 @@
             this.game.load.spritesheet('prince_celebrate', 'assets/prince_celebrate.png', 92.36, 185);
             this.game.load.spritesheet('doorOpenAnim', 'assets/big_door.png', 321, 330);
             this.game.load.spritesheet('happyEnding', 'assets/together_whole.png', 803, 168);
+           
 
         }
 
@@ -924,7 +926,7 @@
             this.princeCelebrate.animations.add('celebratingPrince', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 0, true);
 
             //door opening
-            this.doorOpen = this.game.add.sprite(820, 5200, 'doorOpenAnim');
+            this.doorOpen = this.game.add.sprite(820, 5030, 'doorOpenAnim');
             this.game.physics.arcade.enable(this.doorOpen);
             this.doorOpen.visible = false;
             this.doorOpen.animations.add('doorOpening', [0, 1, 2, 3, 4, 5, 6, 7, 8], 0, true);
