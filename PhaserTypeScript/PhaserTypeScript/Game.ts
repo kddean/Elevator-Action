@@ -63,6 +63,14 @@
         ghostAttack: Phaser.Sprite;
         skeletonAttack: Phaser.Sprite;
         gryphonDeath: Phaser.Sprite;
+        princeFall: Phaser.Sprite;
+        princeCelebrate: Phaser.Sprite;
+        prince: Phaser.Sprite;
+        doorOpen: Phaser.Sprite;
+        happyEnding: Phaser.Sprite;
+
+
+
 
         //Elevator Sprites
         elevator1: Phaser.Sprite;
@@ -163,7 +171,7 @@
             this.game.load.image('floors2', 'assets/floor2.png');
             this.game.load.image('floors3', 'assets/floor3.png');
             this.game.load.image('floors4', 'assets/floor4.png');
-            this.game.load.image('boblife', 'assets/bob.png');
+            this.game.load.image('boblife', 'assets/bob_2.png');
             this.game.load.image('keyTaken', 'assets/golden_key.png');
             this.game.load.image('noKeyTaken', 'assets/golden_key_dark.png');
             this.game.load.image('life', 'assets/pink_heart.png');
@@ -171,6 +179,7 @@
             this.game.load.image('crystal', 'assets/crystal_adj.png');
             this.game.load.image('bone', 'assets/bone3.png');
             this.game.load.image('filter', 'assets/camera_filter.png');
+            this.game.load.image('prince_hang', 'assets/prince_hang.png');
 
             //All spritesheets here.
             this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
@@ -191,6 +200,11 @@
             this.game.load.spritesheet('finalKey1', 'assets/FKA_part_01.png', 1151, 886);
             this.game.load.spritesheet('finalKey2', 'assets/FKA_part_02.png', 1151, 886);
             this.game.load.spritesheet('gryphonDeathAnim', 'assets/dead_gryphon_2.png', 723, 650);
+            this.game.load.spritesheet('prince_fall', 'assets/prince_fall.png', 100, 575);
+            this.game.load.spritesheet('prince_celebrate', 'assets/prince_celebrate.png', 92.36, 185);
+            this.game.load.spritesheet('doorOpenAnim', 'assets/big_door.png', 321, 330);
+            this.game.load.spritesheet('happyEnding', 'assets/together_whole.png', 803, 168);
+
         }
 
         create() {
@@ -208,7 +222,7 @@
             this.game.stage.backgroundColor = "#000000;"
             this.game.world.setBounds(0, 0, 1890, 5400);
             this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-            this.gryphonHealth = 20;
+            this.gryphonHealth = 1;
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
 
@@ -274,6 +288,7 @@
                     h = h + 1080;
             }*/
             this.game.add.sprite(0, -1000, 'boblife');
+            this.prince = this.game.add.sprite(915, 4795, 'prince_hang');
             var filter;
             filter = this.game.add.sprite(0, 0, 'filter');
             filter.fixedToCamera = true;
@@ -859,6 +874,30 @@
             this.gryphonDeath.visible = false;
             this.gryphonDeath.animations.add('gryphonDying', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], 0, true);
 
+            //prince going down animation
+            this.princeFall = this.game.add.sprite(915, 4795, 'prince_fall');
+            this.game.physics.arcade.enable(this.princeFall);
+            this.princeFall.visible = false;
+            this.princeFall.animations.add('fallingPrince', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], 0, true);
+
+            //prince celebrating
+            this.princeCelebrate = this.game.add.sprite(915, 5200, 'prince_celebrate');
+            this.game.physics.arcade.enable(this.princeCelebrate);
+            this.princeCelebrate.visible = false;
+            this.princeCelebrate.animations.add('celebratingPrince', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 0, true);
+
+            //door opening
+            this.doorOpen = this.game.add.sprite(820, 5200, 'doorOpenAnim');
+            this.game.physics.arcade.enable(this.doorOpen);
+            this.doorOpen.visible = false;
+            this.doorOpen.animations.add('doorOpening', [0, 1, 2, 3, 4, 5, 6, 7, 8], 0, true);
+
+            //HappyEnding
+            this.happyEnding = this.game.add.sprite(550, 5250, 'happyEnding');
+            this.game.physics.arcade.enable(this.happyEnding);
+            this.happyEnding.visible = false;
+            this.happyEnding.animations.add('finalEnding', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 0, true);
+
 
 
 
@@ -1338,13 +1377,47 @@
             this.game.physics.arcade.overlap(this.player, this.keys, this.collectKeys, null, this);
             this.showHearts();
             this.showKeys();
+
+            //Making all the animations go one after another
+
             if (!this.gryphonDeath.alive) {
                 this.finalKey1.visible = true;
-                this.finalKey2.visible = true;
                 this.finalKey1.animations.play('keyAnim1', 4, false, true);
+
+            }
+            if (!this.finalKey1.alive) {
+                this.finalKey2.visible = true;
                 this.finalKey2.animations.play('keyAnim2', 4, false, true);
             }
 
+            if (!this.finalKey2.alive) {
+                this.princeFall.visible = true;
+                this.prince.visible = false;
+                this.princeFall.animations.play('fallingPrince', 10, false, true);
+            }
+
+            if (!this.princeFall.alive) {
+                this.princeCelebrate.visible = true;
+                this.prince.visible = false;
+                this.princeFall.visible = false;
+                this.princeCelebrate.animations.play('celebratingPrince', 10, false, true);
+            }
+            if (!this.princeCelebrate.alive) {
+                this.princeCelebrate.visible = false;
+                this.doorOpen.visible = true;
+                this.doorOpen.animations.play('doorOpening', 6, false, true);
+            }
+            if (!this.doorOpen.alive) {
+                this.happyEnding.visible = true;
+                this.player.visible = false;
+                this.happyEnding.animations.play('finalEnding', 6, false, true);
+            }
+            if (!this.happyEnding.alive) {
+                this.game.state.start('GameWon', true, false);
+            }
+            if (!this.playerDeath.alive) {
+                this.game.state.start('GameOver', true, false);
+            }
         }
 
 
@@ -1431,10 +1504,12 @@
             this.livesCount -= 1;
             this.showHearts();
             if (this.livesCount == 0) {
+                this.princessAttack.visible = false;
+                this.player.visible = false;
                 this.playerDeath.x = this.player.x;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead', 8, false, false);
+                this.playerDeath.animations.play('dead', 8, false, true);
                 //this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
@@ -1455,10 +1530,12 @@
             this.livesCount -= 1;
             this.showHearts();
             if (this.livesCount == 0) {
+                this.princessAttack.visible = false;
+                this.player.visible = false;
                 this.playerDeath.x = this.player.x;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead', 8, false, false);
+                this.playerDeath.animations.play('dead', 8, false, true);
                 //this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
@@ -1475,10 +1552,12 @@
             this.livesCount -= 1;
             this.showHearts();
             if (this.livesCount == 0) {
+                this.princessAttack.visible = false;
+                this.player.visible = false;
                 this.playerDeath.x = this.player.x;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead', 8, false, false);
+                this.playerDeath.animations.play('dead', 8, false, true);
                 //this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
@@ -1496,10 +1575,12 @@
             this.livesCount -= 1;
             this.showHearts();
             if (this.livesCount == 0) {
+                this.princessAttack.visible = false;
+                this.player.visible = false;
                 this.playerDeath.x = this.player.x;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead', 8, false, false);
+                this.playerDeath.animations.play('dead', 8, false, true);
                 //this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
@@ -1528,9 +1609,9 @@
                 else {
                     this.princessAttack.animations.play('shield_shoot_left', 12, false, true);
                 }
-                if (this.princessAttack.animations.currentAnim) {
-                    this.player.visible = true;
-                }
+                //if (this.princessAttack.animations.currentAnim) {
+                //    this.player.visible = true;
+                //}
                 //if (!this.princessAttack.animations.currentAnim.isPlaying) {
                 //    this.player.visible = true;
                 //}

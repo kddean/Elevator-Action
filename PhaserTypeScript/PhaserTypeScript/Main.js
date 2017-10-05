@@ -1,19 +1,25 @@
 window.onload = function () {
     var game = new ElevatorAction.Main();
 };
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var ElevatorAction;
 (function (ElevatorAction) {
     var Game = (function (_super) {
         __extends(Game, _super);
         function Game() {
-            _super.apply(this, arguments);
-            this.elevatorDir = 1;
-            this.isOnElevator = false;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.elevatorDir = 1;
+            _this.isOnElevator = false;
+            return _this;
         }
         Game.prototype.preload = function () {
             //Audio
@@ -49,7 +55,7 @@ var ElevatorAction;
             this.game.load.image('floors2', 'assets/floor2.png');
             this.game.load.image('floors3', 'assets/floor3.png');
             this.game.load.image('floors4', 'assets/floor4.png');
-            this.game.load.image('boblife', 'assets/bob.png');
+            this.game.load.image('boblife', 'assets/bob_2.png');
             this.game.load.image('keyTaken', 'assets/golden_key.png');
             this.game.load.image('noKeyTaken', 'assets/golden_key_dark.png');
             this.game.load.image('life', 'assets/pink_heart.png');
@@ -57,6 +63,7 @@ var ElevatorAction;
             this.game.load.image('crystal', 'assets/crystal_adj.png');
             this.game.load.image('bone', 'assets/bone3.png');
             this.game.load.image('filter', 'assets/camera_filter.png');
+            this.game.load.image('prince_hang', 'assets/prince_hang.png');
             //All spritesheets here.
             this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
             this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
@@ -76,6 +83,10 @@ var ElevatorAction;
             this.game.load.spritesheet('finalKey1', 'assets/FKA_part_01.png', 1151, 886);
             this.game.load.spritesheet('finalKey2', 'assets/FKA_part_02.png', 1151, 886);
             this.game.load.spritesheet('gryphonDeathAnim', 'assets/dead_gryphon_2.png', 723, 650);
+            this.game.load.spritesheet('prince_fall', 'assets/prince_fall.png', 100, 575);
+            this.game.load.spritesheet('prince_celebrate', 'assets/prince_celebrate.png', 92.36, 185);
+            this.game.load.spritesheet('doorOpenAnim', 'assets/big_door.png', 321, 330);
+            this.game.load.spritesheet('happyEnding', 'assets/together_whole.png', 803, 168);
         };
         Game.prototype.create = function () {
             this.keysCollected = 0;
@@ -92,7 +103,7 @@ var ElevatorAction;
             this.game.stage.backgroundColor = "#000000;";
             this.game.world.setBounds(0, 0, 1890, 5400);
             this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-            this.gryphonHealth = 20;
+            this.gryphonHealth = 1;
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             //all the music here
             this.music = this.add.audio('shoot', 1, false);
@@ -146,6 +157,7 @@ var ElevatorAction;
                     h = h + 1080;
             }*/
             this.game.add.sprite(0, -1000, 'boblife');
+            this.prince = this.game.add.sprite(915, 4795, 'prince_hang');
             var filter;
             filter = this.game.add.sprite(0, 0, 'filter');
             filter.fixedToCamera = true;
@@ -645,6 +657,26 @@ var ElevatorAction;
             this.game.physics.arcade.enable(this.gryphonDeath);
             this.gryphonDeath.visible = false;
             this.gryphonDeath.animations.add('gryphonDying', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], 0, true);
+            //prince going down animation
+            this.princeFall = this.game.add.sprite(915, 4795, 'prince_fall');
+            this.game.physics.arcade.enable(this.princeFall);
+            this.princeFall.visible = false;
+            this.princeFall.animations.add('fallingPrince', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], 0, true);
+            //prince celebrating
+            this.princeCelebrate = this.game.add.sprite(915, 5200, 'prince_celebrate');
+            this.game.physics.arcade.enable(this.princeCelebrate);
+            this.princeCelebrate.visible = false;
+            this.princeCelebrate.animations.add('celebratingPrince', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 0, true);
+            //door opening
+            this.doorOpen = this.game.add.sprite(820, 5200, 'doorOpenAnim');
+            this.game.physics.arcade.enable(this.doorOpen);
+            this.doorOpen.visible = false;
+            this.doorOpen.animations.add('doorOpening', [0, 1, 2, 3, 4, 5, 6, 7, 8], 0, true);
+            //HappyEnding
+            this.happyEnding = this.game.add.sprite(550, 5250, 'happyEnding');
+            this.game.physics.arcade.enable(this.happyEnding);
+            this.happyEnding.visible = false;
+            this.happyEnding.animations.add('finalEnding', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 0, true);
             //Animations end.
             //Gryphon boss things here.
             this.gryphon = this.game.add.sprite(610, 4670, 'gryphon'); //700, 4670
@@ -1071,11 +1103,41 @@ var ElevatorAction;
             this.game.physics.arcade.overlap(this.player, this.keys, this.collectKeys, null, this);
             this.showHearts();
             this.showKeys();
+            //Making all the animations go one after another
             if (!this.gryphonDeath.alive) {
                 this.finalKey1.visible = true;
-                this.finalKey2.visible = true;
                 this.finalKey1.animations.play('keyAnim1', 4, false, true);
+            }
+            if (!this.finalKey1.alive) {
+                this.finalKey2.visible = true;
                 this.finalKey2.animations.play('keyAnim2', 4, false, true);
+            }
+            if (!this.finalKey2.alive) {
+                this.princeFall.visible = true;
+                this.prince.visible = false;
+                this.princeFall.animations.play('fallingPrince', 10, false, true);
+            }
+            if (!this.princeFall.alive) {
+                this.princeCelebrate.visible = true;
+                this.prince.visible = false;
+                this.princeFall.visible = false;
+                this.princeCelebrate.animations.play('celebratingPrince', 10, false, true);
+            }
+            if (!this.princeCelebrate.alive) {
+                this.princeCelebrate.visible = false;
+                this.doorOpen.visible = true;
+                this.doorOpen.animations.play('doorOpening', 6, false, true);
+            }
+            if (!this.doorOpen.alive) {
+                this.happyEnding.visible = true;
+                this.player.visible = false;
+                this.happyEnding.animations.play('finalEnding', 6, false, true);
+            }
+            if (!this.happyEnding.alive) {
+                this.game.state.start('GameWon', true, false);
+            }
+            if (!this.playerDeath.alive) {
+                this.game.state.start('GameOver', true, false);
             }
         };
         //Boss battle
@@ -1149,10 +1211,12 @@ var ElevatorAction;
             this.livesCount -= 1;
             this.showHearts();
             if (this.livesCount == 0) {
+                this.princessAttack.visible = false;
+                this.player.visible = false;
                 this.playerDeath.x = this.player.x;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead', 8, false, false);
+                this.playerDeath.animations.play('dead', 8, false, true);
                 //this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
@@ -1172,10 +1236,12 @@ var ElevatorAction;
             this.livesCount -= 1;
             this.showHearts();
             if (this.livesCount == 0) {
+                this.princessAttack.visible = false;
+                this.player.visible = false;
                 this.playerDeath.x = this.player.x;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead', 8, false, false);
+                this.playerDeath.animations.play('dead', 8, false, true);
                 //this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
@@ -1191,10 +1257,12 @@ var ElevatorAction;
             this.livesCount -= 1;
             this.showHearts();
             if (this.livesCount == 0) {
+                this.princessAttack.visible = false;
+                this.player.visible = false;
                 this.playerDeath.x = this.player.x;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead', 8, false, false);
+                this.playerDeath.animations.play('dead', 8, false, true);
                 //this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
@@ -1210,10 +1278,12 @@ var ElevatorAction;
             this.livesCount -= 1;
             this.showHearts();
             if (this.livesCount == 0) {
+                this.princessAttack.visible = false;
+                this.player.visible = false;
                 this.playerDeath.x = this.player.x;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
-                this.playerDeath.animations.play('dead', 8, false, false);
+                this.playerDeath.animations.play('dead', 8, false, true);
                 //this.playerDeath.animations.currentAnim.speed = 8;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
@@ -1238,9 +1308,9 @@ var ElevatorAction;
                 else {
                     this.princessAttack.animations.play('shield_shoot_left', 12, false, true);
                 }
-                if (this.princessAttack.animations.currentAnim) {
-                    this.player.visible = true;
-                }
+                //if (this.princessAttack.animations.currentAnim) {
+                //    this.player.visible = true;
+                //}
                 //if (!this.princessAttack.animations.currentAnim.isPlaying) {
                 //    this.player.visible = true;
                 //}
@@ -1334,16 +1404,122 @@ var ElevatorAction;
 })(ElevatorAction || (ElevatorAction = {}));
 var ElevatorAction;
 (function (ElevatorAction) {
+    var GameOver = (function (_super) {
+        __extends(GameOver, _super);
+        function GameOver() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        GameOver.prototype.preload = function () {
+            this.game.load.spritesheet('gameOver1', 'assets/GameOver/gameover_01.png', 1920, 1080);
+            this.game.load.spritesheet('gameOver2', 'assets/GameOver/gameover_02.png', 1920, 1080);
+            this.game.load.spritesheet('gameOver3', 'assets/GameOver/gameover_03.png', 1920, 1080);
+            this.game.load.spritesheet('gameOver4', 'assets/GameOver/gameover_04.png', 1920, 1080);
+            this.game.load.spritesheet('gameOver5', 'assets/GameOver/gameover_05.png', 1920, 1080);
+            this.game.load.spritesheet('gameOver6', 'assets/GameOver/gameover_06.png', 1920, 1080);
+            this.fireButton = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        };
+        GameOver.prototype.create = function () {
+            //GameOver Things
+            this.gameOver1 = this.game.add.sprite(0, 0, 'gameOver1');
+            this.game.physics.arcade.enable(this.gameOver1);
+            this.gameOver1.visible = false;
+            this.gameOver1.animations.add('ending1', [0, 1, 2, 3, 4], 0, true);
+            this.gameOver2 = this.game.add.sprite(0, 0, 'gameOver2');
+            this.game.physics.arcade.enable(this.gameOver2);
+            this.gameOver2.visible = false;
+            this.gameOver2.animations.add('ending2', [0, 1, 2, 3, 4], 0, true);
+            this.gameOver3 = this.game.add.sprite(0, 0, 'gameOver3');
+            this.game.physics.arcade.enable(this.gameOver3);
+            this.gameOver3.visible = false;
+            this.gameOver3.animations.add('ending3', [0, 1, 2, 3, 4], 0, true);
+            this.gameOver4 = this.game.add.sprite(0, 0, 'gameOver4');
+            this.game.physics.arcade.enable(this.gameOver4);
+            this.gameOver4.visible = false;
+            this.gameOver4.animations.add('ending4', [0, 1, 2, 3, 4], 0, true);
+            this.gameOver5 = this.game.add.sprite(0, 0, 'gameOver5');
+            this.game.physics.arcade.enable(this.gameOver5);
+            this.gameOver5.visible = false;
+            this.gameOver5.animations.add('ending5', [0, 1, 2], 0, true);
+            this.gameOver6 = this.game.add.sprite(0, 0, 'gameOver6');
+            this.game.physics.arcade.enable(this.gameOver6);
+            this.gameOver6.visible = false;
+            this.gameOver6.animations.add('ending6', [0, 1], 0, true);
+        };
+        GameOver.prototype.update = function () {
+            this.gameOver1.visible = true;
+            this.gameOver1.animations.play('ending1', 10, false, true);
+            if (!this.gameOver1.alive) {
+                this.gameOver1.visible = false;
+                this.gameOver2.visible = true;
+                this.gameOver2.animations.play('ending2', 10, false, true);
+            }
+            if (!this.gameOver2.alive) {
+                this.gameOver2.visible = false;
+                this.gameOver3.visible = true;
+                this.gameOver3.animations.play('ending3', 10, false, true);
+            }
+            if (!this.gameOver3.alive) {
+                this.gameOver3.visible = false;
+                this.gameOver4.visible = true;
+                this.gameOver4.animations.play('ending4', 10, false, true);
+            }
+            if (!this.gameOver4.alive) {
+                this.gameOver4.visible = false;
+                this.gameOver5.visible = true;
+                this.gameOver5.animations.play('ending5', 10, false, true);
+            }
+            if (!this.gameOver5.alive) {
+                this.gameOver5.visible = false;
+                this.gameOver6.visible = true;
+                this.gameOver6.animations.play('ending6', 10, true, true);
+            }
+            if (this.fireButton.isDown) {
+                this.state.start('Game', true, false);
+            }
+        };
+        return GameOver;
+    }(Phaser.State));
+    ElevatorAction.GameOver = GameOver;
+})(ElevatorAction || (ElevatorAction = {}));
+var ElevatorAction;
+(function (ElevatorAction) {
+    var GameWon = (function (_super) {
+        __extends(GameWon, _super);
+        function GameWon() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        GameWon.prototype.preload = function () {
+            this.load.image('youWin', 'assets/you_win.png');
+            this.fireButton = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        };
+        GameWon.prototype.create = function () {
+            this.youWinScreen = this.add.sprite(0, 0, 'youWin');
+        };
+        GameWon.prototype.update = function () {
+            if (this.fireButton.isDown) {
+                this.state.start('Game', true, false);
+            }
+        };
+        return GameWon;
+    }(Phaser.State));
+    ElevatorAction.GameWon = GameWon;
+})(ElevatorAction || (ElevatorAction = {}));
+var ElevatorAction;
+(function (ElevatorAction) {
     var Main = (function (_super) {
         __extends(Main, _super);
         function Main() {
+            var _this = this;
             var renderMode = Phaser.AUTO;
-            _super.call(this, 1890, 1000, renderMode, "content", null);
+            _this = _super.call(this, 1890, 1000, renderMode, "content", null) || this;
             //this.state.add('Boot', Boot, false);
             //this.state.add('Preloader', Preloader, false);
-            this.state.add('MainMenu', ElevatorAction.MainMenu, false);
-            this.state.add('Game', ElevatorAction.Game, false);
-            this.state.start('MainMenu');
+            _this.state.add('MainMenu', ElevatorAction.MainMenu, false);
+            _this.state.add('Game', ElevatorAction.Game, false);
+            _this.state.add('GameOver', ElevatorAction.GameOver, false);
+            _this.state.add('GameWon', ElevatorAction.GameWon, false);
+            _this.state.start('MainMenu');
+            return _this;
         }
         return Main;
     }(Phaser.Game));
@@ -1351,10 +1527,10 @@ var ElevatorAction;
     var GameStates = (function () {
         function GameStates() {
         }
-        GameStates.MAINMENU = "mainMenu";
-        GameStates.GAME = "game";
         return GameStates;
     }());
+    GameStates.MAINMENU = "mainMenu";
+    GameStates.GAME = "game";
     ElevatorAction.GameStates = GameStates;
 })(ElevatorAction || (ElevatorAction = {}));
 var ElevatorAction;
@@ -1362,7 +1538,7 @@ var ElevatorAction;
     var MainMenu = (function (_super) {
         __extends(MainMenu, _super);
         function MainMenu() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         MainMenu.prototype.preload = function () {
             this.game.load.audio('start', 'assets/spooky.mp3');

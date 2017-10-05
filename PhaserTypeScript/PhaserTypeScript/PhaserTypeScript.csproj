@@ -63,6 +63,8 @@
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="box2d.d.ts" />
     <TypeScriptCompile Include="Game.ts" />
+    <TypeScriptCompile Include="GameOver.ts" />
+    <TypeScriptCompile Include="GameWon.ts" />
     <TypeScriptCompile Include="Main.ts" />
     <TypeScriptCompile Include="MainMenu.ts" />
     <TypeScriptCompile Include="p2.d.ts" />

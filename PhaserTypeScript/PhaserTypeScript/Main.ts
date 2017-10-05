@@ -7,7 +7,8 @@
             //this.state.add('Preloader', Preloader, false);
             this.state.add('MainMenu', MainMenu, false);
             this.state.add('Game', Game, false);
-
+            this.state.add('GameOver', GameOver, false);
+            this.state.add('GameWon', GameWon, false);
             this.state.start('MainMenu');
         }
 
