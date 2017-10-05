@@ -32,6 +32,7 @@
         lives: Phaser.Group;
         bullets: Phaser.Group;
         enemies: Phaser.Group;
+        gryphonFeathers: Phaser.Group;
         //doors: Phaser.Group;
 
 
@@ -135,6 +136,7 @@
         cursors: Phaser.CursorKeys;
         fireButton: Phaser.Key;
         gryphonHealth: number;
+        gryphonFiringTimer: number;
 
         preload() {
             //Audio
@@ -159,6 +161,7 @@
             this.game.load.image('bullet', 'assets/shield.png');
             this.game.load.image('star', 'assets/bullet.png');
             this.game.load.image('elevator', 'assets/IntroScreen/Feather_new.png');
+            this.game.load.image('gryphonFeather', 'assets/feather.png');
             //this.game.load.spritesheet('princess_attact', 'assets/princess_attack.png', 181, 150, 10);
             this.game.load.image('button', 'assets/button.png');
             this.game.load.image('invisible', 'assets/Invisible Box.png');
@@ -216,13 +219,14 @@
             this.livesCount = 5;
             this.ghostFiringTimer = 0;
             this.skeletonFirinigTimer = 0;
+            this.gryphonFiringTimer = 0;
             this.numberOfEnemies = 1;
             this.gameTime = 50;
             this.scoreConst = "Score :";
             this.game.stage.backgroundColor = "#000000;"
             this.game.world.setBounds(0, 0, 1890, 5400);
             this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-            this.gryphonHealth = 1;
+            this.gryphonHealth = 20;
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
 
@@ -981,6 +985,16 @@
             this.skeletonBones.setAll('outOfBoundsKill', true);
             this.skeletonBones.setAll('checkWorldBounds', true);
 
+            //Gryphon Feathers
+            this.gryphonFeathers = this.game.add.group()
+            this.gryphonFeathers.enableBody = true;
+            this.gryphonFeathers.physicsBodyType = Phaser.Physics.ARCADE;
+            this.gryphonFeathers.createMultiple(30, 'gryphonFeather');
+            this.gryphonFeathers.setAll('anchor.x', 0);
+            this.gryphonFeathers.setAll('anchor.y', 0);
+            this.gryphonFeathers.setAll('outOfBoundsKill', true);
+            this.gryphonFeathers.setAll('checkWorldBounds', true);
+
             //BUllets end
 
 
@@ -1061,6 +1075,7 @@
             //var doorHit = this.game.physics.arcade.collide(this.doors, this.player);
 
             var bonesHits = this.game.physics.arcade.collide(this.bullets, this.skeletonBones);
+            var featherHits = this.game.physics.arcade.collide(this.bullets, this.gryphonFeathers);
 
 
             this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -1116,6 +1131,11 @@
             }
             if (this.game.time.now > this.skeletonFirinigTimer) {
                 this.skeletonFires();
+            }
+            if (((this.player.x >= this.gryphon.x) || (this.player.x <= this.gryphon.x)) && (this.player.y > this.gryphon.y - 50)) {
+                if (this.game.time.now > this.gryphonFiringTimer) {
+                    this.gryphonFires();
+                }
             }
 
             //New Elevators' Controls
@@ -1355,15 +1375,23 @@
                 bullet.kill();
                 skeletonBone.kill();
             }
+            if (featherHits) {
+                var bullet = this.bullets.getFirstExists(true);
+                var gryphonFeather = this.gryphonFeathers.getFirstExists(true);
+                bullet.kill();
+                gryphonFeather.kill();
+            }
             if (this.cursors.up.isDown && this.game.physics.arcade.overlap(this.player, this.doors)) {
                 this.playAnimation(this.player, this.door);
             }
             this.game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler, null, this);
             this.game.physics.arcade.overlap(this.bullets, this.skeletons, this.skeletonCollisionHandler, null, this);
             this.game.physics.arcade.overlap(this.enemyBullets, this.player, this.enemyHitsPlayer, null, this);
+            this.game.physics.arcade.overlap(this.gryphonFeathers, this.player, this.bossDeath, null, this);
             this.game.physics.arcade.overlap(this.skeletonBones, this.player, this.skeletonHitsPlayer, null, this);
             this.game.physics.arcade.overlap(this.player, this.enemies, this.playerHitByEnemy, null, this);
             this.game.physics.arcade.overlap(this.player, this.skeletons, this.playerHitBySkeleton, null, this);
+            this.game.physics.arcade.overlap(this.player, this.gryphon, this.playerHitByGryphon, null, this);
             this.game.physics.arcade.overlap(this.bullets, this.gryphon, this.bossBattle, null, this);
 
             var enemy = this.enemies.getFirstExists(true);
@@ -1434,6 +1462,48 @@
                 this.gryphon.revive();
             }
 
+        }
+
+        bossDeath(gryphonFeather, player) {
+            gryphonFeather.kill();
+            player.kill();
+            this.livesCount = 0;
+            if (this.livesCount == 0) {
+                this.princessAttack.visible = false;
+                this.player.visible = false;
+                this.playerDeath.x = this.player.x;
+                this.playerDeath.y = this.player.y;
+                this.playerDeath.visible = true;
+                this.playerDeath.animations.play('dead', 8, false, true);
+                //this.playerDeath.animations.currentAnim.speed = 8;
+                //this.stateText.text = "You Lose, click to restart";
+                //this.stateText.visible = true;
+                //this.game.input.onTap.addOnce(this.restart, this);
+            }
+            else {
+                this.player.revive();
+            }
+        }
+
+        playerHitByGryphon(gryphon, player) {
+            gryphon.kill();
+            this.gryphonHealth -= 1;
+            this.livesCount = 0;
+            if (this.livesCount == 0) {
+                this.princessAttack.visible = false;
+                this.player.visible = false;
+                this.playerDeath.x = this.player.x;
+                this.playerDeath.y = this.player.y;
+                this.playerDeath.visible = true;
+                this.playerDeath.animations.play('dead', 8, false, true);
+                //this.playerDeath.animations.currentAnim.speed = 8;
+                //this.stateText.text = "You Lose, click to restart";
+                //this.stateText.visible = true;
+                //this.game.input.onTap.addOnce(this.restart, this);
+            }
+            else {
+                this.player.revive();
+            }
         }
 
 
@@ -1511,9 +1581,9 @@
                 this.playerDeath.visible = true;
                 this.playerDeath.animations.play('dead', 8, false, true);
                 //this.playerDeath.animations.currentAnim.speed = 8;
-                this.stateText.text = "You Lose, click to restart";
-                this.stateText.visible = true;
-                this.game.input.onTap.addOnce(this.restart, this);
+                //this.stateText.text = "You Lose, click to restart";
+                //this.stateText.visible = true;
+                //this.game.input.onTap.addOnce(this.restart, this);
             }
             else {
                 this.player.revive();
@@ -1537,9 +1607,9 @@
                 this.playerDeath.visible = true;
                 this.playerDeath.animations.play('dead', 8, false, true);
                 //this.playerDeath.animations.currentAnim.speed = 8;
-                this.stateText.text = "You Lose, click to restart";
-                this.stateText.visible = true;
-                this.game.input.onTap.addOnce(this.restart, this);
+                //this.stateText.text = "You Lose, click to restart";
+                //this.stateText.visible = true;
+                //this.game.input.onTap.addOnce(this.restart, this);
             }
             else {
                 this.player.revive();
@@ -1559,9 +1629,9 @@
                 this.playerDeath.visible = true;
                 this.playerDeath.animations.play('dead', 8, false, true);
                 //this.playerDeath.animations.currentAnim.speed = 8;
-                this.stateText.text = "You Lose, click to restart";
-                this.stateText.visible = true;
-                this.game.input.onTap.addOnce(this.restart, this);
+                //this.stateText.text = "You Lose, click to restart";
+                //this.stateText.visible = true;
+                //this.game.input.onTap.addOnce(this.restart, this);
             }
             else {
                 this.player.revive();
@@ -1582,9 +1652,9 @@
                 this.playerDeath.visible = true;
                 this.playerDeath.animations.play('dead', 8, false, true);
                 //this.playerDeath.animations.currentAnim.speed = 8;
-                this.stateText.text = "You Lose, click to restart";
-                this.stateText.visible = true;
-                this.game.input.onTap.addOnce(this.restart, this);
+                //this.stateText.text = "You Lose, click to restart";
+                //this.stateText.visible = true;
+                //this.game.input.onTap.addOnce(this.restart, this);
             }
             else {
                 this.player.revive();
@@ -1669,6 +1739,24 @@
                     skeletonBone.body.velocity.x -= 200;
                 }
                 this.skeletonFirinigTimer = this.game.time.now + 1500;
+            }
+        }
+
+        gryphonFires() {
+            var gryphonFeather = this.gryphonFeathers.getFirstExists(false);
+            if (gryphonFeather && this.gryphon) {
+                this.skeletonAttackMusic.play();
+                gryphonFeather.reset(this.gryphon.body.x, this.gryphon.body.y + this.randomIntFromInterval(100, 500));
+                gryphonFeather.animations.add('rotate', [0, 1, 2, 3], 0, true);
+                gryphonFeather.animations.play('rotate');
+                gryphonFeather.animations.currentAnim.speed = 10;
+                if (this.player.x > this.gryphon.body.x) {
+                    gryphonFeather.body.velocity.x += 200;
+                }
+                else {
+                    gryphonFeather.body.velocity.x -= 200;
+                }
+                this.gryphonFiringTimer = this.game.time.now + 3000;
             }
         }
 
