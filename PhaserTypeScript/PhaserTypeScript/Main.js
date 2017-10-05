@@ -1,25 +1,19 @@
 window.onload = function () {
     var game = new ElevatorAction.Main();
 };
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var ElevatorAction;
 (function (ElevatorAction) {
     var Game = (function (_super) {
         __extends(Game, _super);
         function Game() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.elevatorDir = 1;
-            _this.isOnElevator = false;
-            return _this;
+            _super.apply(this, arguments);
+            this.elevatorDir = 1;
+            this.isOnElevator = false;
         }
         Game.prototype.preload = function () {
             //Audio
@@ -67,16 +61,18 @@ var ElevatorAction;
             this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
             this.game.load.spritesheet('doors1', 'assets/Doors_Blue.jpg', 25, 60, 4);
             this.game.load.spritesheet('doors2', 'assets/Doors_Red.jpg', 25, 75, 4);
-            this.game.load.spritesheet('princess', 'assets/f_princess_all_smaller2.png', 110, 150);
+            this.game.load.spritesheet('princess', 'assets/IntroScreen/princess_all_132px.png', 132, 150);
             this.game.load.spritesheet('princess_death', 'assets/princess_death.png', 181, 150);
             this.game.load.spritesheet('ghost_death_anim', 'assets/mrghost_death.png', 181, 150);
             this.game.load.spritesheet('skeleton_death_anim', 'assets/mrskeleton_death.png', 181, 150);
             this.game.load.spritesheet('ghost', 'assets/mrghost.png', 181, 150);
             this.game.load.spritesheet('skeleton', 'assets/mr_skeleton_walk.png', 181, 150);
-            this.game.load.spritesheet('crystalAnim', 'assets/crystal_adj_anim.png', 60, 80);
-            this.game.load.spritesheet('boneAnim', 'assets/bone.png', 37, 90);
+            this.game.load.spritesheet('crystalAnim', 'assets/crystal_adj_anim.png', 60, 150);
+            this.game.load.spritesheet('boneAnim', 'assets/bone.png', 37, 150);
             this.game.load.spritesheet('keyShining', 'assets/key_animation_whole.png', 109, 216);
-            //this.game.load.spritesheet('princess_attact', 'assets/princess_attack.png', 181, 150, 10);
+            this.game.load.spritesheet('princess_attack', 'assets/IntroScreen/princess_attack.png', 181, 150, 20);
+            this.game.load.spritesheet('gryphon', 'assets/gryphonall.png', 780, 700);
+            this.game.load.spritesheet('finalKey', 'assets/final_key_animation.png', 780, 700);
         };
         Game.prototype.create = function () {
             this.keysCollected = 0;
@@ -93,6 +89,7 @@ var ElevatorAction;
             this.game.stage.backgroundColor = "#000000;";
             this.game.world.setBounds(0, 0, 1890, 5400);
             this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+            this.gryphonHealth = 20;
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             //all the music here
             this.music = this.add.audio('shoot', 1, false);
@@ -339,171 +336,6 @@ var ElevatorAction;
             //Door Placement
             this.doors = this.game.add.group();
             this.doors.enableBody = true;
-            /*var z = 150;
-            for (var d = 0; d < 3; d++) {
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i>2 && i<4) || (i>4 && i<8) || (i==9)){
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i < 1) || (i==2) || (i==7) || (i==9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if (( i < 3) || (i==4) || (i>5 && i<8) || (i==9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i==2) || (i>3 && i<7) || (i==9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i == 2)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-                for (var i = 0; i < 10; i++) {
-                    if ((i > 2 && i < 4) || (i > 4 && i < 8) || (i == 9)) {
-                        t = this.doors.create(((i * 192) + 20), z - 90, 'door');
-                        t.body.immovable = true;
-                    }
-                }
-                z = z + 216;
-    
-           
-            }*/
             //Keys
             this.keys = this.game.add.group();
             this.keys.enableBody = true;
@@ -744,12 +576,13 @@ var ElevatorAction;
             this.player.body.bounce.y = 0.2;
             this.player.body.gravity.y = 9000; //9000
             this.player.body.collideWorldBounds = true;
-            this.player.animations.add('left', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
-            this.player.animations.add('right', [26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 0, true);
-            this.player.animations.add('leftidle', [10, 11, 12, 13, 14, 15, 16, 17], 0, true);
-            this.player.animations.add('rightidle', [18, 19, 20, 21, 22, 23, 24, 25], 0, true);
+            this.player.animations.add('shootShield_left', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
+            this.player.animations.add('right', [36, 37, 38, 39, 40, 41, 42, 43, 44, 45], 0, true);
+            this.player.animations.add('left', [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], 0, true);
+            this.player.animations.add('leftidle', [20, 21, 22, 23, 24, 25, 26, 27], 0, true);
+            this.player.animations.add('rightidle', [28, 29, 30, 31, 32, 33, 34, 35], 0, true);
             this.player.animations.currentAnim.speed = 10;
-            //this.player.animations.add('shootShield', [28, 29, 30, 31, 32, 33, 34, 35, 36, 37], 0, true);
+            this.player.animations.add('shootShield_right', [46, 47, 48, 49, 50, 51, 52, 53, 54, 55], 0, true);
             //All Animations here
             //PlayerDeath
             this.playerDeath = this.game.add.sprite(this.player.x, this.player.y, 'princess_death');
@@ -771,7 +604,25 @@ var ElevatorAction;
             this.game.physics.arcade.enable(this.keyAnimation);
             this.keyAnimation.visible = false;
             this.keyAnimation.animations.add('keyGlowing', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 0, true);
+            // princess attack animations..
+            this.princessAttack = this.game.add.sprite(0, 0, 'princess_attack');
+            this.game.physics.arcade.enable(this.princessAttack);
+            this.princessAttack.visible = false;
+            this.princessAttack.animations.add('shield_shoot_left', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
+            this.princessAttack.animations.add('shield_shoot_right', [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], 0, true);
+            this.princessAttack.kill();
+            //Final Key animations..
+            //this.finalKey = this.game.add.sprite
             //Animations end.
+            //Gryphon boss things here.
+            this.gryphon = this.game.add.sprite(700, 1000, 'gryphon'); //700, 4670
+            this.game.physics.arcade.enable(this.gryphon);
+            this.gryphon.animations.add('gryphon_attack_left', [0, 1, 2, 3, 4, 5, 6, 7, 8], 0, true);
+            this.gryphon.animations.add('gryphon_idle_left', [9, 10, 11, 12, 13, 14, 15], 0, true);
+            //this.gryphon.animations.add('gryphon_idle_right', [16, 17, 18, 19, 20, 21, 22], 0, true);
+            //this.gryphon.animations.add('gryphon_attack_right', [23, 24, 25, 26, 27, 28, 29, 30, 31], 0, true);
+            this.gryphon.animations.play('gryphon_idle_left');
+            this.gryphon.animations.currentAnim.speed = 10;
             this.doors = this.game.add.group();
             this.doors.enableBody = true;
             this.enemyDoors = this.game.add.group();
@@ -863,6 +714,13 @@ var ElevatorAction;
         };
         Game.prototype.update = function () {
             this.game.input.update();
+            if (this.princessAttack.alive) {
+                this.player.visible = false;
+            }
+            else {
+                this.player.visible = true;
+            }
+            //this.player.visible = true;
             /*var hitElevator = this.game.physics.arcade.collide(this.player, this.elevator);
             var hitElevator2 = this.game.physics.arcade.collide(this.player, this.elevatorT);
             var hitElevator3 = this.game.physics.arcade.collide(this.player, this.elevatorX);
@@ -1172,6 +1030,7 @@ var ElevatorAction;
             this.game.physics.arcade.overlap(this.skeletonBones, this.player, this.skeletonHitsPlayer, null, this);
             this.game.physics.arcade.overlap(this.player, this.enemies, this.playerHitByEnemy, null, this);
             this.game.physics.arcade.overlap(this.player, this.skeletons, this.playerHitBySkeleton, null, this);
+            this.game.physics.arcade.overlap(this.bullets, this.gryphon, this.BossBattle, null, this);
             //this.doors.game.
             var enemy = this.enemies.getFirstExists(true);
             if (this.game.physics.arcade.overlap(this.player, (this.floor1 || this.floor2 || this.floor3 || this.floor4 || this.floor5 || this.floor6 || this.floor7) && this.cursors.up.isDown)) {
@@ -1318,7 +1177,24 @@ var ElevatorAction;
         Game.prototype.firebullet = function (bullet) {
             if (this.game.time.now > this.bulletTime) {
                 this.music.play();
-                //this.player.animations.play('shootShield');
+                this.princessAttack.x = this.player.x;
+                this.princessAttack.y = this.player.y;
+                this.princessAttack.revive();
+                this.player.visible = false;
+                this.princessAttack.visible = true;
+                if (this.playerDirection) {
+                    this.princessAttack.animations.play('shield_shoot_right', 12, false, true);
+                }
+                else {
+                    this.princessAttack.animations.play('shield_shoot_left', 12, false, true);
+                }
+                if (this.princessAttack.animations.currentAnim) {
+                    this.player.visible = true;
+                }
+                //if (!this.princessAttack.animations.currentAnim.isPlaying) {
+                //    this.player.visible = true;
+                //}
+                //this.player.animations.play('shootShield_right', 10, true, false);
                 //this.player.animations.currentAnim.speed = 10;
                 bullet = this.bullets.getFirstExists(false);
                 if (bullet) {
@@ -1347,11 +1223,6 @@ var ElevatorAction;
                 enemyBullet.animations.currentAnim.speed = 10;
                 if (this.player.x > enemy.body.x) {
                     enemyBullet.body.velocity.x += 200;
-                    //this.crystalAnimation.x = enemyBullet.body.x;
-                    //this.crystalAnimation.y = enemyBullet.body.y;
-                    //enemyBullet.visible = false;
-                    //this.crystalAnimation.visible = true;
-                    //this.crystalAnimation.animations.play('crystalShining');
                 }
                 else {
                     enemyBullet.body.velocity.x -= 200;
@@ -1368,7 +1239,6 @@ var ElevatorAction;
                 skeletonBone.animations.add('rotate', [0, 1, 2, 3], 0, true);
                 skeletonBone.animations.play('rotate');
                 skeletonBone.animations.currentAnim.speed = 10;
-                //this.game.physics.arcade.moveToObject(enemyBullet, this.player, 120);
                 if (this.player.x > skeleton.body.x) {
                     skeletonBone.body.velocity.x += 200;
                 }
@@ -1408,7 +1278,14 @@ var ElevatorAction;
         Game.prototype.randomIntFromInterval = function (min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
         };
-        Game.prototype.crystalAnimations = function () { };
+        //Boss battle
+        Game.prototype.BossBattle = function (bullet) {
+            bullet.kill();
+            this.gryphonHealth -= 1;
+            if (this.gryphonHealth == 0) {
+                this.gryphon.kill();
+            }
+        };
         return Game;
     }(Phaser.State));
     ElevatorAction.Game = Game;
@@ -1418,15 +1295,13 @@ var ElevatorAction;
     var Main = (function (_super) {
         __extends(Main, _super);
         function Main() {
-            var _this = this;
             var renderMode = Phaser.AUTO;
-            _this = _super.call(this, 1890, 1000, renderMode, "content", null) || this;
+            _super.call(this, 1890, 1000, renderMode, "content", null);
             //this.state.add('Boot', Boot, false);
             //this.state.add('Preloader', Preloader, false);
-            _this.state.add('MainMenu', ElevatorAction.MainMenu, false);
-            _this.state.add('Game', ElevatorAction.Game, false);
-            _this.state.start('MainMenu');
-            return _this;
+            this.state.add('MainMenu', ElevatorAction.MainMenu, false);
+            this.state.add('Game', ElevatorAction.Game, false);
+            this.state.start('MainMenu');
         }
         return Main;
     }(Phaser.Game));
@@ -1434,10 +1309,10 @@ var ElevatorAction;
     var GameStates = (function () {
         function GameStates() {
         }
+        GameStates.MAINMENU = "mainMenu";
+        GameStates.GAME = "game";
         return GameStates;
     }());
-    GameStates.MAINMENU = "mainMenu";
-    GameStates.GAME = "game";
     ElevatorAction.GameStates = GameStates;
 })(ElevatorAction || (ElevatorAction = {}));
 var ElevatorAction;
@@ -1445,7 +1320,7 @@ var ElevatorAction;
     var MainMenu = (function (_super) {
         __extends(MainMenu, _super);
         function MainMenu() {
-            return _super !== null && _super.apply(this, arguments) || this;
+            _super.apply(this, arguments);
         }
         MainMenu.prototype.preload = function () {
             this.game.load.audio('start', 'assets/spooky.mp3');
