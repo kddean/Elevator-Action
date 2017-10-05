@@ -6,19 +6,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-window.onload = function () {
-    var game = new ElevatorAction.Main();
-};
 var ElevatorAction;
 (function (ElevatorAction) {
     var Game = (function (_super) {
@@ -49,7 +36,7 @@ var ElevatorAction;
             this.game.load.image('ground3', 'assets/platformTiny.png');
             this.game.load.image('bullet', 'assets/shield.png');
             this.game.load.image('star', 'assets/bullet.png');
-            this.game.load.image('elevator', 'assets/feather.png');
+            this.game.load.image('elevator', 'assets/IntroScreen/Feather_new.png');
             //this.game.load.spritesheet('princess_attact', 'assets/princess_attack.png', 181, 150, 10);
             this.game.load.image('button', 'assets/button.png');
             this.game.load.image('invisible', 'assets/Invisible Box.png');
@@ -86,7 +73,9 @@ var ElevatorAction;
             this.game.load.spritesheet('keyShining', 'assets/key_animation_whole.png', 109, 216);
             this.game.load.spritesheet('princess_attack', 'assets/IntroScreen/princess_attack.png', 181, 150, 20);
             this.game.load.spritesheet('gryphon', 'assets/gryphonall.png', 780, 700);
-            this.game.load.spritesheet('finalKey', 'assets/final_key_animation.png', 780, 700);
+            this.game.load.spritesheet('finalKey1', 'assets/FKA_part_01.png', 1151, 886);
+            this.game.load.spritesheet('finalKey2', 'assets/FKA_part_02.png', 1151, 886);
+            this.game.load.spritesheet('gryphonDeathAnim', 'assets/dead_gryphon_2.png', 723, 650);
         };
         Game.prototype.create = function () {
             this.keysCollected = 0;
@@ -605,7 +594,7 @@ var ElevatorAction;
             //this.door = this.game.add.sprite(this.game.world.width / 2, this.game.world.height - 475, 'doors1');
             this.game.physics.arcade.enable(this.player);
             this.player.body.bounce.y = 0.2;
-            this.player.body.gravity.y = 2000; //9000
+            this.player.body.gravity.y = 9000; //9000
             this.player.body.collideWorldBounds = true;
             this.player.animations.add('shootShield_left', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
             this.player.animations.add('right', [36, 37, 38, 39, 40, 41, 42, 43, 44, 45], 0, true);
@@ -636,17 +625,29 @@ var ElevatorAction;
             this.keyAnimation.visible = false;
             this.keyAnimation.animations.add('keyGlowing', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 0, true);
             // princess attack animations..
-            this.princessAttack = this.game.add.sprite(0, 0, 'princess_attack');
+            this.princessAttack = this.game.add.sprite(700, 4500, 'princess_attack');
             this.game.physics.arcade.enable(this.princessAttack);
             this.princessAttack.visible = false;
             this.princessAttack.animations.add('shield_shoot_left', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
             this.princessAttack.animations.add('shield_shoot_right', [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], 0, true);
             this.princessAttack.kill();
             //Final Key animations..
-            //this.finalKey = this.game.add.sprite
+            this.finalKey1 = this.game.add.sprite(370, 4520, 'finalKey1');
+            this.game.physics.arcade.enable(this.finalKey1);
+            this.finalKey1.visible = false;
+            this.finalKey1.animations.add('keyAnim1', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
+            this.finalKey2 = this.game.add.sprite(370, 4520, 'finalKey2');
+            this.game.physics.arcade.enable(this.finalKey2);
+            this.finalKey2.visible = false;
+            this.finalKey2.animations.add('keyAnim2', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
+            //gryphon death animation
+            this.gryphonDeath = this.game.add.sprite(610, 4670, 'gryphonDeathAnim');
+            this.game.physics.arcade.enable(this.gryphonDeath);
+            this.gryphonDeath.visible = false;
+            this.gryphonDeath.animations.add('gryphonDying', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], 0, true);
             //Animations end.
             //Gryphon boss things here.
-            this.gryphon = this.game.add.sprite(700, 1000, 'gryphon'); //700, 4670
+            this.gryphon = this.game.add.sprite(610, 4670, 'gryphon'); //700, 4670
             this.game.physics.arcade.enable(this.gryphon);
             this.gryphon.animations.add('gryphon_attack_left', [0, 1, 2, 3, 4, 5, 6, 7, 8], 0, true);
             this.gryphon.animations.add('gryphon_idle_left', [9, 10, 11, 12, 13, 14, 15], 0, true);
@@ -1013,7 +1014,7 @@ var ElevatorAction;
                 this.elevator27.body.immovable = true;
             }
             //Player and Elevators
-            /*var hitElevator1 = this.game.physics.arcade.collide(this.player, this.elevator1);
+            var hitElevator1 = this.game.physics.arcade.collide(this.player, this.elevator1);
             var hitElevator2 = this.game.physics.arcade.collide(this.player, this.elevator2);
             var hitElevator3 = this.game.physics.arcade.collide(this.player, this.elevator3);
             var hitElevator4 = this.game.physics.arcade.collide(this.player, this.elevator4);
@@ -1040,7 +1041,6 @@ var ElevatorAction;
             var hitElevator25 = this.game.physics.arcade.collide(this.player, this.elevator25);
             var hitElevator26 = this.game.physics.arcade.collide(this.player, this.elevator26);
             var hitElevator27 = this.game.physics.arcade.collide(this.player, this.elevator27);
-           */
             if (bulletHits) {
                 var bullet = this.bullets.getFirstExists(true);
                 var enemyBullet = this.enemyBullets.getFirstExists(true);
@@ -1062,8 +1062,7 @@ var ElevatorAction;
             this.game.physics.arcade.overlap(this.skeletonBones, this.player, this.skeletonHitsPlayer, null, this);
             this.game.physics.arcade.overlap(this.player, this.enemies, this.playerHitByEnemy, null, this);
             this.game.physics.arcade.overlap(this.player, this.skeletons, this.playerHitBySkeleton, null, this);
-            this.game.physics.arcade.overlap(this.bullets, this.gryphon, this.BossBattle, null, this);
-            //this.doors.game.
+            this.game.physics.arcade.overlap(this.bullets, this.gryphon, this.bossBattle, null, this);
             var enemy = this.enemies.getFirstExists(true);
             if (this.game.physics.arcade.overlap(this.player, (this.floor1 || this.floor2 || this.floor3 || this.floor4 || this.floor5 || this.floor6 || this.floor7) && this.cursors.up.isDown)) {
                 this.playAnimation(this.player, this.floor1);
@@ -1072,6 +1071,25 @@ var ElevatorAction;
             this.game.physics.arcade.overlap(this.player, this.keys, this.collectKeys, null, this);
             this.showHearts();
             this.showKeys();
+            if (!this.gryphonDeath.alive) {
+                this.finalKey1.visible = true;
+                this.finalKey2.visible = true;
+                this.finalKey1.animations.play('keyAnim1', 4, false, true);
+                this.finalKey2.animations.play('keyAnim2', 4, false, true);
+            }
+        };
+        //Boss battle
+        Game.prototype.bossBattle = function (gryphon, bullet) {
+            bullet.kill();
+            gryphon.kill();
+            this.gryphonHealth -= 1;
+            if (this.gryphonHealth == 0) {
+                this.gryphonDeath.visible = true;
+                this.gryphonDeath.animations.play('gryphonDying', 10, false, true);
+            }
+            else {
+                this.gryphon.revive();
+            }
         };
         Game.prototype.collectKeys = function (player, key) {
             //key = this.keys.getFirstExists(true);
@@ -1302,21 +1320,13 @@ var ElevatorAction;
         Game.prototype.restart = function () {
             //this.lives.callAll('revive');
             this.player.revive();
-            this.livesCount = 3;
+            this.livesCount = 5;
             this.stateText.visible = false;
             this.playerDeath.animations.stop();
             this.playerDeath.visible = false;
         };
         Game.prototype.randomIntFromInterval = function (min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
-        };
-        //Boss battle
-        Game.prototype.BossBattle = function (bullet) {
-            bullet.kill();
-            this.gryphonHealth -= 1;
-            if (this.gryphonHealth == 0) {
-                this.gryphon.kill();
-            }
         };
         return Game;
     }(Phaser.State));
