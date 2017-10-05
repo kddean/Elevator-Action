@@ -1,19 +1,25 @@
 window.onload = function () {
     var game = new ElevatorAction.Main();
 };
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var ElevatorAction;
 (function (ElevatorAction) {
     var Game = (function (_super) {
         __extends(Game, _super);
         function Game() {
-            _super.apply(this, arguments);
-            this.elevatorDir = 1;
-            this.isOnElevator = false;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.elevatorDir = 1;
+            _this.isOnElevator = false;
+            return _this;
         }
         Game.prototype.preload = function () {
             //Audio
@@ -1204,6 +1210,10 @@ var ElevatorAction;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
                 this.playerDeath.animations.play('dead', 8, false, true);
+                //this.playerDeath.animations.currentAnim.speed = 8;
+                //this.stateText.text = "You Lose, click to restart";
+                //this.stateText.visible = true;
+                //this.game.input.onTap.addOnce(this.restart, this);
             }
             else {
                 this.player.revive();
@@ -1220,6 +1230,10 @@ var ElevatorAction;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
                 this.playerDeath.animations.play('dead', 8, false, true);
+                //this.playerDeath.animations.currentAnim.speed = 8;
+                //this.stateText.text = "You Lose, click to restart";
+                //this.stateText.visible = true;
+                //this.game.input.onTap.addOnce(this.restart, this);
             }
             else {
                 this.player.revive();
@@ -1289,6 +1303,10 @@ var ElevatorAction;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
                 this.playerDeath.animations.play('dead', 8, false, true);
+                //this.playerDeath.animations.currentAnim.speed = 8;
+                //this.stateText.text = "You Lose, click to restart";
+                //this.stateText.visible = true;
+                //this.game.input.onTap.addOnce(this.restart, this);
             }
             else {
                 this.player.revive();
@@ -1310,6 +1328,10 @@ var ElevatorAction;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
                 this.playerDeath.animations.play('dead', 8, false, true);
+                //this.playerDeath.animations.currentAnim.speed = 8;
+                //this.stateText.text = "You Lose, click to restart";
+                //this.stateText.visible = true;
+                //this.game.input.onTap.addOnce(this.restart, this);
             }
             else {
                 this.player.revive();
@@ -1327,6 +1349,10 @@ var ElevatorAction;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
                 this.playerDeath.animations.play('dead', 8, false, true);
+                //this.playerDeath.animations.currentAnim.speed = 8;
+                //this.stateText.text = "You Lose, click to restart";
+                //this.stateText.visible = true;
+                //this.game.input.onTap.addOnce(this.restart, this);
             }
             else {
                 this.player.revive();
@@ -1344,6 +1370,10 @@ var ElevatorAction;
                 this.playerDeath.y = this.player.y;
                 this.playerDeath.visible = true;
                 this.playerDeath.animations.play('dead', 8, false, true);
+                //this.playerDeath.animations.currentAnim.speed = 8;
+                //this.stateText.text = "You Lose, click to restart";
+                //this.stateText.visible = true;
+                //this.game.input.onTap.addOnce(this.restart, this);
             }
             else {
                 this.player.revive();
@@ -1480,7 +1510,7 @@ var ElevatorAction;
     var GameOver = (function (_super) {
         __extends(GameOver, _super);
         function GameOver() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         GameOver.prototype.preload = function () {
             this.game.load.spritesheet('gameOver1', 'assets/GameOver/gameover_01.png', 1920, 1080);
@@ -1559,7 +1589,7 @@ var ElevatorAction;
     var GameWon = (function (_super) {
         __extends(GameWon, _super);
         function GameWon() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         GameWon.prototype.preload = function () {
             this.load.image('youWin', 'assets/you_win.png');
@@ -1582,15 +1612,17 @@ var ElevatorAction;
     var Main = (function (_super) {
         __extends(Main, _super);
         function Main() {
+            var _this = this;
             var renderMode = Phaser.AUTO;
-            _super.call(this, 1890, 1000, renderMode, "content", null);
+            _this = _super.call(this, 1890, 1000, renderMode, "content", null) || this;
             //this.state.add('Boot', Boot, false);
             //this.state.add('Preloader', Preloader, false);
-            this.state.add('MainMenu', ElevatorAction.MainMenu, false);
-            this.state.add('Game', ElevatorAction.Game, false);
-            this.state.add('GameOver', ElevatorAction.GameOver, false);
-            this.state.add('GameWon', ElevatorAction.GameWon, false);
-            this.state.start('MainMenu');
+            _this.state.add('MainMenu', ElevatorAction.MainMenu, false);
+            _this.state.add('Game', ElevatorAction.Game, false);
+            _this.state.add('GameOver', ElevatorAction.GameOver, false);
+            _this.state.add('GameWon', ElevatorAction.GameWon, false);
+            _this.state.start('MainMenu');
+            return _this;
         }
         return Main;
     }(Phaser.Game));
@@ -1598,10 +1630,10 @@ var ElevatorAction;
     var GameStates = (function () {
         function GameStates() {
         }
-        GameStates.MAINMENU = "mainMenu";
-        GameStates.GAME = "game";
         return GameStates;
     }());
+    GameStates.MAINMENU = "mainMenu";
+    GameStates.GAME = "game";
     ElevatorAction.GameStates = GameStates;
 })(ElevatorAction || (ElevatorAction = {}));
 var ElevatorAction;
@@ -1609,7 +1641,7 @@ var ElevatorAction;
     var MainMenu = (function (_super) {
         __extends(MainMenu, _super);
         function MainMenu() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         MainMenu.prototype.preload = function () {
             this.game.load.audio('start', 'assets/spooky.mp3');
