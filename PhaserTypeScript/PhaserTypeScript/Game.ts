@@ -167,6 +167,7 @@
             this.game.load.image('noLife', 'assets/pink_heart_dark.png');
             this.game.load.image('crystal', 'assets/crystal_adj.png');
             this.game.load.image('bone', 'assets/bone3.png');
+            this.game.load.image('filter', 'assets/camera_filter.png');
 
             //All spritesheets here.
             this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
@@ -268,6 +269,9 @@
                     h = h + 1080;
             }*/
             this.game.add.sprite(0, -1000, 'boblife'); 
+            var filter;
+            filter = this.game.add.sprite(0, 0, 'filter');
+            filter.fixedToCamera = true;
 
             //initializing lifes and keys.
             this.lightHeart = this.game.add.group();
@@ -284,7 +288,7 @@
         //for (var w = 0; w <= 3; w++) {
             
                 for (var j = 0; j < 10; j++) {
-                    if (((j >= 0) && (j < 1)) || (j > 1 && j < 8) || (j > 8 && j <= 9)) {
+                    if ((j<3) || (j > 3 && j < 6) || (j > 6)) {
                         t = this.leve1.create(j * 192, y, 'floor');
                         t.body.immovable = true;
                     }
@@ -293,7 +297,7 @@
         
             
                 for (var j = 0; j < 10; j++) {
-                    if (((j >= 0) && (j < 3)) || (j > 3 && j < 5) || (j >= 6 && j < 8) || (j == 9)) {
+                    if ((j == 0) || (j > 1 && j < 5) || (j >= 6 && j < 8) || (j == 9)) {
                         t = this.leve1.create(j * 192, y, 'floor');
                         t.body.immovable = true;
                         
@@ -393,7 +397,7 @@
             y = y + 216;
 
             for (var j = 0; j < 10; j++) {
-                if ((j < 1) || (j == 2) || (j > 5 && j < 9)) {
+                if ((j < 1) || (j >1 && j<4) || (j > 5 && j < 9)) {
                     t = this.leve1.create(j * 192, y, 'floor');
                     t.body.immovable = true;
                 }
@@ -523,7 +527,7 @@
 
 
 
-            this.elevator1 = this.game.add.sprite(384+20, 216, 'elevator');
+            this.elevator1 = this.game.add.sprite(384 - 170, 216, 'elevator');
             this.game.physics.arcade.enable(this.elevator1);
             this.elevator1.body.enableBody = true;
             this.elevator1.body.collideWorldBounds = true;
@@ -532,7 +536,7 @@
             this.elevator1.body.immovable = false;
             this.elevator1.body.onCollide = new Phaser.Signal();
 
-            this.elevator2 = this.game.add.sprite(1728+20, 216, 'elevator');
+            this.elevator2 = this.game.add.sprite(1728-180, 216, 'elevator');
             this.game.physics.arcade.enable(this.elevator2);
             this.elevator2.body.enableBody = true;
             this.elevator2.body.collideWorldBounds = true;
@@ -540,8 +544,8 @@
             this.elevator2.body.bounce.set(1);
             this.elevator2.body.immovable = true;
             this.elevator2.body.onCollide = new Phaser.Signal();
-
-            this.elevator3 = this.game.add.sprite(768+20, 432, 'elevator');
+            
+            this.elevator3 = this.game.add.sprite(768 + 205, 432, 'elevator');
             this.game.physics.arcade.enable(this.elevator3);
             this.elevator3.body.enableBody = true;
             this.elevator3.body.collideWorldBounds = true;
@@ -550,7 +554,7 @@
             this.elevator3.body.immovable = true;
             this.elevator3.body.onCollide = new Phaser.Signal();
 
-            this.elevator4 = this.game.add.sprite(1152+20, 432, 'elevator');
+            this.elevator4 = this.game.add.sprite(1152-550, 432, 'elevator');
             this.game.physics.arcade.enable(this.elevator4);
             this.elevator4.body.enableBody = true;
             this.elevator4.body.collideWorldBounds = true;
@@ -558,8 +562,9 @@
             this.elevator4.body.bounce.set(1);
             this.elevator4.body.immovable = true;
             this.elevator4.body.onCollide = new Phaser.Signal();
-
-            this.elevator5 = this.game.add.sprite(10+20, 864, 'elevator');
+            
+            
+            this.elevator5 = this.game.add.sprite(10, 864, 'elevator');
             this.game.physics.arcade.enable(this.elevator5);
             this.elevator5.body.enableBody = true;
             this.elevator5.body.collideWorldBounds = true;
@@ -567,8 +572,8 @@
             this.elevator5.body.bounce.set(1);
             this.elevator5.body.immovable = true;
             this.elevator5.body.onCollide = new Phaser.Signal();
-
-            this.elevator6 = this.game.add.sprite(1536+20, 864, 'elevator');
+           
+            this.elevator6 = this.game.add.sprite(1536-170, 864, 'elevator');
             this.game.physics.arcade.enable(this.elevator6);
             this.elevator6.body.enableBody = true;
             this.elevator6.body.collideWorldBounds = true;
@@ -576,8 +581,8 @@
             this.elevator6.body.bounce.set(1);
             this.elevator6.body.immovable = true;
             this.elevator6.body.onCollide = new Phaser.Signal();
-
-            this.elevator7 = this.game.add.sprite(1152+20, 1080, 'elevator');
+           
+            this.elevator7 = this.game.add.sprite(1152+185, 1080, 'elevator');
             this.game.physics.arcade.enable(this.elevator7);
             this.elevator7.body.enableBody = true;
             this.elevator7.body.collideWorldBounds = true;
@@ -585,8 +590,8 @@
             this.elevator7.body.bounce.set(1);
             this.elevator7.body.immovable = true;
             this.elevator7.body.onCollide = new Phaser.Signal();
-
-            this.elevator8 = this.game.add.sprite(1344+20, 1080, 'elevator');
+        
+            this.elevator8 = this.game.add.sprite(1344+120, 638, 'elevator');
             this.game.physics.arcade.enable(this.elevator8);
             this.elevator8.body.enableBody = true;
             this.elevator8.body.collideWorldBounds = true;
@@ -595,7 +600,7 @@
             this.elevator8.body.immovable = true;
             this.elevator8.body.onCollide = new Phaser.Signal();
 
-            this.elevator9 = this.game.add.sprite(1920+40, 1296, 'elevator');
+            /*this.elevator9 = this.game.add.sprite(1920+100, 1296, 'elevator');
             this.game.physics.arcade.enable(this.elevator9);
             this.elevator9.body.enableBody = true;
             this.elevator9.body.collideWorldBounds = true;
@@ -603,8 +608,8 @@
             this.elevator9.body.bounce.set(1);
             this.elevator9.body.immovable = true;
             this.elevator9.body.onCollide = new Phaser.Signal();
-
-            this.elevator10 = this.game.add.sprite(576+20,1728, 'elevator');
+            */
+            /*this.elevator10 = this.game.add.sprite(576+20,1728, 'elevator');
             this.game.physics.arcade.enable(this.elevator10);
             this.elevator10.body.enableBody = true;
             this.elevator10.body.collideWorldBounds = true;
@@ -612,8 +617,8 @@
             this.elevator10.body.bounce.set(1);
             this.elevator10.body.immovable = true;
             this.elevator10.body.onCollide = new Phaser.Signal();
-
-            this.elevator11 = this.game.add.sprite(960+20, 1728, 'elevator');
+            */
+            /*this.elevator11 = this.game.add.sprite(960+20, 1728, 'elevator');
             this.game.physics.arcade.enable(this.elevator11);
             this.elevator11.body.enableBody = true;
             this.elevator11.body.collideWorldBounds = true;
@@ -621,8 +626,8 @@
             this.elevator11.body.bounce.set(1);
             this.elevator11.body.immovable = true;
             this.elevator11.body.onCollide = new Phaser.Signal();
-
-            this.elevator12 = this.game.add.sprite(1536+20, 1728, 'elevator');
+            */
+           /* this.elevator12 = this.game.add.sprite(1536+20, 1728, 'elevator');
             this.game.physics.arcade.enable(this.elevator12);
             this.elevator12.body.enableBody = true;
             this.elevator12.body.collideWorldBounds = true;
@@ -630,8 +635,8 @@
             this.elevator12.body.bounce.set(1);
             this.elevator12.body.immovable = true;
             this.elevator12.body.onCollide = new Phaser.Signal();
-
-            this.elevator13 = this.game.add.sprite(1920+40, 1728, 'elevator');
+            */
+            /*this.elevator13 = this.game.add.sprite(1920+40, 1728, 'elevator');
             this.game.physics.arcade.enable(this.elevator13);
             this.elevator13.body.enableBody = true;
             this.elevator13.body.collideWorldBounds = true;
@@ -639,7 +644,7 @@
             this.elevator13.body.bounce.set(1);
             this.elevator13.body.immovable = true;
             this.elevator13.body.onCollide = new Phaser.Signal();
-
+            */
             this.elevator14 = this.game.add.sprite(1536+20, 2160, 'elevator');
             this.game.physics.arcade.enable(this.elevator14);
             this.elevator14.body.enableBody = true;
@@ -649,7 +654,7 @@
             this.elevator14.body.immovable = true;
             this.elevator14.body.onCollide = new Phaser.Signal();
 
-            this.elevator15 = this.game.add.sprite(1728+20, 2160, 'elevator');
+            /*this.elevator15 = this.game.add.sprite(1728+20, 2160, 'elevator');
             this.game.physics.arcade.enable(this.elevator15);
             this.elevator15.body.enableBody = true;
             this.elevator15.body.collideWorldBounds = true;
@@ -657,8 +662,8 @@
             this.elevator15.body.bounce.set(1);
             this.elevator15.body.immovable = true;
             this.elevator15.body.onCollide = new Phaser.Signal();
-
-            this.elevator16 = this.game.add.sprite(1152+20, 2376, 'elevator');
+            */
+            /*this.elevator16 = this.game.add.sprite(1152+20, 2376, 'elevator');
             this.game.physics.arcade.enable(this.elevator16);
             this.elevator16.body.enableBody = true;
             this.elevator16.body.collideWorldBounds = true;
@@ -666,7 +671,7 @@
             this.elevator16.body.bounce.set(1);
             this.elevator16.body.immovable = true;
             this.elevator16.body.onCollide = new Phaser.Signal();
-
+            
             this.elevator17 = this.game.add.sprite(10+20, 2592, 'elevator');
             this.game.physics.arcade.enable(this.elevator17);
             this.elevator17.body.enableBody = true;
@@ -675,8 +680,8 @@
             this.elevator17.body.bounce.set(1);
             this.elevator17.body.immovable = true;
             this.elevator17.body.onCollide = new Phaser.Signal();
-
-            this.elevator18 = this.game.add.sprite(960+20, 2592, 'elevator');
+            */
+            /*this.elevator18 = this.game.add.sprite(960+20, 2592, 'elevator');
             this.game.physics.arcade.enable(this.elevator18);
             this.elevator18.body.enableBody = true;
             this.elevator18.body.collideWorldBounds = true;
@@ -684,8 +689,8 @@
             this.elevator18.body.bounce.set(1);
             this.elevator18.body.immovable = true;
             this.elevator18.body.onCollide = new Phaser.Signal();
-
-            this.elevator19 = this.game.add.sprite(384+20, 2808, 'elevator');
+            */
+            /*this.elevator19 = this.game.add.sprite(384+20, 2808, 'elevator');
             this.game.physics.arcade.enable(this.elevator19);
             this.elevator19.body.enableBody = true;
             this.elevator19.body.collideWorldBounds = true;
@@ -693,8 +698,8 @@
             this.elevator19.body.bounce.set(1);
             this.elevator19.body.immovable = true;
             this.elevator19.body.onCollide = new Phaser.Signal();
-
-            this.elevator20 = this.game.add.sprite(1920+20, 2808, 'elevator');
+            */
+           /* this.elevator20 = this.game.add.sprite(1920+20, 2808, 'elevator');
             this.game.physics.arcade.enable(this.elevator20);
             this.elevator20.body.enableBody = true;
             this.elevator20.body.collideWorldBounds = true;
@@ -702,8 +707,8 @@
             this.elevator20.body.bounce.set(1);
             this.elevator20.body.immovable = true;
             this.elevator20.body.onCollide = new Phaser.Signal();
-
-            this.elevator21 = this.game.add.sprite(768+20, 3024, 'elevator');
+            */
+            this.elevator21 = this.game.add.sprite(768+20, 3340, 'elevator');
             this.game.physics.arcade.enable(this.elevator21);
             this.elevator21.body.enableBody = true;
             this.elevator21.body.collideWorldBounds = true;
@@ -712,7 +717,7 @@
             this.elevator21.body.immovable = true;
             this.elevator21.body.onCollide = new Phaser.Signal();
 
-            this.elevator22 = this.game.add.sprite(1152+20, 3024, 'elevator');
+            /*this.elevator22 = this.game.add.sprite(1152+20, 3124, 'elevator');
             this.game.physics.arcade.enable(this.elevator22);
             this.elevator22.body.enableBody = true;
             this.elevator22.body.collideWorldBounds = true;
@@ -720,8 +725,8 @@
             this.elevator22.body.bounce.set(1);
             this.elevator22.body.immovable = true;
             this.elevator22.body.onCollide = new Phaser.Signal();
-
-            this.elevator23 = this.game.add.sprite(1536+20, 3240, 'elevator');
+            */
+            /*this.elevator23 = this.game.add.sprite(1536+20, 3240, 'elevator');
             this.game.physics.arcade.enable(this.elevator23);
             this.elevator23.body.enableBody = true;
             this.elevator23.body.collideWorldBounds = true;
@@ -729,7 +734,7 @@
             this.elevator23.body.bounce.set(1);
             this.elevator23.body.immovable = true;
             this.elevator23.body.onCollide = new Phaser.Signal();
-
+            */
             this.elevator24 = this.game.add.sprite(1152+20, 3672, 'elevator');
             this.game.physics.arcade.enable(this.elevator24);
             this.elevator24.body.enableBody = true;
@@ -739,7 +744,7 @@
             this.elevator24.body.immovable = true;
             this.elevator24.body.onCollide = new Phaser.Signal();
 
-            this.elevator25 = this.game.add.sprite(10+20, 3984, 'elevator');
+            /*this.elevator25 = this.game.add.sprite(10+20, 3984, 'elevator');
             this.game.physics.arcade.enable(this.elevator25);
             this.elevator25.body.enableBody = true;
             this.elevator25.body.collideWorldBounds = true;
@@ -747,8 +752,8 @@
             this.elevator25.body.bounce.set(1);
             this.elevator25.body.immovable = true;
             this.elevator25.body.onCollide = new Phaser.Signal();
-
-            this.elevator26 = this.game.add.sprite(576+20, 4416, 'elevator');
+            */
+            this.elevator26 = this.game.add.sprite(384+20, 4416, 'elevator');
             this.game.physics.arcade.enable(this.elevator26);
             this.elevator26.body.enableBody = true;
             this.elevator26.body.collideWorldBounds = true;
@@ -768,6 +773,7 @@
             
             
             
+            
 
 
 
@@ -780,7 +786,7 @@
 
             this.game.physics.arcade.enable(this.player);
             this.player.body.bounce.y = 0.2;
-            this.player.body.gravity.y = 9000; //9000
+            this.player.body.gravity.y = 2000; //9000
             this.player.body.collideWorldBounds = true;
             this.player.animations.add('shootShield_left', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
             this.player.animations.add('right', [36, 37, 38, 39, 40, 41, 42, 43, 44, 45], 0, true);
@@ -1082,6 +1088,7 @@
             else {
                 this.elevator4.body.immovable = true;
             }
+            
             var elevator5HitFloor = this.game.physics.arcade.collide(this.elevator5, this.leve1);
             if (elevatorHitFloor) {
                 this.elevator5.body.immovable = false;
@@ -1110,41 +1117,41 @@
             else {
                 this.elevator8.body.immovable = true;
             }
-            var elevator9HitFloor = this.game.physics.arcade.collide(this.elevator9, this.leve1);
+            /*var elevator9HitFloor = this.game.physics.arcade.collide(this.elevator9, this.leve1);
             if (elevator9HitFloor) {
                 this.elevator9.body.immovable = false;
             }
             else {
                 this.elevator9.body.immovable = true;
-            }
-            var elevator10HitFloor = this.game.physics.arcade.collide(this.elevator10, this.leve1);
+            }*/
+            /*var elevator10HitFloor = this.game.physics.arcade.collide(this.elevator10, this.leve1);
             if (elevator10HitFloor) {
                 this.elevator10.body.immovable = false;
             }
             else {
                 this.elevator10.body.immovable = true;
-            }
-            var elevator11HitFloor = this.game.physics.arcade.collide(this.elevator11, this.leve1);
+            }*/
+           /* var elevator11HitFloor = this.game.physics.arcade.collide(this.elevator11, this.leve1);
             if (elevator11HitFloor) {
                 this.elevator11.body.immovable = false;
             }
             else {
                 this.elevator11.body.immovable = true;
             }
-            var elevator12HitFloor = this.game.physics.arcade.collide(this.elevator12, this.leve1);
+           var elevator12HitFloor = this.game.physics.arcade.collide(this.elevator12, this.leve1);
             if (elevator12HitFloor) {
                 this.elevator12.body.immovable = false;
             }
             else {
                 this.elevator12.body.immovable = true;
-            }
-            var elevator13HitFloor = this.game.physics.arcade.collide(this.elevator13, this.leve1);
+            }*/
+            /*var elevator13HitFloor = this.game.physics.arcade.collide(this.elevator13, this.leve1);
             if (elevator13HitFloor) {
                 this.elevator13.body.immovable = false;
             }
             else {
                 this.elevator13.body.immovable = true;
-            }
+            }*/
             var elevator14HitFloor = this.game.physics.arcade.collide(this.elevator14, this.leve1);
             if (elevator14HitFloor) {
                 this.elevator14.body.immovable = false;
@@ -1152,14 +1159,14 @@
             else {
                 this.elevator14.body.immovable = true;
             }
-            var elevator15HitFloor = this.game.physics.arcade.collide(this.elevator15, this.leve1);
+            /*var elevator15HitFloor = this.game.physics.arcade.collide(this.elevator15, this.leve1);
             if (elevator15HitFloor) {
                 this.elevator15.body.immovable = false;
             }
             else {
                 this.elevator15.body.immovable = true;
-            }
-            var elevator16HitFloor = this.game.physics.arcade.collide(this.elevator16, this.leve1);
+            }*/
+            /*var elevator16HitFloor = this.game.physics.arcade.collide(this.elevator16, this.leve1);
             if (elevator16HitFloor) {
                 this.elevator16.body.immovable = false;
             }
@@ -1172,28 +1179,28 @@
             }
             else {
                 this.elevator17.body.immovable = true;
-            }
-            var elevator18HitFloor = this.game.physics.arcade.collide(this.elevator18, this.leve1);
+            }*/
+            /*var elevator18HitFloor = this.game.physics.arcade.collide(this.elevator18, this.leve1);
             if (elevator18HitFloor) {
                 this.elevator18.body.immovable = false;
             }
             else {
                 this.elevator18.body.immovable = true;
-            }
-            var elevator19HitFloor = this.game.physics.arcade.collide(this.elevator19, this.leve1);
+            }*/
+           /* var elevator19HitFloor = this.game.physics.arcade.collide(this.elevator19, this.leve1);
             if (elevator19HitFloor) {
                 this.elevator19.body.immovable = false;
             }
             else {
                 this.elevator19.body.immovable = true;
-            }
-            var elevator20HitFloor = this.game.physics.arcade.collide(this.elevator20, this.leve1);
+            }*/
+            /*var elevator20HitFloor = this.game.physics.arcade.collide(this.elevator20, this.leve1);
             if (elevator20HitFloor) {
                 this.elevator20.body.immovable = false;
             }
             else {
                 this.elevator20.body.immovable = true;
-            }
+            }*/
             var elevator21HitFloor = this.game.physics.arcade.collide(this.elevator21, this.leve1);
             if (elevator21HitFloor) {
                 this.elevator21.body.immovable = false;
@@ -1201,20 +1208,20 @@
             else {
                 this.elevator21.body.immovable = true;
             }
-            var elevator22HitFloor = this.game.physics.arcade.collide(this.elevator22, this.leve1);
+            /*var elevator22HitFloor = this.game.physics.arcade.collide(this.elevator22, this.leve1);
             if (elevator22HitFloor) {
                 this.elevator22.body.immovable = false;
             }
             else {
                 this.elevator22.body.immovable = true;
-            }
-            var elevator23HitFloor = this.game.physics.arcade.collide(this.elevator23, this.leve1);
+            }*/
+            /*var elevator23HitFloor = this.game.physics.arcade.collide(this.elevator23, this.leve1);
             if (elevator23HitFloor) {
                 this.elevator23.body.immovable = false;
             }
             else {
                 this.elevator23.body.immovable = true;
-            }
+            }*/
             var elevator24HitFloor = this.game.physics.arcade.collide(this.elevator24, this.leve1);
             if (elevator24HitFloor) {
                 this.elevator24.body.immovable = false;
@@ -1222,13 +1229,13 @@
             else {
                 this.elevator24.body.immovable = true;
             }
-            var elevator25HitFloor = this.game.physics.arcade.collide(this.elevator25, this.leve1);
+           /* var elevator25HitFloor = this.game.physics.arcade.collide(this.elevator25, this.leve1);
             if (elevator25HitFloor) {
                 this.elevator25.body.immovable = false;
             }
             else {
                 this.elevator25.body.immovable = true;
-            }
+            }*/
             var elevator26HitFloor = this.game.physics.arcade.collide(this.elevator26, this.leve1);
             if (elevator26HitFloor) {
                 this.elevator26.body.immovable = false;
@@ -1246,7 +1253,7 @@
 
 
             //Player and Elevators
-            var hitElevator1 = this.game.physics.arcade.collide(this.player, this.elevator1);
+            /*var hitElevator1 = this.game.physics.arcade.collide(this.player, this.elevator1);
             var hitElevator2 = this.game.physics.arcade.collide(this.player, this.elevator2);
             var hitElevator3 = this.game.physics.arcade.collide(this.player, this.elevator3);
             var hitElevator4 = this.game.physics.arcade.collide(this.player, this.elevator4);
@@ -1273,7 +1280,7 @@
             var hitElevator25 = this.game.physics.arcade.collide(this.player, this.elevator25);
             var hitElevator26 = this.game.physics.arcade.collide(this.player, this.elevator26);
             var hitElevator27 = this.game.physics.arcade.collide(this.player, this.elevator27);
-           
+           */
 
 
 
