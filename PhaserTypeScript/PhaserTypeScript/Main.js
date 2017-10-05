@@ -77,7 +77,6 @@ var ElevatorAction;
             this.game.load.spritesheet('boneAnim', 'assets/bone.png', 37, 150);
             this.game.load.spritesheet('keyShining', 'assets/key_animation_whole.png', 109, 216);
             //this.game.load.spritesheet('princess_attact', 'assets/princess_attack.png', 181, 150, 10);
-            this.game.load.image('boblife', 'assets/bobnewlife.png');
         };
         Game.prototype.create = function () {
             this.keysCollected = 0;
@@ -146,7 +145,7 @@ var ElevatorAction;
                     this.game.add.sprite(0, h, 'floors4');
                     h = h + 1080;
             }*/
-            //this.game.add.sprite(0, -50, 'boblife'); 
+            this.game.add.sprite(0, -1000, 'boblife');
             //initializing lifes and keys.
             this.lightHeart = this.game.add.group();
             this.darkHeart = this.game.add.group();
