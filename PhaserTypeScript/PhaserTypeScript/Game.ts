@@ -56,6 +56,61 @@
         playerDeath: Phaser.Sprite;
         skeletonDeath: Phaser.Sprite;
         keyAnimation: Phaser.Sprite;
+        //Elevator Sprites
+        //1
+        elevator1: Phaser.Sprite;
+        //2
+        elevator2: Phaser.Sprite;
+        //3
+        elevator3: Phaser.Sprite;
+        //4
+        elevator4: Phaser.Sprite;
+        //5
+        elevator5: Phaser.Sprite;
+        //6
+        elevator6: Phaser.Sprite;
+        //7
+        elevator7: Phaser.Sprite;
+        //8
+        elevator8: Phaser.Sprite;
+        //9
+        elevator9: Phaser.Sprite;
+        //10
+        elevator10: Phaser.Sprite;
+        //11
+        elevator11: Phaser.Sprite;
+        //12
+        elevator12: Phaser.Sprite;
+        //13
+        elevator13: Phaser.Sprite;
+        //14
+        elevator14: Phaser.Sprite;
+        //15
+        elevator15: Phaser.Sprite;
+        //16
+        elevator16: Phaser.Sprite;
+        //17
+        elevator17: Phaser.Sprite;
+        //18
+        elevator18: Phaser.Sprite;
+        //19
+        elevator19: Phaser.Sprite;
+        //20
+        elevator20: Phaser.Sprite;
+        //21
+        elevator21: Phaser.Sprite;
+        //22
+        elevator22: Phaser.Sprite;
+        //23
+        elevator23: Phaser.Sprite;
+        //24
+        elevator24: Phaser.Sprite;
+        //25
+        elevator25: Phaser.Sprite;
+        //26
+        elevator26: Phaser.Sprite;
+        //25
+        elevator27: Phaser.Sprite;
 
 
 
@@ -90,171 +145,6 @@
         fireButton: Phaser.Key;
 
         preload() {
-
-                //Elevator Sprites
-                //1
-                elevator1: Phaser.Sprite;
-                //2
-                elevator2: Phaser.Sprite;
-                //3
-                elevator3: Phaser.Sprite;
-                //4
-                elevator4: Phaser.Sprite;
-                //5
-                elevator5: Phaser.Sprite;
-                //6
-                elevator6: Phaser.Sprite;
-                //7
-                elevator7: Phaser.Sprite;
-                //8
-                elevator8: Phaser.Sprite;
-                //9
-                elevator9: Phaser.Sprite;
-                //10
-                elevator10: Phaser.Sprite;
-                //11
-                elevator11: Phaser.Sprite;
-                //12
-                elevator12: Phaser.Sprite;
-                //13
-                elevator13: Phaser.Sprite;
-                //14
-                elevator14: Phaser.Sprite;
-                //15
-                elevator15: Phaser.Sprite;
-                //16
-                elevator16: Phaser.Sprite;
-                //17
-                elevator17: Phaser.Sprite;
-                //18
-                elevator18: Phaser.Sprite;
-                //19
-                elevator19: Phaser.Sprite;
-                //20
-                elevator20: Phaser.Sprite;
-                //21
-                elevator21: Phaser.Sprite;
-                //22
-                elevator22: Phaser.Sprite;
-                //23
-                elevator23: Phaser.Sprite;
-                //24
-                elevator24: Phaser.Sprite;
-                //25
-                elevator25: Phaser.Sprite;
-                //26
-                elevator26: Phaser.Sprite;
-                //25
-                elevator27: Phaser.Sprite;
-                /*//28
-                elevator28: Phaser.Sprite;
-                //29
-                elevator29: Phaser.Sprite;
-                //30
-                elevator30: Phaser.Sprite;
-                //31
-                elevator31: Phaser.Sprite;
-                //32
-                elevator32: Phaser.Sprite;
-                //33
-                elevator33: Phaser.Sprite;
-                //34
-                elevator34: Phaser.Sprite;
-                //35
-                elevator35: Phaser.Sprite;
-                //36
-                elevator36: Phaser.Sprite;
-                //37
-                elevator37: Phaser.Sprite;
-                //38
-                elevator38: Phaser.Sprite;
-                //39
-                elevator39: Phaser.Sprite;
-                //40
-                elevator40: Phaser.Sprite;
-                //41
-                elevator41: Phaser.Sprite;
-                //42
-                elevator42: Phaser.Sprite;
-                //43
-                elevator43: Phaser.Sprite;
-                //44
-                elevator44: Phaser.Sprite;
-                //45
-                elevator45: Phaser.Sprite;
-                //46
-                elevator46: Phaser.Sprite;
-                //47
-                elevator47: Phaser.Sprite;
-                //48
-                elevator48: Phaser.Sprite;
-                //49
-                elevator49: Phaser.Sprite;
-                //50
-                elevator50: Phaser.Sprite;
-                //51
-                elevator51: Phaser.Sprite;
-                //52
-                elevator52: Phaser.Sprite;
-                //53
-                elevator53: Phaser.Sprite;
-                //54
-                elevator54: Phaser.Sprite;
-                //55
-                elevator55: Phaser.Sprite;
-                //56
-                elevator56: Phaser.Sprite;
-                //57
-                elevator57: Phaser.Sprite;
-                //58
-                elevator58: Phaser.Sprite;
-                //59
-                elevator59: Phaser.Sprite;
-                //60
-                elevator60: Phaser.Sprite;
-                //61
-                elevator61: Phaser.Sprite;
-                //62
-                elevator62: Phaser.Sprite;
-                //63
-                elevator63: Phaser.Sprite;
-                //64
-                elevator64: Phaser.Sprite;
-                //65
-                elevator65: Phaser.Sprite;
-                //66
-                elevator66: Phaser.Sprite;
-                //67
-                elevator67: Phaser.Sprite;
-                //68
-                elevator68: Phaser.Sprite;
-                //69
-                elevator69: Phaser.Sprite;
-                //70
-                elevator70: Phaser.Sprite;
-                //71
-                elevator71: Phaser.Sprite;
-                //72
-                elevator72: Phaser.Sprite;
-                //73
-                elevator73: Phaser.Sprite;
-                //74
-                elevator74: Phaser.Sprite;
-                //75
-                elevator75: Phaser.Sprite;
-                //76
-                elevator76: Phaser.Sprite;
-                //77
-                elevator77: Phaser.Sprite;
-                //78
-                elevator78: Phaser.Sprite;
-                //79
-                elevator79: Phaser.Sprite;
-                //80
-                elevator80: Phaser.Sprite;
-                //81
-                elevator81: Phaser.Sprite;*/
-        v
             //Audio
             this.game.load.audio('shoot', 'assets/shoot.wav', true);
             this.game.load.audio('doorOpen', 'assets/door_open_2.wav', true);
@@ -262,8 +152,6 @@
             this.game.load.audio('ghostAttack', 'assets/ghost_attack_1.wav', true);
             this.game.load.audio('skeletonAttack', 'assets/skeleton_attack_1.wav', true);
 
-
-        preload() {
             //All Images here
             this.game.load.image('logo', 'phaser2.png');
             this.game.load.image('sky', 'assets/sky.png');

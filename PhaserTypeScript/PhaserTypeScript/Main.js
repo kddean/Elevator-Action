@@ -43,6 +43,13 @@ var ElevatorAction;
             this.game.load.image('bullet', 'assets/shield.png');
             this.game.load.image('star', 'assets/bullet.png');
             this.game.load.image('elevator', 'assets/feather.png');
+            this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+            this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48);
+            this.game.load.spritesheet('doors1', 'assets/Doors_Blue.jpg', 25, 60, 4);
+            this.game.load.spritesheet('doors2', 'assets/Doors_Red.jpg', 25, 75, 4);
+            this.game.load.spritesheet('princess', 'assets/r_princess_all_sm.png', 110, 150);
+            this.game.load.spritesheet('ghost', 'assets/mrghost.png', 181, 150);
+            //this.game.load.spritesheet('princess_attact', 'assets/princess_attack.png', 181, 150, 10);
             this.game.load.image('button', 'assets/button.png');
             this.game.load.image('invisible', 'assets/Invisible Box.png');
             this.game.load.image('door', 'assets/fancydoor.png');
@@ -76,6 +83,7 @@ var ElevatorAction;
             this.game.load.spritesheet('boneAnim', 'assets/bone.png', 37, 150);
             this.game.load.spritesheet('keyShining', 'assets/key_animation_whole.png', 109, 216);
             //this.game.load.spritesheet('princess_attact', 'assets/princess_attack.png', 181, 150, 10);
+            this.game.load.image('boblife', 'assets/bobnewlife.png');
         };
         Game.prototype.create = function () {
             this.keysCollected = 0;
@@ -154,166 +162,166 @@ var ElevatorAction;
             var y = 190;
             var t;
             //for (var w = 0; w <= 3; w++) {
-                for (var j = 0; j < 10; j++) {
-                    if (((j >= 0) && (j < 1)) || (j > 1 && j < 8) || (j > 8 && j <= 9)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            for (var j = 0; j < 10; j++) {
+                if (((j >= 0) && (j < 1)) || (j > 1 && j < 8) || (j > 8 && j <= 9)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if (((j >= 0) && (j < 3)) || (j > 3 && j < 5) || (j >= 6 && j < 8) || (j == 9)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if (((j >= 0) && (j < 3)) || (j > 3 && j < 5) || (j >= 6 && j < 8) || (j == 9)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j < 3) || (j > 3 && j < 8) || (j == 9)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j < 3) || (j > 3 && j < 8) || (j == 9)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j > 0 && j < 3) || (j > 3 && j < 7) || (j > 7)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j > 0 && j < 3) || (j > 3 && j < 7) || (j > 7)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j > 0 && j < 3) || (j == 4) || (j > 7)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j > 0 && j < 3) || (j == 4) || (j > 7)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j > 0 && j < 3) || (j == 4) || (j == 8)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j > 0 && j < 3) || (j == 4) || (j == 8)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j >= 0 && j < 3) || (j > 3 && j < 6) || (j > 7)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j >= 0 && j < 3) || (j > 3 && j < 6) || (j > 7)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j >= 0 && j < 2) || (j == 5) || (j > 6 && j < 9)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j >= 0 && j < 2) || (j == 5) || (j > 6 && j < 9)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j >= 0 && j < 2) || (j > 2 && j < 6) || (j > 6)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j >= 0 && j < 2) || (j > 2 && j < 6) || (j > 6)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j < 2) || ((j > 2) && (j < 7)) || (j == 9)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j < 2) || ((j > 2) && (j < 7)) || (j == 9)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j < 2) || (j > 2 && j < 5) || (j == 6) || (j == 9)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j < 2) || (j > 2 && j < 5) || (j == 6) || (j == 9)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j > 0 && j < 4) || (j > 4 && j < 7) || (j == 9)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j > 0 && j < 4) || (j > 4 && j < 7) || (j == 9)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j > 1 && j < 4) || (j > 4 && j < 9)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j > 1 && j < 4) || (j > 4 && j < 9)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j < 1) || (j == 2) || (j > 5 && j < 9)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j < 1) || (j == 2) || (j > 5 && j < 9)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j < 1) || (j == 2) || (j > 4 && j < 7) || (j > 7)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j < 1) || (j == 2) || (j > 4 && j < 7) || (j > 7)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j < 3) || (j > 3 && j < 6) || (j > 7)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j < 3) || (j > 3 && j < 6) || (j > 7)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j < 3) || (j == 4) || (j > 6)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j < 3) || (j == 4) || (j > 6)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j > 0 && j < 3) || (j == 4) || (j > 6)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j > 0 && j < 3) || (j == 4) || (j > 6)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j > 0 && j < 5) || (j > 5)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j > 0 && j < 5) || (j > 5)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j < 2) || (j > 2 && j < 5) || (j > 5 && j > 8) || (j == 9)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j < 2) || (j > 2 && j < 5) || (j > 5 && j > 8) || (j == 9)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
-                for (var j = 0; j < 10; j++) {
-                    if ((j < 1) || (j > 1 && j < 8) || (j > 8)) {
-                        t = this.leve1.create(j * 192, y, 'floor');
-                        t.body.immovable = true;
-                    }
+            }
+            y = y + 216;
+            for (var j = 0; j < 10; j++) {
+                if ((j < 1) || (j > 1 && j < 8) || (j > 8)) {
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
                 }
-                y = y + 216;
+            }
+            y = y + 216;
             // }
             for (var j = 0; j < 10; j++) {
                 if ((j < 1) || (j > 1 && j < 4) || (j > 5 && j < 8) || (j == 9)) {
                     t = this.leve1.create(j * 192, y, 'floor');
                     t.body.immovable = true;
-            }
+                }
             }
             y = y + 216;
             for (var j = 0; j < 10; j++) {
                 if ((j == 2) || (j == 7)) {
-                t = this.leve1.create(j * 192, y, 'floor');
-                t.body.immovable = true;
-            }
+                    t = this.leve1.create(j * 192, y, 'floor');
+                    t.body.immovable = true;
+                }
             }
             y = y + 216;
             for (var j = 0; j < 10; j++) {
@@ -508,18 +516,17 @@ var ElevatorAction;
             this.keys.enableBody = true;
             var q = 0;
             //for (var f = 0; f < 3; f++) {
-                var k = this.keys.create(1280, 300 + q, 'key');
-                var k = this.keys.create(210, 732 + q, 'key');
-                var k = this.keys.create(50, 2028 + q, 'key');
-                var k = this.keys.create(700, 2028 + q, 'key');
-                var k = this.keys.create(1750, 2028 + q, 'key');
-                var k = this.keys.create(1000, 2676 + q, 'key');
-                var k = this.keys.create(1350, 3540 + q, 'key');
-                var k = this.keys.create(600, 3756 + q, 'key');
-                var k = this.keys.create(1750, 3756 + q, 'key');
+            var k = this.keys.create(1280, 300 + q, 'key');
+            var k = this.keys.create(210, 732 + q, 'key');
+            var k = this.keys.create(50, 2028 + q, 'key');
+            var k = this.keys.create(700, 2028 + q, 'key');
+            var k = this.keys.create(1750, 2028 + q, 'key');
+            var k = this.keys.create(1000, 2676 + q, 'key');
+            var k = this.keys.create(1350, 3540 + q, 'key');
+            var k = this.keys.create(600, 3756 + q, 'key');
+            var k = this.keys.create(1750, 3756 + q, 'key');
             // q = q + 4770;
             //}
-            //4470 + 300
             //Elevators
             /*this.elevator = this.game.add.sprite(1300, this.game.world.height - 100, 'elevator');
             this.elevatorT = this.game.add.sprite(380, this.game.world.height - 400, 'elevator');
@@ -548,6 +555,7 @@ var ElevatorAction;
             this.elevatorT.body.bounce.set(1);
             this.elevatorT.body.immovable = true;
             this.elevatorT.body.onCollide = new Phaser.Signal();
+
             this.elevatorX.body.collideWorldBounds = true;
             this.elevatorX.body.velocity.setTo(0, 100);
             this.elevatorX.body.bounce.set(1);
@@ -1423,8 +1431,8 @@ var ElevatorAction;
             //    }
             //    this.numberOfEnemies -= 1;
             //}
-                this.enemies = this.game.add.group();
-                this.enemies.enableBody = true;
+            this.enemies = this.game.add.group();
+            this.enemies.enableBody = true;
             this.skeletons = this.game.add.group();
             this.skeletons.enableBody = true;
             for (var i = 0; i < 20; i++) {
@@ -1485,9 +1493,9 @@ var ElevatorAction;
                 if (this.playerDirection) {
                     this.player.animations.play('rightidle');
                     this.player.animations.currentAnim.speed = 10;
-                this.bulletDirection = true;
+                    this.bulletDirection = true;
                     this.princessRunMusic.stop();
-            }
+                }
                 else {
                     this.player.animations.play('leftidle');
                     this.player.animations.currentAnim.speed = 10;
@@ -2165,49 +2173,49 @@ var ElevatorAction;
              var hitElevator81 = this.game.physics.arcade.collide(this.player, this.elevator81);
              */
             /* if (hitElevator || hitElevator2 || hitElevator3 || hitElevator4) {
-            if (this.game.time.now > this.skeletonFirinigTimer) {
-                this.skeletonFires();
-            }
-            if (hitElevator || hitElevator2 || hitElevator3 || hitElevator4) {
-                this.isOnElevator = true;
-                this.elevator.body.immovable = false;
+             if (this.game.time.now > this.skeletonFirinigTimer) {
+                 this.skeletonFires();
+             }
+             if (hitElevator || hitElevator2 || hitElevator3 || hitElevator4) {
+                 this.isOnElevator = true;
+                 this.elevator.body.immovable = false;
  
-            }
-            else {
-                this.elevator.body.immovable = true;
+             }
+             else {
+                 this.elevator.body.immovable = true;
  
-            }
+             }
+ 
              
-             
  
-            //Current Elevators' Contorls
+             //Current Elevators' Contorls
              /*if (elevatorHitFloor) {
-                this.isOnElevator = true;
-                this.elevator.body.immovable = false;
-            }
-            else {
-                this.elevator.body.immovable = true;
-            }
-            if (elevator2HitFloor) {
-                this.isOnElevator = true;
-                this.elevatorT.body.immovable = false;
-            }
-            else {
-                this.elevatorT.body.immovable = true;
-            }
-            if (elevator3HitFloor) {
-                this.isOnElevator = true;
-                this.elevatorX.body.immovable = false;
-            }
-            else {
-                this.elevator.body.immovable = true;
-            }
-            if (elevator4HitFloor) {
-                this.isOnElevator = true;
-                this.elevatorY.body.immovable = false;
-            }
-            else {
-                this.elevatorY.body.immovable = true;
+                 this.isOnElevator = true;
+                 this.elevator.body.immovable = false;
+             }
+             else {
+                 this.elevator.body.immovable = true;
+             }
+             if (elevator2HitFloor) {
+                 this.isOnElevator = true;
+                 this.elevatorT.body.immovable = false;
+             }
+             else {
+                 this.elevatorT.body.immovable = true;
+             }
+             if (elevator3HitFloor) {
+                 this.isOnElevator = true;
+                 this.elevatorX.body.immovable = false;
+             }
+             else {
+                 this.elevator.body.immovable = true;
+             }
+             if (elevator4HitFloor) {
+                 this.isOnElevator = true;
+                 this.elevatorY.body.immovable = false;
+             }
+             else {
+                 this.elevatorY.body.immovable = true;
              }*/
             if (bulletHits) {
                 var bullet = this.bullets.getFirstExists(true);
@@ -2314,10 +2322,10 @@ var ElevatorAction;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
                 this.game.input.onTap.addOnce(this.restart, this);
-                    }
-                    else {
+            }
+            else {
                 this.player.revive();
-                    }
+            }
         };
         Game.prototype.playerHitBySkeleton = function (skeleton, player) {
             skeleton.kill();
@@ -2337,7 +2345,7 @@ var ElevatorAction;
                 this.stateText.text = "You Lose, click to restart";
                 this.stateText.visible = true;
                 this.game.input.onTap.addOnce(this.restart, this);
-                }
+            }
             else {
                 this.player.revive();
             }
