@@ -64,8 +64,6 @@
         ghostAttack: Phaser.Sprite;
         skeletonAttack: Phaser.Sprite;
         gryphonAttack: Phaser.Sprite;
-        gryphonLeft: Phaser.Sprite;
-        gryphonRight: Phaser.Sprite;
         gryphonDeath: Phaser.Sprite;
         princeFall: Phaser.Sprite;
         princeCelebrate: Phaser.Sprite;
@@ -210,8 +208,6 @@
             this.game.load.spritesheet('prince_celebrate', 'assets/prince_celebrate.png', 92.36, 185);
             this.game.load.spritesheet('doorOpenAnim', 'assets/big_door.png', 321, 330);
             this.game.load.spritesheet('happyEnding', 'assets/together_whole.png', 803, 168);
-            this.game.load.spritesheet('gryphonLeft', 'assets/gryphonleft.png', 780, 700);
-            this.game.load.spritesheet('gryphonRight', 'assets/gryphonright.png', 780, 700);
            
 
         }
@@ -897,7 +893,7 @@
             this.princeCelebrate.animations.add('celebratingPrince', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 0, true);
 
             //door opening
-            this.doorOpen = this.game.add.sprite(820, 5100, 'doorOpenAnim');
+            this.doorOpen = this.game.add.sprite(820, 5030, 'doorOpenAnim');
             this.game.physics.arcade.enable(this.doorOpen);
             this.doorOpen.visible = false;
             this.doorOpen.animations.add('doorOpening', [0, 1, 2, 3, 4, 5, 6, 7, 8], 0, true);
@@ -918,27 +914,17 @@
 
 
             //Gryphon boss things here.
-            //this.gryphon = this.game.add.sprite(610, 4670, 'gryphon'); //700, 4670
-            //this.game.physics.arcade.enable(this.gryphon);
-            //this.gryphon.animations.add('gryphon_attack_left', [0, 1, 2, 3, 4, 5, 6, 7, 8], 0, true);
-            //this.gryphon.animations.add('gryphon_idle_left', [9, 10, 11, 12, 13, 14, 15], 0, true);
-            ////this.gryphon.animations.add('gryphon_idle_right', [16, 17, 18, 19, 20, 21, 22], 0, true);
-            ////this.gryphon.animations.add('gryphon_attack_right', [23, 24, 25, 26, 27, 28, 29, 30, 31], 0, true);
-            //this.gryphon.animations.play('gryphon_idle_left');
-            //this.gryphon.animations.currentAnim.speed = 10;
+            this.gryphon = this.game.add.sprite(610, 4670, 'gryphon'); //700, 4670
+            this.game.physics.arcade.enable(this.gryphon);
+            this.gryphon.animations.add('gryphon_attack_left', [0, 1, 2, 3, 4, 5, 6, 7, 8], 0, true);
+            this.gryphon.animations.add('gryphon_idle_left', [9, 10, 11, 12, 13, 14, 15], 0, true);
+            //this.gryphon.animations.add('gryphon_idle_right', [16, 17, 18, 19, 20, 21, 22], 0, true);
+            //this.gryphon.animations.add('gryphon_attack_right', [23, 24, 25, 26, 27, 28, 29, 30, 31], 0, true);
+            this.gryphon.animations.play('gryphon_idle_left');
+            this.gryphon.animations.currentAnim.speed = 10;
 
 
-            this.gryphonLeft = this.game.add.sprite(610, 4670, 'gryphonLeft');
-            this.gryphonLeft.visible = false;
-            this.game.physics.arcade.enable(this.gryphonLeft);
-            this.gryphonLeft.animations.add('gryphonLeftIdle', [9, 10, 11, 12, 13, 14, 15], 0, true);
-            this.gryphonLeft.animations.add('gryphonLeftAttack', [0, 1, 2, 3, 4, 5, 6, 7, 8], 0, true);
 
-            this.gryphonRight = this.game.add.sprite(610, 4670, 'gryphonRight');
-            this.gryphonRight.visible = false;
-            this.game.physics.arcade.enable(this.gryphonRight);
-            this.gryphonRight.animations.add('gryphonRightIdle', [9, 10, 11, 12, 13, 14, 15], 0, true);
-            this.gryphonRight.animations.add('gryphonRightAttack', [0, 1, 2, 3, 4, 5, 6, 7, 8], 0, true);
 
 
 
@@ -1148,22 +1134,9 @@
             if (this.game.time.now > this.skeletonFirinigTimer) {
                 this.skeletonFires();
             }
-            if (((this.player.x >= this.gryphonLeft.x) || (this.player.x <= this.gryphonLeft.x)) && (this.player.y > this.gryphonLeft.y - 50)) {
-
+            if (((this.player.x >= this.gryphon.x) || (this.player.x <= this.gryphon.x)) && (this.player.y > this.gryphon.y - 50)) {
                 if (this.game.time.now > this.gryphonFiringTimer) {
                     this.gryphonFires();
-                }
-            }
-            else {
-                if (this.playerDirection) {
-                    this.gryphonLeft.visible = true;
-                    this.gryphonRight.visible = false;
-                    this.gryphonLeft.animations.play('gryphonLeftIdle', 10, true, false);
-                }
-                else {
-                    this.gryphonLeft.visible = false;
-                    this.gryphonRight.visible = true;
-                    this.gryphonRight.animations.play('gryphonRightIdle', 10, true, false);
                 }
             }
 
@@ -1779,16 +1752,6 @@
                 gryphonFeather.animations.add('rotate', [0, 1, 2, 3], 0, true);
                 gryphonFeather.animations.play('rotate');
                 gryphonFeather.animations.currentAnim.speed = 10;
-                if (this.playerDirection) {
-                    this.gryphonLeft.visible = true;
-                    this.gryphonRight.visible = false;
-                    this.gryphonLeft.animations.play('gryphonLeftAttack', 10, true, false);
-                }
-                else {
-                    this.gryphonLeft.visible = false;
-                    this.gryphonRight.visible = true;
-                    this.gryphonRight.animations.play('gryphonRightAttack', 10, true, false);
-                }
                 if (this.player.x > this.gryphon.body.x) {
                     gryphonFeather.body.velocity.x += 200;
                 }
