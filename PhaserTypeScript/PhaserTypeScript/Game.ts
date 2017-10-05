@@ -348,7 +348,7 @@
 
 
             for (var j = 0; j < 10; j++) {
-                if ((j > 0 && j < 3) || (j == 4) || (j > 7)) {
+                if ((j > 0 && j < 3) || (j == 4) || (j >= 7)) {
                     t = this.leve1.create(j * 192, y, 'floor');
                     t.body.immovable = true;
                 }
@@ -597,7 +597,7 @@
             this.elevator5.body.immovable = true;
             this.elevator5.body.onCollide = new Phaser.Signal();
 
-            this.elevator6 = this.game.add.sprite(1536 - 170, 864, 'elevator');
+            this.elevator6 = this.game.add.sprite(1536 - 100, 864, 'elevator');
             this.game.physics.arcade.enable(this.elevator6);
             this.elevator6.body.enableBody = true;
             this.elevator6.body.collideWorldBounds = true;
@@ -615,7 +615,7 @@
             this.elevator7.body.immovable = true;
             this.elevator7.body.onCollide = new Phaser.Signal();
 
-            this.elevator8 = this.game.add.sprite(1344 + 120, 638, 'elevator');
+            this.elevator8 = this.game.add.sprite(1344, 1080, 'elevator');
             this.game.physics.arcade.enable(this.elevator8);
             this.elevator8.body.enableBody = true;
             this.elevator8.body.collideWorldBounds = true;
@@ -810,7 +810,7 @@
 
             this.game.physics.arcade.enable(this.player);
             this.player.body.bounce.y = 0.2;
-            this.player.body.gravity.y = 9000; //9000
+            this.player.body.gravity.y = 7000; //9000
             this.player.body.collideWorldBounds = true;
             this.player.animations.add('shootShield_left', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, true);
             this.player.animations.add('right', [36, 37, 38, 39, 40, 41, 42, 43, 44, 45], 0, true);
